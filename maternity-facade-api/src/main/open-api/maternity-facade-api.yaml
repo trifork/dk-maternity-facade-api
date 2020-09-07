@@ -1,0 +1,132 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/trifork-nsp/maternity-facade-api/1.0.0
+info:
+  version: "1.0.0"
+  title: DK Maternity Facade API
+  description: >-
+    This is the specification of the DK Maternity Facade API.
+    It is a facade for the Web Services Ressource Transfer DK Maternity API.
+security:
+  - application:
+      - read
+      - write
+paths:
+  /maternity/data-card:
+    parameters:
+      - in: cookie
+        name: context
+        required: true
+        schema:
+          $ref: '#/components/schemas/session-context'
+    get:
+      summary: Get data cards
+      description: >
+        Gets all data cards for the current patient identified in the **context** cookie.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/data-card'
+    post:
+      summary: Create a data card
+      responses:
+        '201':
+          description: Created
+  /maternity/data-card/{identifier}:
+    parameters:
+      - in: path
+        name: identifier
+        schema:
+          $ref: '#/components/schemas/uuidv4'
+        required: true
+        description: The identifier of the data card
+    get:
+      summary: Get a specific data card
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: Update a specific data card
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: Delete a specific data card
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    uuidv4:
+      type: string
+      pattern: '[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'
+      example: 'dfa66499-40b7-4bc6-a2e5-dd3cbcd8cf68'
+    session-context:
+      title: Session context
+      description: >
+        The patient and application mode encoded as a JWT
+      type: object
+      properties:
+        header:
+          type: object
+          properties:
+            alg:
+              type: string
+              enum: [HS256]
+            typ:
+              type: string
+              enum: [JWT]
+          required:
+            - alg
+            - typ
+        payload:
+          type: object
+          properties:
+            patient-identifier:
+              $ref: '#/components/schemas/cpr-number'
+            application-mode:
+              $ref: '#/components/schemas/application-mode'
+          required:
+            - patient-identifier
+            - application-mode
+        signature:
+          description: The signature of the JWT
+          type: string
+          minLength: 44
+          maxLength: 44
+      required:
+        - header
+        - payload
+        - signature
+      example: >
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+        eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.
+        mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc
+    cpr-number:
+      type: string
+      pattern: '([06][1-9]|[1-25-8][0-9]|[39][0-1])(0[1-9]|1[0-2])[0-9]{6}'
+      example: '9103672134'
+    application-mode:
+      type: string
+      enum: [standalone, embedded]
+    data-card:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/uuidv4'
+  securitySchemes:
+    application:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: 'http://example.com/oauth/token'
+          scopes:
+            write: allows modifying resources
+            read: allows reading resources
