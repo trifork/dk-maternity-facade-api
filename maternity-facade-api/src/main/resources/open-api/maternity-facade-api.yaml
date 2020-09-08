@@ -6,9 +6,9 @@ servers:
 info:
   version: "1.0.0"
   title: DK Maternity Facade API
-  description: >-
+  description: >
     This is the specification of the DK Maternity Facade API.
-    It is a facade for the Web Services Ressource Transfer DK Maternity API.
+    It is a facade for the Web Services Resource Transfer DK Maternity API.
 security:
   - application:
       - read
@@ -20,7 +20,7 @@ paths:
         name: context
         required: true
         schema:
-          $ref: '#/components/schemas/session-context'
+          $ref: '#/components/schemas/sessionContext'
     get:
       summary: Get data cards
       description: >
@@ -33,7 +33,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/data-card'
+                  $ref: '#/components/schemas/dataCard'
     post:
       summary: Create a data card
       responses:
@@ -65,10 +65,24 @@ paths:
 components:
   schemas:
     uuidv4:
+      title: Universally Unique IDentifier version 4
+      description: >
+        A Universally Unique IDentifier (UUID) version 4.
+        See [RFC 4122, section 4.4](https://tools.ietf.org/html/rfc4122#section-4.4)
       type: string
       pattern: '[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'
       example: 'dfa66499-40b7-4bc6-a2e5-dd3cbcd8cf68'
-    session-context:
+
+    uuidv5:
+      title: Universally Unique IDentifier version 5
+      description: >
+        A Universally Unique IDentifier (UUID) version 5.
+        See [RFC 4122, section 4.3](https://tools.ietf.org/html/rfc4122#section-4.3)
+      type: string
+      pattern: '[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'
+      example: '8da3af4b-176e-5f53-bab2-a2b349e5229d'
+
+    sessionContext:
       title: Session context
       description: >
         The patient and application mode encoded as a JWT
@@ -90,9 +104,9 @@ components:
           type: object
           properties:
             patient-identifier:
-              $ref: '#/components/schemas/cpr-number'
+              $ref: '#/components/schemas/cprNumber'
             application-mode:
-              $ref: '#/components/schemas/application-mode'
+              $ref: '#/components/schemas/applicationMode'
           required:
             - patient-identifier
             - application-mode
@@ -109,18 +123,288 @@ components:
         eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
         eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.
         mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc
-    cpr-number:
+
+    cprNumber:
+      title: Danish national person identifier
       type: string
       pattern: '([06][1-9]|[1-25-8][0-9]|[39][0-1])(0[1-9]|1[0-2])[0-9]{6}'
       example: '9103672134'
-    application-mode:
+
+    applicationMode:
       type: string
       enum: [standalone, embedded]
-    data-card:
+
+    dataCard:
+      title: Maternity data card
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            episodeOfCareIdentifier:
+              $ref: '#/components/schemas/uuidv5'
+            recordTarget:
+              $ref: '#/components/schemas/cprIdentifiedPerson'
+            childPartnerSection:
+              $ref: '#/components/schemas/childPartnerSection'
+            languageSection:
+              $ref: '#/components/schemas/languageSection'
+            bodyMeasuresSection:
+              $ref: '#/components/schemas/bodyMeasuresSection'
+            socialHistorySection:
+              $ref: '#/components/schemas/socialHistorySection'
+            previousBirthsSection:
+              $ref: '#/components/schemas/previousBirthsSection'
+            previousAbortionsSection:
+              $ref: '#/components/schemas/previousAbortionsSection'
+          required:
+            - recordTarget
+            - author
+
+    languageSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            nationality:
+              type: string
+      oneOf:
+        - $ref: '#/components/schemas/translationRequirements'
+        - $ref: '#/components/schemas/noTranslationRequirements'
+      discriminator:
+        propertyName: translationRequired
+        mapping:
+          yes: '#/components/schemas/translationRequirements'
+          no: '#/components/schemas/noTranslationRequirements'
+
+    translationRequirements:
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/uuidv4'
+        language:
+          type: string
+        translationRequired:
+          type: string
+          enum: [yes]
+      required: [translationRequired]
+
+    noTranslationRequirements:
+      type: object
+      properties:
+        translationRequired:
+          type: string
+          enum: [no]
+      required: [translationRequired]
+
+    bodyMeasuresSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            prenatalBodyWeight:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ kg ]
+              required:
+                - amount
+                - unit
+            bodyHeight:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ cm ]
+              required:
+                - amount
+                - unit
+            bodyMassIndex:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ kg/m2 ]
+
+    socialHistorySection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            maritalOrPartnershipStatus:
+              type: string
+              enum: [ single, married, separated, divorced, widowed ]
+            livingConditions:
+              type: string
+              enum: [ partnership, single ]
+            additionalInformations:
+              type: string
+
+    childPartnerSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - $ref: '#/components/schemas/cprIdentifiedPerson'
+
+    previousBirthsSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                pattern: date
+              outcome:
+                type: string
+                enum: [ livebirth, stillbirth]
+              sex:
+                type: string
+                enum: [ female, male ]
+              gestationLength:
+                type: object
+                properties:
+                  amount:
+                    type: integer
+                    minimum: 0
+                  unit:
+                    type: string
+                    enum: [ d ]
+                required: [ amount, unit ]
+              birthWeight:
+                type: object
+                properties:
+                  amount:
+                    type: integer
+                    minimum: 0
+                  unit:
+                    type: string
+                    enum: [ g ]
+                required: [ amount, unit ]
+              birthPlace:
+                type: string
+              pregnancySummary:
+                type: string
+              birthSummary:
+                type: string
+              subjectiveBirthExpirience:
+                type: string
+                enum: [  good, normal, bad ]
+              puerperalSepsis:
+                type: boolean
+              childsCurrentHealthStatus:
+                type: string
+
+    previousAbortionsSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                pattern: date
+              type:
+                type: string
+                enum: [ spontaneous, induced ]
+              gestationLength:
+                type: object
+                properties:
+                  amount:
+                    type: integer
+                    minimum: 0
+                  unit:
+                    type: string
+                    enum: [ w ]
+                required: [ amount, unit ]
+              indication:
+                type: string
+
+    cprIdentifiedPerson:
+      allOf:
+        - $ref: '#/components/schemas/person'
+        - type: object
+          properties:
+            identifier:
+              $ref: '#/components/schemas/cprNumber'
+          required:
+            - identifier
+    person:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/personName'
+      required:
+        - name
+
+    personName:
+      type: object
+      properties:
+        firstNames:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        middleNames:
+          type: array
+          items:
+            type: string
+        lastName:
+          type: string
+      required:
+        - firstNames
+        - middleNames
+        - lastName
+
+    healthCareActor:
+      oneOf:
+        - $ref: '#/components/schemas/healthCareProfessional'
+        - $ref: '#/components/schemas/healthCareOrganization'
+      discriminator:
+        propertyName: objectType
+
+    healthCareProfessional:
+      allOf:
+        - $ref: '#/components/schemas/person'
+        - type: object
+          properties:
+            objectType:
+                type: string
+                enum:
+                  - healthCareProfessional
+          required:
+            - objectType
+
+    healthCareOrganization:
+      type: object
+      properties:
+        name:
+          type: string
+        objectType:
+          type: string
+          enum:
+            - healthCareOrganization
+      required:
+        - name
+        - objectType
+
+    versionedSection:
+      type: object
+      properties:
+        modifiedTime:
+          type: string
+          pattern: date-time
+        author:
+          $ref: '#/components/schemas/healthCareActor'
+
   securitySchemes:
     application:
       type: oauth2
