@@ -156,6 +156,12 @@ components:
               $ref: '#/components/schemas/previousBirthsSection'
             previousAbortionsSection:
               $ref: '#/components/schemas/previousAbortionsSection'
+            expectedDateOfDeliverySection:
+              $ref: '#/components/schemas/expectedDateOfDeliverySection'
+            prenatalRiskAssessmentSection:
+              $ref: '#/components/schemas/prenatalRiskAssessmentSection'
+            workEnvironmentImpactSection:
+              $ref: '#/components/schemas/workEnvironmentImpactSection'
           required:
             - recordTarget
             - author
@@ -269,15 +275,7 @@ components:
                 type: string
                 enum: [ female, male ]
               gestationLength:
-                type: object
-                properties:
-                  amount:
-                    type: integer
-                    minimum: 0
-                  unit:
-                    type: string
-                    enum: [ d ]
-                required: [ amount, unit ]
+                $ref: '#/components/schemas/durationInDays'
               birthWeight:
                 type: object
                 properties:
@@ -328,6 +326,142 @@ components:
               indication:
                 type: string
 
+    expectedDateOfDeliverySection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            expectedDateOfDeliveryFromLastPeriod:
+              type: object
+              properties:
+                lastPeriod:
+                  type: string
+                  pattern: date
+                menstrualCycle:
+                  oneOf:
+                    - $ref: '#/components/schemas/durationInDays'
+                    - $ref: '#/components/schemas/durationFromDates'
+                expectedDateOfDelivery:
+                  type: string
+                  pattern: date
+                certainty:
+                  type: string
+                  enum: [ certain, equivocal ]
+            expectedDateOfDeliveryFromPrenatalUtrasoundScan:
+              type: string
+              pattern: date
+            remarks:
+              type: string
+
+    assistedFertilizationSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            receivesFertilizationAssitance:
+              type: boolean
+            remarks:
+              type: string
+
+    prenatalRiskAssessmentSection:
+      type: object
+      properties:
+        preliminaryRiskAssessment:
+          allOf:
+            - $ref: '#/components/schemas/versionedSection'
+            - type: object
+              properties:
+                familyHistory:
+                  type: string
+                consanguinity:
+                  type: boolean
+                firstTrimesterUltrasoundScanOfFetusRequested:
+                  type: boolean
+                secondTrimesterUltrasoundScanOfFetusRequested:
+                  type: boolean
+                prenatalRiskAssessmentRequested:
+                  type: boolean
+        finalRiskAssessment:
+          allOf:
+            - $ref: '#/components/schemas/versionedSection'
+            - type: object
+              properties:
+                doubleTestCompleted:
+                  type: boolean
+                firstTrimesterUltrasoundScanOfFetusCompleted:
+                  type: boolean
+                secondTrimesterUltrasoundScanOfFetusCompleted:
+                  type: boolean
+                downsScreeningProbabilityAssessment:
+                  type: string
+                placentalBiopsiObservation:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      pattern: date
+                    result:
+                      type: string
+                prenatalAmniocentesisiObservation:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      pattern: date
+                    result:
+                      type: string
+
+    workEnvironmentImpactSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            mother:
+              type: object
+              properties:
+                jobType:
+                  type: string
+                hoursOfWorkPerWeek:
+                  type: object
+                  properties:
+                    amount:
+                      type: integer
+                      minimum: 0
+                      maximum: 168
+                    unit:
+                      type: string
+                      enum: [ h/wk ]
+                ergonomicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                chemicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                biologicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                otherWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                referredToOccupationalHealthDepartmentForRiskAssessment:
+                  type: boolean
+                prenatalSickLeave:
+                  type: string
+                  enum: [ none, partial, full ]
+            partner:
+              type: object
+              properties:
+                jobType:
+                  type: string
+
+    exposureToWorkEnvironmentRisk:
+      allOf:
+        - $ref: '#/components/schemas/durationFromDates'
+        - type: object
+          properties:
+            remarks:
+              type: string
+
     cprIdentifiedPerson:
       allOf:
         - $ref: '#/components/schemas/person'
@@ -337,6 +471,30 @@ components:
               $ref: '#/components/schemas/cprNumber'
           required:
             - identifier
+
+    durationInDays:
+      type: object
+      properties:
+        amount:
+          type: integer
+          minimum: 0
+        unit:
+          type: string
+          enum: [ d ]
+      required: [ amount, unit ]
+
+    durationFromDates:
+      type: object
+      properties:
+        start:
+          type: string
+          pattern: date
+        end:
+          type: string
+          pattern: date
+        calculated:
+          $ref: '#/components/schemas/durationInDays'
+
     person:
       type: object
       properties:
