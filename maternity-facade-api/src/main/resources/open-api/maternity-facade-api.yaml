@@ -162,9 +162,133 @@ components:
               $ref: '#/components/schemas/prenatalRiskAssessmentSection'
             workEnvironmentImpactSection:
               $ref: '#/components/schemas/workEnvironmentImpactSection'
+            allergiesSection:
+              $ref: '#/components/schemas/allergiesSection'
+            screeningsSection:
+              type: object
+              properties:
+                hepatitisB:
+                  $ref: '#/components/schemas/positiveNegativeDeclinedScreeningWithDateSection'
+                hiv:
+                  $ref: '#/components/schemas/positiveNegativeDeclinedScreeningWithDateSection'
+                syphilis:
+                  $ref: '#/components/schemas/positiveNegativeDeclinedScreeningWithDateSection'
+                chlamydia:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                gonorrhea:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                streptococcusGroupB:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                hemoglobinopathy:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                vitaminDConsumption:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                maternalRhDAntibody:
+                  $ref: '#/components/schemas/maternalRhDAntibodyScreeningSection'
+                fetalRhDAntibody:
+                  $ref: '#/components/schemas/fetalRhDAntibodyScreeningSection'
+                diabetesWeek18To20:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                diabetesWeek28To30:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                diabetesGlycosuria:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                antiDImmunoglobulinGiven:
+                  $ref: '#/components/schemas/yesNoDateScreeningSection'
+            chronicalDiseasesSection:
+              $ref: '#/components/schemas/chronicalDiseasesSection'
+            medicineSection:
+              allOf:
+                - $ref: '#/components/schemas/versionedSection'
+                - type: object
+                  properties:
+                    medicine:
+                      type: string
+            mmrVacinationSection:
+              allOf:
+                - $ref: '#/components/schemas/versionedSection'
+                - type: object
+                  properties:
+                    value:
+                      type: string
+                      enum: [ vaccinated, notVacinnated, unknown ]
+            historyOfPreviousTreatmentWithImpactOnPregnancySection:
+              allOf:
+                - $ref: '#/components/schemas/versionedSection'
+                - type: object
+                  properties:
+                    history:
+                      type: string
+
+            tobaccoUseAndExposureSection:
+              $ref: '#/components/schemas/tobaccoUseAndExposureSection'
           required:
             - recordTarget
             - author
+
+    tobaccoUseAndExposureSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            exposureToEnvironmentalTobaccoSmoke:
+              $ref: '#/components/schemas/yesNoEnum'
+      oneOf:
+        - $ref: '#/components/schemas/activeTobaccoUser'
+        - $ref: '#/components/schemas/formerTobaccoUser'
+        - $ref: '#/components/schemas/neverUsedTobacco'
+        discriminator:
+          propertyName: tobaccoUser
+          mapping:
+            active: '#/components/schemas/activeTobaccoUser'
+            former: '#/components/schemas/formerTobaccoUser'
+            never: '#/components/schemas/neverUsedTobacco'
+
+    activeTobaccoUser:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ active ]
+        referredToTobaccoCessationEducation:
+          $ref: '#/components/schemas/yesNoEnum'
+      required:
+        - tobaccoUser
+
+    formerTobaccoUser:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ former ]
+        stoppedUsingTobacco:
+          type: date
+      required:
+        - tobaccoUser
+
+    neverUsedTobacco:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ never ]
+      required:
+        - tobaccoUser
+
+    chronicalDiseasesSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            circulatorySystem:
+              $ref: '#/components/schemas/yesNoEnum'
+            respitorySystem:
+              $ref: '#/components/schemas/yesNoEnum'
+            thyroid:
+              $ref: '#/components/schemas/yesNoEnum'
+            diabetes:
+              $ref: '#/components/schemas/yesNoEnum'
+
 
     languageSection:
       allOf:
@@ -208,31 +332,31 @@ components:
             prenatalBodyWeight:
               type: object
               properties:
-                amount:
+                value:
                   type: integer
                   minimum: 0
                 unit:
                   type: string
                   enum: [ kg ]
               required:
-                - amount
+                - value
                 - unit
             bodyHeight:
               type: object
               properties:
-                amount:
+                value:
                   type: integer
                   minimum: 0
                 unit:
                   type: string
                   enum: [ cm ]
               required:
-                - amount
+                - value
                 - unit
             bodyMassIndex:
               type: object
               properties:
-                amount:
+                value:
                   type: integer
                   minimum: 0
                 unit:
@@ -279,13 +403,13 @@ components:
               birthWeight:
                 type: object
                 properties:
-                  amount:
+                  value:
                     type: integer
                     minimum: 0
                   unit:
                     type: string
                     enum: [ g ]
-                required: [ amount, unit ]
+                required: [ value, unit ]
               birthPlace:
                 type: string
               pregnancySummary:
@@ -316,13 +440,13 @@ components:
               gestationLength:
                 type: object
                 properties:
-                  amount:
+                  value:
                     type: integer
                     minimum: 0
                   unit:
                     type: string
                     enum: [ w ]
-                required: [ amount, unit ]
+                required: [ value, unit ]
               indication:
                 type: string
 
@@ -424,7 +548,7 @@ components:
                 hoursOfWorkPerWeek:
                   type: object
                   properties:
-                    amount:
+                    value:
                       type: integer
                       minimum: 0
                       maximum: 168
@@ -462,6 +586,91 @@ components:
             remarks:
               type: string
 
+    allergiesSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            allergiesOfMother:
+              type: array
+              items:
+                type: string
+            allergicPredispositionOfChild:
+              type: string
+              enum:
+                - noPredisposition
+                - parentalPredisposition
+                - siblingPredisposition
+                - doublePredisposition
+
+    positiveNegativeDeclinedScreeningWithDateSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - type: object
+          properties:
+            result:
+              type: string
+              enum: [ positive, negative, declined ]
+
+    positiveNegativeScreeningWithDateSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/posNegEnum'
+
+    dateValueUnitScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - type: object
+          properties:
+            value:
+              type: integer
+            unit:
+              type: string
+
+    dateScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            date:
+              type: string
+              pattern: date
+
+    maternalRhDAntibodyScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            bloodSampleTaken:
+              $ref: '#/components/schemas/yesNoEnum'
+            rhesusType:
+              $ref: '#/components/schemas/posNegEnum'
+            irregularBloodGroupAntibodyOresent:
+              $ref: '#/components/schemas/posNegEnum'
+
+    fetalRhDAntibodyScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            rhesusType:
+              $ref: '#/components/schemas/posNegEnum'
+            antiDIsoimmunizationAffectingPregnancy:
+              $ref: '#/components/schemas/posNegEnum'
+
+    yesNoDateScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - $ref: '#/components/schemas/yesNoValue'
+
+    yesNoVersionedSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - $ref: '#/components/schemas/yesNoValue'
+
     cprIdentifiedPerson:
       allOf:
         - $ref: '#/components/schemas/person'
@@ -475,13 +684,13 @@ components:
     durationInDays:
       type: object
       properties:
-        amount:
+        value:
           type: integer
           minimum: 0
         unit:
           type: string
           enum: [ d ]
-      required: [ amount, unit ]
+      required: [ value, unit ]
 
     durationFromDates:
       type: object
@@ -522,6 +731,20 @@ components:
         - middleNames
         - lastName
 
+    yesNoValue:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/yesNoEnum'
+    yesNoEnum:
+      type: string
+      enum: [ yes, no ]
+
+    posNegEnum:
+      type: string
+      enum: [ positive, negative ]
+
+
     healthCareActor:
       oneOf:
         - $ref: '#/components/schemas/healthCareProfessional'
@@ -535,9 +758,9 @@ components:
         - type: object
           properties:
             objectType:
-                type: string
-                enum:
-                  - healthCareProfessional
+              type: string
+              enum:
+                - healthCareProfessional
           required:
             - objectType
 
