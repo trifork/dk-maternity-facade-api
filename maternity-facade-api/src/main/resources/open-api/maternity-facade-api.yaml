@@ -33,7 +33,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/GetDataCardResponse'
+                  $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/GetDataCardResponse'
     post:
       summary: Create a data card
       responses:
