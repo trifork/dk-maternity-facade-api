@@ -985,3 +985,19 @@ components:
           pattern: date-time
         author:
           $ref: '#/components/schemas/healthCareActor'
+
+    cprNumber:
+      title: Danish national person identifier
+      type: string
+      pattern: '([06][1-9]|[1-25-8][0-9]|[39][0-1])(0[1-9]|1[0-2])[0-9]{6}'
+      example: '9103672134'
+
+    uuidv5:
+      title: Universally Unique IDentifier version 5
+      description: >
+        A Universally Unique IDentifier (UUID) version 5.
+        See [RFC 4122, section 4.3](https://tools.ietf.org/html/rfc4122#section-4.3)
+      type: string
+      pattern: '[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'
+      example: '8da3af4b-176e-5f53-bab2-a2b349e5229d'
+
