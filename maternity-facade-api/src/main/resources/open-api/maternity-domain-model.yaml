@@ -1,0 +1,987 @@
+openapi: 3.0.0
+
+info:
+  title: Data Card Domain Model
+  description: Data Card Domain Model for Maternity Facade API
+  version: 1.0.0
+
+paths: {}
+
+components:
+  schemas:
+
+    GetDataCardResponse:
+      title: Maternity data card
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            episodeOfCareIdentifier:
+              $ref: '#/components/schemas/uuidv5'
+            recordTarget:
+              $ref: '#/components/schemas/cprIdentifiedPerson'
+            childPartnerSection:
+              $ref: '#/components/schemas/childPartnerSection'
+            languageSection:
+              $ref: '#/components/schemas/languageSection'
+            bodyMeasuresSection:
+              $ref: '#/components/schemas/bodyMeasuresSection'
+            socialHistorySection:
+              $ref: '#/components/schemas/socialHistorySection'
+            previousBirthsSection:
+              $ref: '#/components/schemas/previousBirthsSection'
+            previousAbortionsSection:
+              $ref: '#/components/schemas/previousAbortionsSection'
+            expectedDateOfDeliverySection:
+              $ref: '#/components/schemas/expectedDateOfDeliverySection'
+            prenatalRiskAssessmentSection:
+              $ref: '#/components/schemas/prenatalRiskAssessmentSection'
+            workEnvironmentImpactSection:
+              $ref: '#/components/schemas/workEnvironmentImpactSection'
+            allergiesSection:
+              $ref: '#/components/schemas/allergiesSection'
+            screeningsSection:
+              type: object
+              properties:
+                hepatitisB:
+                  $ref: '#/components/schemas/positiveNegativeDeclinedScreeningWithDateSection'
+                hiv:
+                  $ref: '#/components/schemas/positiveNegativeDeclinedScreeningWithDateSection'
+                syphilis:
+                  $ref: '#/components/schemas/positiveNegativeDeclinedScreeningWithDateSection'
+                chlamydia:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                gonorrhea:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                streptococcusGroupB:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                hemoglobinopathy:
+                  $ref: '#/components/schemas/positiveNegativeScreeningWithDateSection'
+                vitaminDConsumption:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                maternalRhDAntibody:
+                  $ref: '#/components/schemas/maternalRhDAntibodyScreeningSection'
+                fetalRhDAntibody:
+                  $ref: '#/components/schemas/fetalRhDAntibodyScreeningSection'
+                diabetesWeek18To20:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                diabetesWeek28To30:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                diabetesGlycosuria:
+                  $ref: '#/components/schemas/dateValueUnitScreeningSection'
+                antiDImmunoglobulinGiven:
+                  $ref: '#/components/schemas/yesNoDateScreeningSection'
+            chronicalDiseasesSection:
+              $ref: '#/components/schemas/chronicalDiseasesSection'
+            medicineSection:
+              allOf:
+                - $ref: '#/components/schemas/versionedSection'
+                - type: object
+                  properties:
+                    medicine:
+                      type: string
+            mmrVacinationSection:
+              allOf:
+                - $ref: '#/components/schemas/versionedSection'
+                - type: object
+                  properties:
+                    value:
+                      type: string
+                      enum: [ vaccinated, notVacinnated, unknown ]
+            historyOfPreviousTreatmentWithImpactOnPregnancySection:
+              allOf:
+                - $ref: '#/components/schemas/versionedSection'
+                - type: object
+                  properties:
+                    history:
+                      type: string
+            tobaccoUseAndExposureSection:
+              $ref: '#/components/schemas/tobaccoUseAndExposureSection'
+            alcoholDrinkingBehaviorSection:
+              $ref: '#/components/schemas/alcoholDrinkingBehaviorSection'
+            substanceUseSection:
+              $ref: '#/components/schemas/substanceUseSection'
+            dietaryAndExerciseSection:
+              $ref: '#/components/schemas/dietaryAndExerciseSection'
+            healthInsuranceSection:
+              $ref: '#/components/schemas/healthInsuranceSection'
+            birthPlaceSection:
+              $ref: '#/components/schemas/birthPlaceSection'
+            midwifeClinicSection:
+              $ref: '#/components/schemas/midwifeClinicSection'
+            postpartumNursingSection:
+              $ref: '#/components/schemas/postpartumNursingSection'
+            overallAssessmentSection:
+              $ref: '#/components/schemas/overallAssessmentSection'
+
+          required:
+            - recordTarget
+            - author
+
+#    CreateDataCardRequest:
+#      type: object
+#      properties:
+
+    CreateDataCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/GetDataCardResponse'
+
+#    UpdateDataCardRequest:
+#      type: object
+#      properties:
+
+    UpdateDataCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/GetDataCardResponse'
+
+    overallAssessmentSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            prenatalCareAssessment:
+              properties:
+                assessment:
+                  type: string
+                numberOfFetuses:
+                  type: integer
+                  minimum: 0
+                careLevel:
+                  type: string
+                  enum: [ basic, extended, specialistMultidisciplinaryTeam, highRiskPregnancyCare ]
+            obstetricAssessment:
+              oneOf:
+                - $ref: '#/components/schemas/obstetricAssessment'
+                - $ref: '#/components/schemas/noObstetricAssessment'
+              discriminator:
+                propertyName: required
+                mapping:
+                  yes: '#/components/schemas/obstetricAssessment'
+                  no: '#/components/schemas/noObstetricAssessment'
+            socialServicesPerinatalCareAssessment:
+              oneOf:
+                - $ref: '#/components/schemas/socialServicesPerinatalCareAssessment'
+                - $ref: '#/components/schemas/noSocialServicesPerinatalCareAssessment'
+              discriminator:
+                propertyName: required
+                mapping:
+                  yes: '#/components/schemas/socialServicesPerinatalCareAssessment'
+                  no: '#/components/schemas/noSocialServicesPerinatalCareAssessment'
+
+    obstetricAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ yes ]
+          default: yes
+        reason:
+          type: string
+      required: [ required ]
+
+    noObstetricAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ no ]
+          default: no
+      required: [ required ]
+
+    socialServicesPerinatalCareAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ yes ]
+          default: yes
+        reason:
+          type: string
+        assessmentDate:
+          type: string
+          pattern: date
+      required: [ required ]
+
+    noSocialServicesPerinatalCareAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ no ]
+          default: no
+      required: [ required ]
+
+    postpartumNursingSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            organization:
+              $ref: '#/components/schemas/healthCareOrganization'
+            postpartumNurse:
+              allOf:
+                - $ref: '#/components/schemas/person'
+                - type: object
+                  properties:
+                    phoneNumber:
+                      $ref: '#/components/schemas/phoneNumber'
+
+    midwifeClinicSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            midwifeConsultationWishes:
+              type: object
+              properties:
+                location:
+                  type: string
+                weekday:
+                  type: string
+                  enum:
+                    - monday
+                    - tuesday
+                    - wednesday
+                    - thursday
+                    - friday
+                    - saturday
+                    - sunday
+                midwife:
+                  $ref: '#/components/schemas/person'
+
+            assignedMidwifeClinic:
+              $ref: '#/components/schemas/healthCareOrganization'
+      oneOf:
+        - $ref: '#/components/schemas/parentalCraftClassesDesire'
+        - $ref: '#/components/schemas/noParentalCraftClassesDesire'
+      discriminator:
+        propertyName: parentalCraftClassDesired
+        mapping:
+          yes: '#/components/schemas/parentalCraftClassesDesire'
+          no: '#/components/schemas/noParentalCraftClassesDesire'
+
+    parentalCraftClassesDesire:
+      type: object
+      properties:
+        parentalCraftClassDesired:
+          type: string
+          enum: [ yes ]
+          default: yes
+        consultationForm:
+          type: string
+          enum: [ individual, group ]
+      required:
+        - parentalCraftClassDesired
+
+    noParentalCraftClassesDesire:
+      type: object
+      properties:
+        parentalCraftClassDesired:
+          type: string
+          enum: [ no ]
+          default: no
+      required:
+        - parentalCraftClassDesired
+
+    birthPlaceSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            desiredBirthPlace:
+              type: string
+            primaryPlannedBirthPlace: # How to handle home births?
+              $ref: '#/components/schemas/healthCareOrganization'
+            revisedPlannedBirthPlace: # How to handle home births?
+              $ref: '#/components/schemas/healthCareOrganization'
+
+    healthInsuranceSection:
+      oneOf:
+        - $ref: '#/components/schemas/group1HealthInsurance'
+        - $ref: '#/components/schemas/otherThanGroup1HealthInsurance'
+      discriminator:
+        propertyName: insuranceGroup
+        mapping:
+          1: '#/components/schemas/group1HealthInsurance'
+          2: '#/components/schemas/otherThanGroup1HealthInsurance'
+          4: '#/components/schemas/otherThanGroup1HealthInsurance'
+          6: '#/components/schemas/otherThanGroup1HealthInsurance'
+          7: '#/components/schemas/otherThanGroup1HealthInsurance'
+          8: '#/components/schemas/otherThanGroup1HealthInsurance'
+
+    healthInsurance:
+      type: object
+      properties:
+        generalPractitioner:
+          $ref: '#/components/schemas/healthCareProfessional'
+        insuranceGroup:
+          type: string
+          enum: [ '1', '2', '4', '5', '6', '7', '8', '9' ]
+      required:
+        - insuranceGroup
+
+    group1HealthInsurance:
+      allOf:
+        - $ref: '#/components/schemas/healthInsurance'
+        - type: object
+          properties:
+            insuranceGroup:
+              type: string
+              enum: [ '1' ]
+          required:
+            - insuranceGroup
+
+    otherThanGroup1HealthInsurance:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - $ref: '#/components/schemas/healthInsurance'
+        - type: object
+          properties:
+            insuranceGroup:
+              type: string
+              enum: [ '2', '4', '6', '7', '8' ]
+              default: '2'
+          required:
+            - insuranceGroup
+
+
+    dietaryAndExerciseSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            text:
+              type: string
+
+    substanceUseSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            substanceUseBeforePregnancy:
+              $ref: '#/components/schemas/substanceUseObservation'
+            substanceUseDuringPregnancy:
+              $ref: '#/components/schemas/substanceUseObservation'
+
+    substanceUseObservation:
+      oneOf:
+        - $ref: '#/components/schemas/substanceUse'
+        - $ref: '#/components/schemas/noSubstanceUse'
+      discriminator:
+        propertyName: substanceUse
+        mapping:
+          yes: '#/components/schemas/substanceUse'
+          no: '#/components/schemas/noSubstanceUse'
+
+    substanceUse:
+      type: object
+      properties:
+        substanceUse:
+          type: string
+          enum: [ yes ]
+        text:
+          type: string
+      required:
+        - substanceUse
+
+    noSubstanceUse:
+      type: object
+      properties:
+        substanceUse:
+          type: string
+          enum: [ no ]
+      required:
+        - substanceUse
+
+    alcoholDrinkingBehaviorSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            weeklyConsumptionBeforePregnancy:
+              $ref: '#/components/schemas/weeklyAlcoholUnitsConsumption'
+            weeklyConsumptionDuringPregnancy:
+              $ref: '#/components/schemas/weeklyAlcoholUnitsConsumption'
+
+    weeklyAlcoholUnitsConsumption:
+      type: object
+      properties:
+        value:
+          type: integer
+          minimum: 0
+        multiplier:
+          type: integer
+          minimum: 12
+          maximum: 12
+          default: 12
+        unit:
+          type: string
+          enum: [ g/wk ]
+      required:
+        - value
+        - multiplier
+        - unit
+
+    tobaccoUseAndExposureSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            exposureToEnvironmentalTobaccoSmoke:
+              $ref: '#/components/schemas/yesNoEnum'
+      oneOf:
+        - $ref: '#/components/schemas/activeTobaccoUser'
+        - $ref: '#/components/schemas/formerTobaccoUser'
+        - $ref: '#/components/schemas/neverUsedTobacco'
+      discriminator:
+        propertyName: tobaccoUser
+        mapping:
+          active: '#/components/schemas/activeTobaccoUser'
+          former: '#/components/schemas/formerTobaccoUser'
+          never: '#/components/schemas/neverUsedTobacco'
+
+    activeTobaccoUser:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ active ]
+        referredToTobaccoCessationEducation:
+          $ref: '#/components/schemas/yesNoEnum'
+      required:
+        - tobaccoUser
+
+    formerTobaccoUser:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ former ]
+        stoppedUsingTobacco:
+          type: string
+          pattern: date
+      required:
+        - tobaccoUser
+
+    neverUsedTobacco:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ never ]
+      required:
+        - tobaccoUser
+
+    chronicalDiseasesSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            circulatorySystem:
+              $ref: '#/components/schemas/yesNoEnum'
+            respitorySystem:
+              $ref: '#/components/schemas/yesNoEnum'
+            thyroid:
+              $ref: '#/components/schemas/yesNoEnum'
+            diabetes:
+              $ref: '#/components/schemas/yesNoEnum'
+
+    languageSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            nationality:
+              type: string
+      oneOf:
+        - $ref: '#/components/schemas/translationRequirements'
+        - $ref: '#/components/schemas/noTranslationRequirements'
+      discriminator:
+        propertyName: translationRequired
+        mapping:
+          yes: '#/components/schemas/translationRequirements'
+          no: '#/components/schemas/noTranslationRequirements'
+
+    translationRequirements:
+      type: object
+      properties:
+        language:
+          type: string
+        translationRequired:
+          type: string
+          enum: [ yes ]
+      required: [ translationRequired ]
+
+    noTranslationRequirements:
+      type: object
+      properties:
+        translationRequired:
+          type: string
+          enum: [ no ]
+      required: [ translationRequired ]
+
+    bodyMeasuresSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            prenatalBodyWeight:
+              type: object
+              properties:
+                value:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ kg ]
+              required:
+                - value
+                - unit
+            bodyHeight:
+              type: object
+              properties:
+                value:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ cm ]
+              required:
+                - value
+                - unit
+            bodyMassIndex:
+              type: object
+              properties:
+                value:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ kg/m2 ]
+
+    socialHistorySection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            maritalOrPartnershipStatus:
+              type: string
+              enum: [ single, married, separated, divorced, widowed ]
+            livingConditions:
+              type: string
+              enum: [ partnership, single ]
+            additionalInformations:
+              type: string
+
+    childPartnerSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - $ref: '#/components/schemas/cprIdentifiedPerson'
+
+    previousBirthsSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                pattern: date
+              outcome:
+                type: string
+                enum: [ livebirth, stillbirth ]
+              sex:
+                type: string
+                enum: [ female, male ]
+              gestationLength:
+                $ref: '#/components/schemas/durationInDays'
+              birthWeight:
+                type: object
+                properties:
+                  value:
+                    type: integer
+                    minimum: 0
+                  unit:
+                    type: string
+                    enum: [ g ]
+                required: [ value, unit ]
+              birthPlace:
+                type: string
+              pregnancySummary:
+                type: string
+              birthSummary:
+                type: string
+              subjectiveBirthExpirience:
+                type: string
+                enum: [ good, normal, bad ]
+              puerperalSepsis:
+                type: boolean
+              childsCurrentHealthStatus:
+                type: string
+
+    previousAbortionsSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                pattern: date
+              type:
+                type: string
+                enum: [ spontaneous, induced ]
+              gestationLength:
+                type: object
+                properties:
+                  value:
+                    type: integer
+                    minimum: 0
+                  unit:
+                    type: string
+                    enum: [ w ]
+                required: [ value, unit ]
+              indication:
+                type: string
+
+    expectedDateOfDeliverySection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            expectedDateOfDeliveryFromLastPeriod:
+              type: object
+              properties:
+                lastPeriod:
+                  type: string
+                  pattern: date
+                menstrualCycle:
+                  oneOf:
+                    - $ref: '#/components/schemas/durationInDays'
+                    - $ref: '#/components/schemas/durationFromDates'
+                expectedDateOfDelivery:
+                  type: string
+                  pattern: date
+                certainty:
+                  type: string
+                  enum: [ certain, equivocal ]
+            expectedDateOfDeliveryFromPrenatalUtrasoundScan:
+              type: string
+              pattern: date
+            remarks:
+              type: string
+
+    assistedFertilizationSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            receivesFertilizationAssitance:
+              type: boolean
+            remarks:
+              type: string
+
+    prenatalRiskAssessmentSection:
+      type: object
+      properties:
+        preliminaryRiskAssessment:
+          allOf:
+            - $ref: '#/components/schemas/versionedSection'
+            - type: object
+              properties:
+                familyHistory:
+                  type: string
+                consanguinity:
+                  type: boolean
+                firstTrimesterUltrasoundScanOfFetusRequested:
+                  type: boolean
+                secondTrimesterUltrasoundScanOfFetusRequested:
+                  type: boolean
+                prenatalRiskAssessmentRequested:
+                  type: boolean
+        finalRiskAssessment:
+          allOf:
+            - $ref: '#/components/schemas/versionedSection'
+            - type: object
+              properties:
+                doubleTestCompleted:
+                  type: boolean
+                firstTrimesterUltrasoundScanOfFetusCompleted:
+                  type: boolean
+                secondTrimesterUltrasoundScanOfFetusCompleted:
+                  type: boolean
+                downsScreeningProbabilityAssessment:
+                  type: string
+                placentalBiopsiObservation:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      pattern: date
+                    result:
+                      type: string
+                prenatalAmniocentesisiObservation:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      pattern: date
+                    result:
+                      type: string
+
+    workEnvironmentImpactSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            mother:
+              type: object
+              properties:
+                jobType:
+                  type: string
+                hoursOfWorkPerWeek:
+                  type: object
+                  properties:
+                    value:
+                      type: integer
+                      minimum: 0
+                      maximum: 168
+                    unit:
+                      type: string
+                      enum: [ h/wk ]
+                ergonomicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                chemicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                biologicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                otherWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/exposureToWorkEnvironmentRisk'
+                referredToOccupationalHealthDepartmentForRiskAssessment:
+                  type: boolean
+                prenatalSickLeave:
+                  type: string
+                  enum: [ none, partial, full ]
+            partner:
+              type: object
+              properties:
+                jobType:
+                  type: string
+
+    exposureToWorkEnvironmentRisk:
+      allOf:
+        - $ref: '#/components/schemas/durationFromDates'
+        - type: object
+          properties:
+            remarks:
+              type: string
+
+    allergiesSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            allergiesOfMother:
+              type: array
+              items:
+                type: string
+            allergicPredispositionOfChild:
+              type: string
+              enum:
+                - noPredisposition
+                - parentalPredisposition
+                - siblingPredisposition
+                - doublePredisposition
+
+    positiveNegativeDeclinedScreeningWithDateSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - type: object
+          properties:
+            result:
+              type: string
+              enum: [ positive, negative, declined ]
+
+    positiveNegativeScreeningWithDateSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/posNegEnum'
+
+    dateValueUnitScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - type: object
+          properties:
+            value:
+              type: integer
+            unit:
+              type: string
+
+    dateScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            date:
+              type: string
+              pattern: date
+
+    maternalRhDAntibodyScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            bloodSampleTaken:
+              $ref: '#/components/schemas/yesNoEnum'
+            rhesusType:
+              $ref: '#/components/schemas/posNegEnum'
+            irregularBloodGroupAntibodyOresent:
+              $ref: '#/components/schemas/posNegEnum'
+
+    fetalRhDAntibodyScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - type: object
+          properties:
+            rhesusType:
+              $ref: '#/components/schemas/posNegEnum'
+            antiDIsoimmunizationAffectingPregnancy:
+              $ref: '#/components/schemas/posNegEnum'
+
+    yesNoDateScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/dateScreeningSection'
+        - $ref: '#/components/schemas/yesNoValue'
+
+    yesNoVersionedSection:
+      allOf:
+        - $ref: '#/components/schemas/versionedSection'
+        - $ref: '#/components/schemas/yesNoValue'
+
+    cprIdentifiedPerson:
+      allOf:
+        - $ref: '#/components/schemas/person'
+        - type: object
+          properties:
+            identifier:
+              $ref: '#/components/schemas/cprNumber'
+          required:
+            - identifier
+
+    durationInDays:
+      type: object
+      properties:
+        value:
+          type: integer
+          minimum: 0
+        unit:
+          type: string
+          enum: [ d ]
+      required: [ value, unit ]
+
+    durationFromDates:
+      type: object
+      properties:
+        start:
+          type: string
+          pattern: date
+        end:
+          type: string
+          pattern: date
+        calculated:
+          $ref: '#/components/schemas/durationInDays'
+
+    person:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/personName'
+      required:
+        - name
+
+    personName:
+      type: object
+      properties:
+        firstNames:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        middleNames:
+          type: array
+          items:
+            type: string
+        lastName:
+          type: string
+      required:
+        - firstNames
+        - middleNames
+        - lastName
+
+    yesNoValue:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/yesNoEnum'
+    yesNoEnum:
+      type: string
+      enum: [ yes, no ]
+
+    posNegEnum:
+      type: string
+      enum: [ positive, negative ]
+
+    healthCareActor:
+      oneOf:
+        - $ref: '#/components/schemas/healthCareProfessional'
+        - $ref: '#/components/schemas/healthCareOrganization'
+      discriminator:
+        propertyName: objectType
+
+    healthCareProfessional:
+      allOf:
+        - $ref: '#/components/schemas/person'
+        - type: object
+          properties:
+            objectType:
+              type: string
+              enum:
+                - healthCareProfessional
+          required:
+            - objectType
+
+    healthCareOrganization:
+      type: object
+      properties:
+        name:
+          type: string
+        objectType:
+          type: string
+          enum:
+            - healthCareOrganization
+      required:
+        - name
+        - objectType
+
+    phoneNumber:
+      type: string
+      pattern: '^[+]?\s*((\(\s*[0-9]{1,3}\s*\)\s*\-?\s*)|(\s*[0-9]{1,3}\s*\-?\s*))?[0-9]+(\s*\-?\s*[0-9]+)*\s*$'
+      example: '+45 7221 6800'
+
+    versionedSection:
+      type: object
+      properties:
+        modifiedTime:
+          type: string
+          pattern: date-time
+        author:
+          $ref: '#/components/schemas/healthCareActor'
