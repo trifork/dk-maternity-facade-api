@@ -34,6 +34,27 @@ paths:
                 type: array
                 items:
                   $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+        '206':
+          description: >
+            Partial Content -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     post:
       summary: Create a data card
       description: >
@@ -50,7 +71,27 @@ paths:
             application/json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
-
+        '206':
+          description: >
+            Partial Content -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/data-card/{identifier}:
     parameters:
       - in: path
@@ -71,14 +112,24 @@ paths:
         '206':
           description: >
             Partial Content -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '401':
           description: >
             Unauthorized -
-#            content:
-#              application/json:
-#                schema:
-#                  $ref:
-
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     put:
       summary: Update a specific data card
       requestBody:
@@ -93,6 +144,27 @@ paths:
             application/json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+        '206':
+          description: >
+            Partial Content -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     delete:
       summary: Delete a specific data card
       responses:
@@ -101,6 +173,17 @@ paths:
         '401':
           description: >
             Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Unauthorized -
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
 components:
   schemas:
     sessionContext:
