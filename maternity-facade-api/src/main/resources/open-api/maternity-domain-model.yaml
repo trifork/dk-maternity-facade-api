@@ -13,7 +13,7 @@ components:
     CreateDataCardRequest:
       title: Maternity data card to create
       allOf:
-        - $ref: '#/components/schemas/DataCareRequest'
+        - $ref: '#/components/schemas/DataCardRequest'
         - type: object
           properties:
             episodeOfCareIdentifier:
@@ -24,7 +24,7 @@ components:
     UpdateDataCardRequest:
       title: Maternity data card to update
       allOf:
-        - $ref: '#/components/schemas/DataCareRequest'
+        - $ref: '#/components/schemas/DataCardRequest'
 
     DataCardRequest:
       title: Maternity data card response
