@@ -33,6 +33,11 @@ components:
       pattern: '([06][1-9]|[1-25-8][0-9]|[39][0-1])(0[1-9]|1[0-2])[0-9]{6}'
       example: '9103672134'
 
+    PartialDetails:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+      
+
     ProblemDetails:
       title: Problem Details for HTTP APIs
       description: >

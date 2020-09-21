@@ -40,19 +40,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     post:
@@ -77,19 +77,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/data-card/{identifier}:
@@ -115,19 +115,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     put:
@@ -150,19 +150,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     delete:
@@ -174,14 +174,14 @@ paths:
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Unauthorized -
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
 components:
@@ -210,7 +210,7 @@ components:
             patient-identifier:
               $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
             application-mode:
-              $ref: '#/components/schemas/applicationMode'
+              $ref: '#/components/schemas/ApplicationMode'
           required:
             - patient-identifier
             - application-mode
@@ -228,9 +228,9 @@ components:
         eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.
         mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc
 
-    applicationMode:
+    ApplicationMode:
       type: string
-      enum: [standalone, embedded]
+      enum: [ standalone, embedded ]
 
   securitySchemes:
     application:
