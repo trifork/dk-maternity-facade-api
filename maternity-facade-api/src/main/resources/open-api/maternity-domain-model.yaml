@@ -10,14 +10,43 @@ paths: {}
 components:
   schemas:
 
-    GetDataCardResponse:
+    CreateDataCardRequest:
+      title: Maternity data card to create
+      allOf:
+        - $ref: '#/components/schemas/DataCareRequest'
+        - type: object
+          properties:
+            episodeOfCareIdentifier:
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/uuidv5'
+          required:
+            - episodeOfCareIdentifier
+
+    UpdateDataCardRequest:
+      title: Maternity data card to update
+      allOf:
+        - $ref: '#/components/schemas/DataCareRequest'
+
+    DataCardRequest:
+      title: Maternity data card response
+      allOf:
+        - $ref: '#/components/schemas/DataCard'
+
+    DataCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/DataCard'
+        - type: object
+          properties:
+            episodeOfCareIdentifier:
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/uuidv5'
+          required:
+            - episodeOfCareIdentifier
+
+    DataCard:
       title: Maternity data card
       allOf:
         - $ref: '#/components/schemas/versionedSection'
         - type: object
           properties:
-            episodeOfCareIdentifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/uuidv5'
             recordTarget:
               $ref: '#/components/schemas/cprIdentifiedPerson'
             childPartnerSection:
@@ -117,22 +146,6 @@ components:
           required:
             - recordTarget
             - author
-
-#    CreateDataCardRequest:
-#      type: object
-#      properties:
-
-    CreateDataCardResponse:
-      allOf:
-        - $ref: '#/components/schemas/GetDataCardResponse'
-
-#    UpdateDataCardRequest:
-#      type: object
-#      properties:
-
-    UpdateDataCardResponse:
-      allOf:
-        - $ref: '#/components/schemas/GetDataCardResponse'
 
     overallAssessmentSection:
       allOf:

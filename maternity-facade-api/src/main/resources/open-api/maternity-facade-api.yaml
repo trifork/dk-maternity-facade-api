@@ -33,12 +33,24 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/GetDataCardResponse'
+                  $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
     post:
       summary: Create a data card
+      description: >
+        Creates a new data card for the current patient identified in the **context** cookie.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/CreateDataCardRequest'
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+
   /maternity/data-card/{identifier}:
     parameters:
       - in: path
@@ -52,16 +64,43 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+        '206':
+          description: >
+            Partial Content -
+        '401':
+          description: >
+            Unauthorized -
+#            content:
+#              application/json:
+#                schema:
+#                  $ref:
+
     put:
       summary: Update a specific data card
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/UpdateDataCardRequest'
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
     delete:
       summary: Delete a specific data card
       responses:
         '200':
           description: OK
+        '401':
+          description: >
+            Unauthorized -
 components:
   schemas:
     sessionContext:
