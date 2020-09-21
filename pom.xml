@@ -15,6 +15,7 @@
 
     <modules>
         <module>maternity-facade-api</module>
+        <module>common</module>
     </modules>
 
     <build>
