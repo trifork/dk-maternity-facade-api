@@ -13,6 +13,7 @@ security:
   - application:
       - read
       - write
+
 paths:
   /maternity/data-card:
     parameters:
@@ -22,6 +23,7 @@ paths:
         schema:
           $ref: '#/components/schemas/sessionContext'
     get:
+      tags: [data-card]
       summary: Get data cards
       description: >
         Gets all data cards for the current patient identified in the **context** cookie.
@@ -56,6 +58,7 @@ paths:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     post:
+      tags: [data-card]
       summary: Create a data card
       description: >
         Creates a new data card for the current patient identified in the **context** cookie.
@@ -101,6 +104,7 @@ paths:
         required: true
         description: The identifier of the data card
     get:
+      tags: [data-card]
       summary: Get a specific data card
       responses:
         '200':
@@ -131,6 +135,7 @@ paths:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     put:
+      tags: [data-card]
       summary: Update a specific data card
       requestBody:
         content:
@@ -166,6 +171,7 @@ paths:
               schema:
                 $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     delete:
+      tags: [data-card]
       summary: Delete a specific data card
       responses:
         '200':
