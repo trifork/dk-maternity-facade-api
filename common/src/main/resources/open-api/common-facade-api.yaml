@@ -4,6 +4,9 @@ info:
   title: Common Domain Model
   description: Common Domain Model for Facade APIs
   version: 1.0.0
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
 
 paths: {}
 
@@ -36,7 +39,7 @@ components:
     PartialDetails:
       allOf:
         - $ref: '#/components/schemas/ProblemDetails'
-      
+
 
     ProblemDetails:
       title: Problem Details for HTTP APIs

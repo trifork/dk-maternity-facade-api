@@ -1,14 +1,15 @@
 openapi: 3.0.0
-# Added by API Auto Mocking Plugin
-servers:
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/trifork-nsp/maternity-facade-api/1.0.0
+
 info:
   version: "1.0.0"
   title: DK Maternity Facade API
   description: >
     This is the specification of the DK Maternity Facade API.
     It is a facade for the Web Services Resource Transfer DK Maternity API.
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
+
 security:
   - application:
       - read

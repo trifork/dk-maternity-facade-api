@@ -4,6 +4,9 @@ info:
   title: Data Card Domain Model
   description: Data Card Domain Model for Maternity Facade API
   version: 1.0.0
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
 
 paths: {}
 
