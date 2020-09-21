@@ -873,7 +873,7 @@ components:
         - type: object
           properties:
             identifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml/components/schemas/cprNumber'
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/cprNumber'
           required:
             - identifier
 
