@@ -35,7 +35,7 @@ paths:
             When set and the **context** cookie has applicationMode = standalone changes the patient.
           required: false
           schema:
-            $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
+            $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
         - in: header
           name: X-Break-The-Glass-Reason
           description: >
@@ -63,7 +63,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                  $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
@@ -79,21 +79,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     post:
       tags: [data-card]
       summary: Create a data card
@@ -103,41 +103,41 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'maternity-domain-model.yaml#/components/schemas/CreateDataCardRequest'
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/CreateDataCardRequest'
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/data-card/{identifier}:
     parameters:
       - in: path
         name: identifier
         schema:
-          $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
+          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
         required: true
         description: The identifier of the data card
     get:
@@ -166,28 +166,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     put:
       tags: [data-card]
       summary: Update a specific data card
@@ -195,35 +195,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'maternity-domain-model.yaml#/components/schemas/UpdateDataCardRequest'
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/UpdateDataCardRequest'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     delete:
       tags: [data-card]
       summary: Delete a specific data card
@@ -236,14 +236,14 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
 components:
   schemas:
     SessionContext:
@@ -268,7 +268,7 @@ components:
           type: object
           properties:
             patientIdentifier:
-              $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
+              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
             applicationMode:
               $ref: '#/components/schemas/ApplicationMode'
             breakTheGlass:
