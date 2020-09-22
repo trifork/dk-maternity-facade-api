@@ -20,44 +20,80 @@ paths:
     parameters:
       - in: cookie
         name: context
+        description: >
+          The context encoded as a JWT token, see [SessionContext](#/components/schemas/SessionContext)
         required: true
         schema:
-          $ref: '#/components/schemas/sessionContext'
+          $ref: '#/components/schemas/SessionContext'
     get:
       tags: [data-card]
       summary: Get data cards
+      parameters:
+        - in: header
+          name: X-Patient-Identifier
+          description: >
+            When set and the **context** cookie has applicationMode = standalone changes the patient.
+          required: false
+          schema:
+            $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
+        - in: header
+          name: X-Break-The-Glass-Reason
+          description: >
+            When set disables access controls for a well defined period of time or until the patient is changed
+          required: false
+          schema:
+            $ref: '#/components/schemas/BreakTheGlassReason'
       description: >
-        Gets all data cards for the current patient identified in the **context** cookie.
+        Gets all data cards for the current patient identified in the **context** cookie unless the header X-Patient-Identifier is set, in which case that patient is used.
       responses:
         '200':
           description: OK
+          headers:
+            Set-Cookie:
+              description: >
+                The **context** cookie.
+                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
+                If the **X-Break-The-Glass-Reason** header was set the **context** is updated to contain a breakTheGlass with an expiration time.
+              schema:
+                type: string
+              example: >
+                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                  $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
+          headers:
+            Set-Cookie:
+              description: >
+                The updated **context** cookie.
+                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
+              schema:
+                type: string
+              example: >
+                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     post:
       tags: [data-card]
       summary: Create a data card
@@ -67,74 +103,91 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/CreateDataCardRequest'
+              $ref: 'maternity-domain-model.yaml#/components/schemas/CreateDataCardRequest'
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/data-card/{identifier}:
     parameters:
       - in: path
         name: identifier
         schema:
-          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
+          $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
         required: true
         description: The identifier of the data card
     get:
       tags: [data-card]
       summary: Get a specific data card
+      parameters:
+        - in: header
+          name: X-Break-The-Glass-Reason
+          description: >
+            When set disables access controls for a well defined period of time or until the patient is changed
+          required: false
+          schema:
+            $ref: '#/components/schemas/BreakTheGlassReason'
       responses:
         '200':
           description: OK
+          headers:
+            Set-Cookie:
+              description: >
+                The updated **context** cookie.
+                If the **X-Break-The-Glass-Reason** header was set the **context** is updated to contain a breakTheGlass with an expiration time.
+              schema:
+                type: string
+              example: >
+                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     put:
       tags: [data-card]
       summary: Update a specific data card
@@ -142,35 +195,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/UpdateDataCardRequest'
+              $ref: 'maternity-domain-model.yaml#/components/schemas/UpdateDataCardRequest'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'maternity-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     delete:
       tags: [data-card]
       summary: Delete a specific data card
@@ -183,20 +236,20 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
 components:
   schemas:
-    sessionContext:
+    SessionContext:
       title: Session context
       description: >
-        The patient and application mode encoded as a JWT
+        The patient, application mode and break the glass expiration encoded as a JWT
       type: object
       properties:
         header:
@@ -214,10 +267,21 @@ components:
         payload:
           type: object
           properties:
-            patient-identifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
-            application-mode:
+            patientIdentifier:
+              $ref: '../../../../../common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
+            applicationMode:
               $ref: '#/components/schemas/ApplicationMode'
+            breakTheGlass:
+              description: >
+                If present access controls will be bypassed "breaking the glass".
+              type: object
+              properties:
+                expires:
+                  description: After this time the session will return to normal mode.
+                  type: string
+                  pattern: date-time
+              required:
+                - expires
           required:
             - patient-identifier
             - application-mode
@@ -230,14 +294,15 @@ components:
         - header
         - payload
         - signature
-      example: >
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
-        eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.
-        mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc
 
     ApplicationMode:
       type: string
       enum: [ standalone, embedded ]
+
+    BreakTheGlassReason:
+      type: string
+      example: Patienten har givet telefonisk samtykke
 
   securitySchemes:
     application:
