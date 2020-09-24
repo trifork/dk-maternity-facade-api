@@ -1,4 +1,4 @@
-package dk.sds.nsp.maternity.facade.maternity.model;
+package dk.sds.nsp.maternity.facade.common.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
