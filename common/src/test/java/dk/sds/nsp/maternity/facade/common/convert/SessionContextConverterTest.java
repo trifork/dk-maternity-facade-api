@@ -23,8 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = SpringTestConfiguration.class)
 class SessionContextConverterTest {
 
+    private final SessionContextConverter converter;
+
     @Autowired
-    private SessionContextConverter converter;
+    SessionContextConverterTest(final SessionContextConverter converter) {
+        this.converter = converter;
+    }
 
     @ParameterizedTest
     @MethodSource("arguments")

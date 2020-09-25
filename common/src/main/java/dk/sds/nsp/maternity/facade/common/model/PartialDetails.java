@@ -1,10 +1,12 @@
-package dk.sds.nsp.maternity.facade.maternity.model;
+package dk.sds.nsp.maternity.facade.common.model;
 
+import javax.annotation.Generated;
 import java.util.Objects;
 
 /**
  * PartialDetails
  */
+@Generated("openapi")
 public class PartialDetails extends ProblemDetails {
 
     @Override

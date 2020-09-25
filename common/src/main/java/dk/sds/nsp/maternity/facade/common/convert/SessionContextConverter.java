@@ -27,6 +27,8 @@ public class SessionContextConverter implements ParamConverter<SessionContext> {
 
     @Override
     public SessionContext fromString(final String value) {
+        if(value == null) return null;
+
         final DecodedJWT jwt = jwtHelper.verify(value);
         return SessionContext
                 .withApplicationMode(ApplicationMode.fromValue(jwt.getClaim(APPLICATION_MODE_CLAIM_NAME).asString()))
@@ -37,6 +39,8 @@ public class SessionContextConverter implements ParamConverter<SessionContext> {
 
     @Override
     public String toString(final SessionContext sessionContext) {
+        if(sessionContext == null) return null;
+
         return jwtHelper.sign(JWT.create()
                 .withClaim(APPLICATION_MODE_CLAIM_NAME, sessionContext.getApplicationMode().toString())
                 .withClaim(PATIENT_IDENTIFIER_CLAIM_NAME, sessionContext.getPatientIdentifier())

@@ -7,16 +7,17 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
 @Path("data-card")
-@Produces("application/json")
+@Produces(MediaType.APPLICATION_JSON)
 public class DataCardService {
 
     @GET
     public Response getDataCards(@CookieParam("context") final SessionContext context) {
-        return Response.ok().build();
+        return Response.ok().entity(context).build();
     }
 
     @GET
