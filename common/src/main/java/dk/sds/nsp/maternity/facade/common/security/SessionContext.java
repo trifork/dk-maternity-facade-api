@@ -14,6 +14,7 @@ public class SessionContext {
     public static final String APPLICATION_MODE_CLAIM_NAME = "applicationMode";
     public static final String BREAK_THE_GLASS_EXPIRATION_CLAIM_NAME = "breakTheGlassExpiration";
 
+    public static SessionContextBuilder clone(final SessionContext context) { return new SessionContextBuilder(context); }
     public static SessionContextBuilder withPatientIdentifier(final String patientIdentifier) { return new SessionContextBuilder().withPatientIdentifier(patientIdentifier); }
     public static SessionContextBuilder withApplicationMode(final ApplicationMode applicationMode) { return new SessionContextBuilder().withApplicationMode(applicationMode); }
     public static SessionContextBuilder withBreakTheGlassExpiration(final LocalDateTime breakTheGlassExpiration) { return new SessionContextBuilder().withBreakTheGlassExpiration(breakTheGlassExpiration); }
@@ -62,6 +63,12 @@ public class SessionContext {
         private LocalDateTime breakTheGlassExpiration;
 
         private SessionContextBuilder() {}
+
+        public SessionContextBuilder(final SessionContext context) {
+            patientIdentifier = context.patientIdentifier;
+            applicationMode = context.applicationMode;
+            breakTheGlassExpiration = context.breakTheGlassExpiration;
+        }
 
         public SessionContextBuilder withPatientIdentifier(final String patientIdentifier) {
             this.patientIdentifier = patientIdentifier;

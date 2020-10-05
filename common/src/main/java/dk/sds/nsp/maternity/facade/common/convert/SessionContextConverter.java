@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.ext.ParamConverter;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static dk.sds.nsp.maternity.facade.common.convert.LocalDateTimeConverter.convert;
 import static dk.sds.nsp.maternity.facade.common.security.SessionContext.APPLICATION_MODE_CLAIM_NAME;
@@ -17,6 +21,12 @@ import static dk.sds.nsp.maternity.facade.common.security.SessionContext.PATIENT
 
 @Component
 public class SessionContextConverter implements ParamConverter<SessionContext> {
+
+    private static final Map<String, Object> JWT_HEADER_CLAIMS;
+
+    static {
+        JWT_HEADER_CLAIMS = Stream.of("typ").collect(Collectors.toMap(Function.identity(), e -> "JWT"));
+    }
 
     private final JWTHelper jwtHelper;
 
@@ -41,7 +51,15 @@ public class SessionContextConverter implements ParamConverter<SessionContext> {
     public String toString(final SessionContext sessionContext) {
         if(sessionContext == null) return null;
 
+        if(sessionContext.getBreakTheGlassExpiration() == null) {
+            return jwtHelper.sign(JWT.create()
+                    .withHeader(JWT_HEADER_CLAIMS)
+                    .withClaim(APPLICATION_MODE_CLAIM_NAME, sessionContext.getApplicationMode().toString())
+                    .withClaim(PATIENT_IDENTIFIER_CLAIM_NAME, sessionContext.getPatientIdentifier()));
+        }
+
         return jwtHelper.sign(JWT.create()
+                .withHeader(JWT_HEADER_CLAIMS)
                 .withClaim(APPLICATION_MODE_CLAIM_NAME, sessionContext.getApplicationMode().toString())
                 .withClaim(PATIENT_IDENTIFIER_CLAIM_NAME, sessionContext.getPatientIdentifier())
                 .withClaim(BREAK_THE_GLASS_EXPIRATION_CLAIM_NAME, convert(sessionContext.getBreakTheGlassExpiration())));
