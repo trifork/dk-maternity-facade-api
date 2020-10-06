@@ -1,7 +1,7 @@
 package dk.sds.nsp.maternity.facade.maternity.security;
 
-import dk.sds.nsp.maternity.facade.common.convert.SessionContextConverter;
-import dk.sds.nsp.maternity.facade.common.security.SessionContext;
+import dk.sds.nsp.maternity.facade.maternity.jaxrs.SessionContextConverter;
+import dk.sds.nsp.maternity.facade.common.security.Cookies;
 import dk.sds.nsp.maternity.facade.common.spring.SpringContext;
 
 import javax.ws.rs.core.NewCookie;
@@ -15,12 +15,22 @@ public final class SecurityHandler {
 
     public static NewCookie updateContextCookie(final SessionContext context) {
         if(isBreakTheGlassExpired(context)) {
-            return new NewCookie("context", CONVERTER.toString(SessionContext.clone(context).withBreakTheGlassExpiration(null).build()));
+            final SessionContext updatedContext = SessionContext.clone(context).withBreakTheGlassExpiration(null).build();
+            return cookie(updatedContext);
         }
-        return new NewCookie("context", CONVERTER.toString(context));
+
+        return cookie(context);
     }
 
     private static boolean isBreakTheGlassExpired(final SessionContext context) {
         return context.getBreakTheGlassExpiration() != null && LocalDateTime.now().isAfter(context.getBreakTheGlassExpiration());
+    }
+
+    private static NewCookie cookie(final SessionContext context) {
+        return Cookies.cookie()
+                .withName("context")
+                .withValue(CONVERTER.toString(context))
+                .secure()
+                .build();
     }
 }

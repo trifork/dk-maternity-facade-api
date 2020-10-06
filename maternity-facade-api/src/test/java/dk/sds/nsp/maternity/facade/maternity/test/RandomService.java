@@ -1,4 +1,4 @@
-package dk.sds.nsp.maternity.facade.test;
+package dk.sds.nsp.maternity.facade.maternity.test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

@@ -1,4 +1,4 @@
-package dk.sds.nsp.maternity.facade.common.security;
+package dk.sds.nsp.maternity.facade.maternity.security;
 
 import dk.sds.nsp.maternity.facade.common.model.ApplicationMode;
 

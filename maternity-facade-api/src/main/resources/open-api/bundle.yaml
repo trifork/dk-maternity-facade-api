@@ -1,0 +1,1394 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.0"
+  title: DK Maternity Facade API
+  description: >
+    This is the specification of the DK Maternity Facade API.
+    It is a facade for the Web Services Resource Transfer DK Maternity API.
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
+
+security:
+  - application:
+      - read
+      - write
+
+paths:
+  /maternity/data-card:
+    parameters:
+      - in: cookie
+        name: context
+        description: >
+          The context encoded as a JWT token, see [SessionContext](#/components/schemas/SessionContext)
+        required: true
+        schema:
+          $ref: '#/components/schemas/SessionContext'
+    get:
+      tags: [data-card]
+      summary: Get data cards
+      parameters:
+        - in: header
+          name: X-Patient-Identifier
+          description: >
+            When set and the **context** cookie has applicationMode = standalone changes the patient.
+          required: false
+          schema:
+            $ref: '#/components/schemas/CprNumber'
+        - in: header
+          name: X-Break-The-Glass-Reason
+          description: >
+            When set disables access controls for a well defined period of time or until the patient is changed
+          required: false
+          schema:
+            $ref: '#/components/schemas/BreakTheGlassReason'
+      description: >
+        Gets all data cards for the current patient identified in the **context** cookie unless the header X-Patient-Identifier is set, in which case that patient is used.
+      responses:
+        '200':
+          description: OK
+          headers:
+            Set-Cookie:
+              description: >
+                The **context** cookie.
+                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
+                If the **X-Break-The-Glass-Reason** header was set the **context** is updated to contain a breakTheGlass with an expiration time.
+              schema:
+                type: string
+              example: >
+                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataCardResponse'
+        '206':
+          description: >
+            Partial Content -
+          headers:
+            Set-Cookie:
+              description: >
+                The updated **context** cookie.
+                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
+              schema:
+                type: string
+              example: >
+                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardResponse'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    post:
+      tags: [data-card]
+      summary: Create a data card
+      description: >
+        Creates a new data card for the current patient identified in the **context** cookie.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataCardRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardResponse'
+        '206':
+          description: >
+            Partial Content -
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardResponse'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /maternity/data-card/{identifier}:
+    parameters:
+      - in: path
+        name: identifier
+        schema:
+          $ref: '#/components/schemas/Uuidv4'
+        required: true
+        description: The identifier of the data card
+    get:
+      tags: [data-card]
+      summary: Get a specific data card
+      parameters:
+        - in: header
+          name: X-Break-The-Glass-Reason
+          description: >
+            When set disables access controls for a well defined period of time or until the patient is changed
+          required: false
+          schema:
+            $ref: '#/components/schemas/BreakTheGlassReason'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Set-Cookie:
+              description: >
+                The updated **context** cookie.
+                If the **X-Break-The-Glass-Reason** header was set the **context** is updated to contain a breakTheGlass with an expiration time.
+              schema:
+                type: string
+              example: >
+                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardResponse'
+        '206':
+          description: >
+            Partial Content -
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardResponse'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    put:
+      tags: [data-card]
+      summary: Update a specific data card
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDataCardRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardResponse'
+        '206':
+          description: >
+            Partial Content -
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardResponse'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    delete:
+      tags: [data-card]
+      summary: Delete a specific data card
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+components:
+  schemas:
+    SessionContext:
+      title: Session context
+      description: >
+        The patient, application mode and break the glass expiration encoded as a JWT
+      type: object
+      properties:
+        header:
+          type: object
+          properties:
+            alg:
+              type: string
+              enum: [HS256]
+            typ:
+              type: string
+              enum: [JWT]
+          required:
+            - alg
+            - typ
+        payload:
+          type: object
+          properties:
+            patientIdentifier:
+              $ref: '#/components/schemas/CprNumber'
+            applicationMode:
+              $ref: '#/components/schemas/ApplicationMode'
+            breakTheGlass:
+              description: >
+                If present access controls will be bypassed "breaking the glass".
+              type: object
+              properties:
+                expires:
+                  description: After this time the session will return to normal mode.
+                  type: string
+                  pattern: date-time
+              required:
+                - expires
+          required:
+            - patient-identifier
+            - application-mode
+        signature:
+          description: The signature of the JWT
+          type: string
+          minLength: 44
+          maxLength: 44
+      required:
+        - header
+        - payload
+        - signature
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc
+
+    ApplicationMode:
+      type: string
+      enum: [ standalone, embedded ]
+
+    BreakTheGlassReason:
+      type: string
+      example: Patienten har givet telefonisk samtykke
+
+
+    CreateDataCardRequest:
+      title: Maternity data card to create
+      allOf:
+        - $ref: '#/components/schemas/DataCardRequest'
+        - type: object
+          properties:
+            episodeOfCareIdentifier:
+              $ref: '#/components/schemas/Uuidv5'
+          required:
+            - episodeOfCareIdentifier
+
+    UpdateDataCardRequest:
+      title: Maternity data card to update
+      allOf:
+        - $ref: '#/components/schemas/DataCardRequest'
+
+    DataCardRequest:
+      title: Maternity data card response
+      allOf:
+        - $ref: '#/components/schemas/DataCard'
+
+    DataCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/DataCard'
+        - type: object
+          properties:
+            episodeOfCareIdentifier:
+              $ref: '#/components/schemas/Uuidv5'
+            identifier:
+              $ref: '#/components/schemas/Uuidv4'
+          required:
+            - episodeOfCareIdentifier
+
+    DataCard:
+      title: Maternity data card
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            recordTarget:
+              $ref: '#/components/schemas/CprIdentifiedPerson'
+            childPartnerSection:
+              $ref: '#/components/schemas/ChildPartnerSection'
+            languageSection:
+              $ref: '#/components/schemas/LanguageSection'
+            bodyMeasuresSection:
+              $ref: '#/components/schemas/BodyMeasuresSection'
+            socialHistorySection:
+              $ref: '#/components/schemas/SocialHistorySection'
+            previousBirthsSection:
+              $ref: '#/components/schemas/PreviousBirthsSection'
+            previousAbortionsSection:
+              $ref: '#/components/schemas/PreviousAbortionsSection'
+            expectedDateOfDeliverySection:
+              $ref: '#/components/schemas/ExpectedDateOfDeliverySection'
+            prenatalRiskAssessmentSection:
+              $ref: '#/components/schemas/PrenatalRiskAssessmentSection'
+            workEnvironmentImpactSection:
+              $ref: '#/components/schemas/WorkEnvironmentImpactSection'
+            allergiesSection:
+              $ref: '#/components/schemas/AllergiesSection'
+            screeningsSection:
+              type: object
+              properties:
+                hepatitisB:
+                  $ref: '#/components/schemas/PositiveNegativeDeclinedScreeningWithDateSection'
+                hiv:
+                  $ref: '#/components/schemas/PositiveNegativeDeclinedScreeningWithDateSection'
+                syphilis:
+                  $ref: '#/components/schemas/PositiveNegativeDeclinedScreeningWithDateSection'
+                chlamydia:
+                  $ref: '#/components/schemas/PositiveNegativeScreeningWithDateSection'
+                gonorrhea:
+                  $ref: '#/components/schemas/PositiveNegativeScreeningWithDateSection'
+                streptococcusGroupB:
+                  $ref: '#/components/schemas/PositiveNegativeScreeningWithDateSection'
+                hemoglobinopathy:
+                  $ref: '#/components/schemas/PositiveNegativeScreeningWithDateSection'
+                vitaminDConsumption:
+                  $ref: '#/components/schemas/DateValueUnitScreeningSection'
+                maternalRhDAntibody:
+                  $ref: '#/components/schemas/MaternalRhDAntibodyScreeningSection'
+                fetalRhDAntibody:
+                  $ref: '#/components/schemas/FetalRhDAntibodyScreeningSection'
+                diabetesWeek18To20:
+                  $ref: '#/components/schemas/DateValueUnitScreeningSection'
+                diabetesWeek28To30:
+                  $ref: '#/components/schemas/DateValueUnitScreeningSection'
+                diabetesGlycosuria:
+                  $ref: '#/components/schemas/DateValueUnitScreeningSection'
+                antiDImmunoglobulinGiven:
+                  $ref: '#/components/schemas/YesNoDateScreeningSection'
+            chronicalDiseasesSection:
+              $ref: '#/components/schemas/ChronicDiseasesSection'
+            medicineSection:
+              allOf:
+                - $ref: '#/components/schemas/VersionedSection'
+                - type: object
+                  properties:
+                    medicine:
+                      type: string
+            mmrVacinationSection:
+              allOf:
+                - $ref: '#/components/schemas/VersionedSection'
+                - type: object
+                  properties:
+                    value:
+                      type: string
+                      enum: [ vaccinated, notVacinnated, unknown ]
+            historyOfPreviousTreatmentWithImpactOnPregnancySection:
+              allOf:
+                - $ref: '#/components/schemas/VersionedSection'
+                - type: object
+                  properties:
+                    history:
+                      type: string
+            tobaccoUseAndExposureSection:
+              $ref: '#/components/schemas/TobaccoUseAndExposureSection'
+            alcoholDrinkingBehaviorSection:
+              $ref: '#/components/schemas/AlcoholDrinkingBehaviorSection'
+            substanceUseSection:
+              $ref: '#/components/schemas/SubstanceUseSection'
+            dietaryAndExerciseSection:
+              $ref: '#/components/schemas/DietaryAndExerciseSection'
+            healthInsuranceSection:
+              $ref: '#/components/schemas/HealthInsuranceSection'
+            birthPlaceSection:
+              $ref: '#/components/schemas/BirthPlaceSection'
+            midwifeClinicSection:
+              $ref: '#/components/schemas/MidwifeClinicSection'
+            postpartumNursingSection:
+              $ref: '#/components/schemas/PostpartumNursingSection'
+            overallAssessmentSection:
+              $ref: '#/components/schemas/OverallAssessmentSection'
+
+          required:
+            - recordTarget
+            - author
+
+    OverallAssessmentSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            prenatalCareAssessment:
+              properties:
+                assessment:
+                  type: string
+                numberOfFetuses:
+                  type: integer
+                  minimum: 0
+                careLevel:
+                  type: string
+                  enum: [ basic, extended, specialistMultidisciplinaryTeam, highRiskPregnancyCare ]
+            obstetricAssessment:
+              oneOf:
+                - $ref: '#/components/schemas/ObstetricAssessment'
+                - $ref: '#/components/schemas/NoObstetricAssessment'
+              discriminator:
+                propertyName: required
+                mapping:
+                  yes: '#/components/schemas/obstetricAssessment'
+                  no: '#/components/schemas/noObstetricAssessment'
+            socialServicesPerinatalCareAssessment:
+              oneOf:
+                - $ref: '#/components/schemas/SocialServicesPerinatalCareAssessment'
+                - $ref: '#/components/schemas/NoSocialServicesPerinatalCareAssessment'
+              discriminator:
+                propertyName: required
+                mapping:
+                  yes: '#/components/schemas/socialServicesPerinatalCareAssessment'
+                  no: '#/components/schemas/noSocialServicesPerinatalCareAssessment'
+
+    ObstetricAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ yes ]
+          default: yes
+        reason:
+          type: string
+      required: [ required ]
+
+    NoObstetricAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ no ]
+          default: no
+      required: [ required ]
+
+    SocialServicesPerinatalCareAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ yes ]
+          default: yes
+        reason:
+          type: string
+        assessmentDate:
+          type: string
+          pattern: date
+      required: [ required ]
+
+    NoSocialServicesPerinatalCareAssessment:
+      type: object
+      properties:
+        required:
+          type: string
+          enum: [ no ]
+          default: no
+      required: [ required ]
+
+    PostpartumNursingSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            organization:
+              $ref: '#/components/schemas/HealthCareOrganization'
+            postpartumNurse:
+              allOf:
+                - $ref: '#/components/schemas/Person'
+                - type: object
+                  properties:
+                    phoneNumber:
+                      $ref: '#/components/schemas/PhoneNumber'
+
+    MidwifeClinicSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            midwifeConsultationWishes:
+              type: object
+              properties:
+                location:
+                  type: string
+                weekday:
+                  type: string
+                  enum:
+                    - monday
+                    - tuesday
+                    - wednesday
+                    - thursday
+                    - friday
+                    - saturday
+                    - sunday
+                midwife:
+                  $ref: '#/components/schemas/Person'
+
+            assignedMidwifeClinic:
+              $ref: '#/components/schemas/HealthCareOrganization'
+      oneOf:
+        - $ref: '#/components/schemas/ParentalCraftClassesDesire'
+        - $ref: '#/components/schemas/NoParentalCraftClassesDesire'
+      discriminator:
+        propertyName: parentalCraftClassDesired
+        mapping:
+          yes: '#/components/schemas/ParentalCraftClassesDesire'
+          no: '#/components/schemas/NoParentalCraftClassesDesire'
+
+    ParentalCraftClassesDesire:
+      type: object
+      properties:
+        parentalCraftClassDesired:
+          type: string
+          enum: [ yes ]
+          default: yes
+        consultationForm:
+          type: string
+          enum: [ individual, group ]
+      required:
+        - parentalCraftClassDesired
+
+    NoParentalCraftClassesDesire:
+      type: object
+      properties:
+        parentalCraftClassDesired:
+          type: string
+          enum: [ no ]
+          default: no
+      required:
+        - parentalCraftClassDesired
+
+    BirthPlaceSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            desiredBirthPlace:
+              type: string
+            primaryPlannedBirthPlace: # How to handle home births?
+              $ref: '#/components/schemas/HealthCareOrganization'
+            revisedPlannedBirthPlace: # How to handle home births?
+              $ref: '#/components/schemas/HealthCareOrganization'
+
+    HealthInsuranceSection:
+      oneOf:
+        - $ref: '#/components/schemas/Group1HealthInsurance'
+        - $ref: '#/components/schemas/OtherThanGroup1HealthInsurance'
+      discriminator:
+        propertyName: insuranceGroup
+        mapping:
+          1: '#/components/schemas/group1HealthInsurance'
+          2: '#/components/schemas/otherThanGroup1HealthInsurance'
+          4: '#/components/schemas/otherThanGroup1HealthInsurance'
+          6: '#/components/schemas/otherThanGroup1HealthInsurance'
+          7: '#/components/schemas/otherThanGroup1HealthInsurance'
+          8: '#/components/schemas/otherThanGroup1HealthInsurance'
+
+    HealthInsurance:
+      type: object
+      properties:
+        generalPractitioner:
+          $ref: '#/components/schemas/HealthCareProfessional'
+        insuranceGroup:
+          type: string
+          enum: [ '1', '2', '4', '5', '6', '7', '8', '9' ]
+      required:
+        - insuranceGroup
+
+    Group1HealthInsurance:
+      allOf:
+        - $ref: '#/components/schemas/HealthInsurance'
+        - type: object
+          properties:
+            insuranceGroup:
+              type: string
+              enum: [ '1' ]
+          required:
+            - insuranceGroup
+
+    OtherThanGroup1HealthInsurance:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - $ref: '#/components/schemas/HealthInsurance'
+        - type: object
+          properties:
+            insuranceGroup:
+              type: string
+              enum: [ '2', '4', '6', '7', '8' ]
+              default: '2'
+          required:
+            - insuranceGroup
+
+
+    DietaryAndExerciseSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            text:
+              type: string
+
+    SubstanceUseSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            substanceUseBeforePregnancy:
+              $ref: '#/components/schemas/SubstanceUseObservation'
+            substanceUseDuringPregnancy:
+              $ref: '#/components/schemas/SubstanceUseObservation'
+
+    SubstanceUseObservation:
+      oneOf:
+        - $ref: '#/components/schemas/SubstanceUse'
+        - $ref: '#/components/schemas/NoSubstanceUse'
+      discriminator:
+        propertyName: substanceUse
+        mapping:
+          yes: '#/components/schemas/substanceUse'
+          no: '#/components/schemas/noSubstanceUse'
+
+    SubstanceUse:
+      type: object
+      properties:
+        substanceUse:
+          type: string
+          enum: [ yes ]
+        text:
+          type: string
+      required:
+        - substanceUse
+
+    NoSubstanceUse:
+      type: object
+      properties:
+        substanceUse:
+          type: string
+          enum: [ no ]
+      required:
+        - substanceUse
+
+    AlcoholDrinkingBehaviorSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            weeklyConsumptionBeforePregnancy:
+              $ref: '#/components/schemas/WeeklyAlcoholUnitsConsumption'
+            weeklyConsumptionDuringPregnancy:
+              $ref: '#/components/schemas/WeeklyAlcoholUnitsConsumption'
+
+    WeeklyAlcoholUnitsConsumption:
+      type: object
+      properties:
+        value:
+          type: integer
+          minimum: 0
+        multiplier:
+          type: integer
+          minimum: 12
+          maximum: 12
+          default: 12
+        unit:
+          type: string
+          enum: [ g/wk ]
+      required:
+        - value
+        - multiplier
+        - unit
+
+    TobaccoUseAndExposureSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            exposureToEnvironmentalTobaccoSmoke:
+              $ref: '#/components/schemas/YesNoEnum'
+      oneOf:
+        - $ref: '#/components/schemas/ActiveTobaccoUser'
+        - $ref: '#/components/schemas/FormerTobaccoUser'
+        - $ref: '#/components/schemas/NeverUsedTobacco'
+      discriminator:
+        propertyName: tobaccoUser
+        mapping:
+          active: '#/components/schemas/activeTobaccoUser'
+          former: '#/components/schemas/formerTobaccoUser'
+          never: '#/components/schemas/neverUsedTobacco'
+
+    ActiveTobaccoUser:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ active ]
+        referredToTobaccoCessationEducation:
+          $ref: '#/components/schemas/YesNoEnum'
+      required:
+        - tobaccoUser
+
+    FormerTobaccoUser:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ former ]
+        stoppedUsingTobacco:
+          type: string
+          pattern: date
+      required:
+        - tobaccoUser
+
+    NeverUsedTobacco:
+      type: object
+      properties:
+        tobaccoUser:
+          type: string
+          enum: [ never ]
+      required:
+        - tobaccoUser
+
+    ChronicDiseasesSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            circulatorySystem:
+              $ref: '#/components/schemas/YesNoEnum'
+            respitorySystem:
+              $ref: '#/components/schemas/YesNoEnum'
+            thyroid:
+              $ref: '#/components/schemas/YesNoEnum'
+            diabetes:
+              $ref: '#/components/schemas/YesNoEnum'
+
+    LanguageSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            nationality:
+              type: string
+      oneOf:
+        - $ref: '#/components/schemas/TranslationRequirements'
+        - $ref: '#/components/schemas/NoTranslationRequirements'
+      discriminator:
+        propertyName: translationRequired
+        mapping:
+          yes: '#/components/schemas/translationRequirements'
+          no: '#/components/schemas/noTranslationRequirements'
+
+    TranslationRequirements:
+      type: object
+      properties:
+        language:
+          type: string
+        translationRequired:
+          type: string
+          enum: [ yes ]
+      required: [ translationRequired ]
+
+    NoTranslationRequirements:
+      type: object
+      properties:
+        translationRequired:
+          type: string
+          enum: [ no ]
+      required: [ translationRequired ]
+
+    BodyMeasuresSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            prenatalBodyWeight:
+              type: object
+              properties:
+                value:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ kg ]
+              required:
+                - value
+                - unit
+            bodyHeight:
+              type: object
+              properties:
+                value:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ cm ]
+              required:
+                - value
+                - unit
+            bodyMassIndex:
+              type: object
+              properties:
+                value:
+                  type: integer
+                  minimum: 0
+                unit:
+                  type: string
+                  enum: [ kg/m2 ]
+
+    SocialHistorySection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            maritalOrPartnershipStatus:
+              type: string
+              enum: [ single, married, separated, divorced, widowed ]
+            livingConditions:
+              type: string
+              enum: [ partnership, single ]
+            additionalInformations:
+              type: string
+
+    ChildPartnerSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - $ref: '#/components/schemas/CprIdentifiedPerson'
+
+    PreviousBirthsSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                pattern: date
+              outcome:
+                type: string
+                enum: [ livebirth, stillbirth ]
+              sex:
+                type: string
+                enum: [ female, male ]
+              gestationLength:
+                $ref: '#/components/schemas/DurationInDays'
+              birthWeight:
+                type: object
+                properties:
+                  value:
+                    type: integer
+                    minimum: 0
+                  unit:
+                    type: string
+                    enum: [ g ]
+                required: [ value, unit ]
+              birthPlace:
+                type: string
+              pregnancySummary:
+                type: string
+              birthSummary:
+                type: string
+              subjectiveBirthExpirience:
+                type: string
+                enum: [ good, normal, bad ]
+              puerperalSepsis:
+                type: boolean
+              childsCurrentHealthStatus:
+                type: string
+
+    PreviousAbortionsSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                pattern: date
+              type:
+                type: string
+                enum: [ spontaneous, induced ]
+              gestationLength:
+                type: object
+                properties:
+                  value:
+                    type: integer
+                    minimum: 0
+                  unit:
+                    type: string
+                    enum: [ w ]
+                required: [ value, unit ]
+              indication:
+                type: string
+
+    ExpectedDateOfDeliverySection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            expectedDateOfDeliveryFromLastPeriod:
+              type: object
+              properties:
+                lastPeriod:
+                  type: string
+                  pattern: date
+                menstrualCycle:
+                  oneOf:
+                    - $ref: '#/components/schemas/DurationInDays'
+                    - $ref: '#/components/schemas/DurationFromDates'
+                expectedDateOfDelivery:
+                  type: string
+                  pattern: date
+                certainty:
+                  type: string
+                  enum: [ certain, equivocal ]
+            expectedDateOfDeliveryFromPrenatalUtrasoundScan:
+              type: string
+              pattern: date
+            remarks:
+              type: string
+
+    AssistedFertilizationSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            receivesFertilizationAssitance:
+              type: boolean
+            remarks:
+              type: string
+
+    PrenatalRiskAssessmentSection:
+      type: object
+      properties:
+        preliminaryRiskAssessment:
+          allOf:
+            - $ref: '#/components/schemas/VersionedSection'
+            - type: object
+              properties:
+                familyHistory:
+                  type: string
+                consanguinity:
+                  type: boolean
+                firstTrimesterUltrasoundScanOfFetusRequested:
+                  type: boolean
+                secondTrimesterUltrasoundScanOfFetusRequested:
+                  type: boolean
+                prenatalRiskAssessmentRequested:
+                  type: boolean
+        finalRiskAssessment:
+          allOf:
+            - $ref: '#/components/schemas/VersionedSection'
+            - type: object
+              properties:
+                doubleTestCompleted:
+                  type: boolean
+                firstTrimesterUltrasoundScanOfFetusCompleted:
+                  type: boolean
+                secondTrimesterUltrasoundScanOfFetusCompleted:
+                  type: boolean
+                downsScreeningProbabilityAssessment:
+                  type: string
+                placentalBiopsiObservation:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      pattern: date
+                    result:
+                      type: string
+                prenatalAmniocentesisiObservation:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      pattern: date
+                    result:
+                      type: string
+
+    WorkEnvironmentImpactSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            mother:
+              type: object
+              properties:
+                jobType:
+                  type: string
+                hoursOfWorkPerWeek:
+                  type: object
+                  properties:
+                    value:
+                      type: integer
+                      minimum: 0
+                      maximum: 168
+                    unit:
+                      type: string
+                      enum: [ h/wk ]
+                ergonomicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
+                chemicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
+                biologicalWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
+                otherWorkEnvironmentalImpact:
+                  allOf:
+                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
+                referredToOccupationalHealthDepartmentForRiskAssessment:
+                  type: boolean
+                prenatalSickLeave:
+                  type: string
+                  enum: [ none, partial, full ]
+            partner:
+              type: object
+              properties:
+                jobType:
+                  type: string
+
+    ExposureToWorkEnvironmentRisk:
+      allOf:
+        - $ref: '#/components/schemas/DurationFromDates'
+        - type: object
+          properties:
+            remarks:
+              type: string
+
+    AllergiesSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            allergiesOfMother:
+              type: array
+              items:
+                type: string
+            allergicPredispositionOfChild:
+              type: string
+              enum:
+                - noPredisposition
+                - parentalPredisposition
+                - siblingPredisposition
+                - doublePredisposition
+
+    PositiveNegativeDeclinedScreeningWithDateSection:
+      allOf:
+        - $ref: '#/components/schemas/DateScreeningSection'
+        - type: object
+          properties:
+            result:
+              type: string
+              enum: [ positive, negative, declined ]
+
+    PositiveNegativeScreeningWithDateSection:
+      allOf:
+        - $ref: '#/components/schemas/DateScreeningSection'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/PosNegEnum'
+
+    DateValueUnitScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/DateScreeningSection'
+        - type: object
+          properties:
+            value:
+              type: integer
+            unit:
+              type: string
+
+    DateScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            date:
+              type: string
+              pattern: date
+
+    MaternalRhDAntibodyScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            bloodSampleTaken:
+              $ref: '#/components/schemas/YesNoEnum'
+            rhesusType:
+              $ref: '#/components/schemas/PosNegEnum'
+            irregularBloodGroupAntibodyOresent:
+              $ref: '#/components/schemas/PosNegEnum'
+
+    FetalRhDAntibodyScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            rhesusType:
+              $ref: '#/components/schemas/PosNegEnum'
+            antiDIsoimmunizationAffectingPregnancy:
+              $ref: '#/components/schemas/PosNegEnum'
+
+    YesNoDateScreeningSection:
+      allOf:
+        - $ref: '#/components/schemas/DateScreeningSection'
+        - $ref: '#/components/schemas/YesNoValue'
+
+    YesNoVersionedSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - $ref: '#/components/schemas/YesNoValue'
+
+    CprIdentifiedPerson:
+      allOf:
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            identifier:
+              $ref: '#/components/schemas/CprNumber'
+          required:
+            - identifier
+
+    DurationInDays:
+      type: object
+      properties:
+        value:
+          type: integer
+          minimum: 0
+        unit:
+          type: string
+          enum: [ d ]
+      required: [ value, unit ]
+
+    DurationFromDates:
+      type: object
+      properties:
+        start:
+          type: string
+          pattern: date
+        end:
+          type: string
+          pattern: date
+        calculated:
+          $ref: '#/components/schemas/DurationInDays'
+
+    Person:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/PersonName'
+      required:
+        - name
+
+    PersonName:
+      type: object
+      properties:
+        firstNames:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        middleNames:
+          type: array
+          items:
+            type: string
+        lastName:
+          type: string
+      required:
+        - firstNames
+        - middleNames
+        - lastName
+
+    YesNoValue:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/YesNoEnum'
+    YesNoEnum:
+      type: string
+      enum: [ yes, no ]
+
+    PosNegEnum:
+      type: string
+      enum: [ positive, negative ]
+
+    HealthCareActor:
+      oneOf:
+        - $ref: '#/components/schemas/HealthCareProfessional'
+        - $ref: '#/components/schemas/HealthCareOrganization'
+      discriminator:
+        propertyName: objectType
+
+    HealthCareProfessional:
+      allOf:
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            objectType:
+              type: string
+              enum:
+                - healthCareProfessional
+          required:
+            - objectType
+
+    HealthCareOrganization:
+      type: object
+      properties:
+        name:
+          type: string
+        objectType:
+          type: string
+          enum:
+            - healthCareOrganization
+      required:
+        - name
+        - objectType
+
+    PhoneNumber:
+      type: string
+      pattern: '^[+]?\s*((\(\s*[0-9]{1,3}\s*\)\s*\-?\s*)|(\s*[0-9]{1,3}\s*\-?\s*))?[0-9]+(\s*\-?\s*[0-9]+)*\s*$'
+      example: '+45 7221 6800'
+
+    VersionedSection:
+      type: object
+      properties:
+        modifiedTime:
+          type: string
+          pattern: date-time
+        author:
+          $ref: '#/components/schemas/HealthCareActor'
+
+    Uuidv4:
+      title: Universally Unique IDentifier version 4
+      description: >
+        A Universally Unique IDentifier (UUID) version 4.
+        See [RFC 4122, section 4.4](https://tools.ietf.org/html/rfc4122#section-4.4)
+      type: string
+      pattern: '[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'
+      example: 'dfa66499-40b7-4bc6-a2e5-dd3cbcd8cf68'
+
+    Uuidv5:
+      title: Universally Unique IDentifier version 5
+      description: >
+        A Universally Unique IDentifier (UUID) version 5.
+        See [RFC 4122, section 4.3](https://tools.ietf.org/html/rfc4122#section-4.3)
+      type: string
+      pattern: '[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'
+      example: '8da3af4b-176e-5f53-bab2-a2b349e5229d'
+
+    CprNumber:
+      title: Danish national person identifier
+      type: string
+      pattern: '([06][1-9]|[1-25-8][0-9]|[39][0-1])(0[1-9]|1[0-2])[0-9]{6}'
+      example: '9103672134'
+
+    PartialDetails:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+
+
+    ProblemDetails:
+      title: Problem Details for HTTP APIs
+      description: >
+        A way to carry machine-readable details of errors in a HTTP response to avoid the need to
+        define new error response formats for HTTP APIs. See [RFC7807](https://tools.ietf.org/rfc/rfc7807.txt)
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          description: >
+            A URI reference [RFC3986](https://tools.ietf.org/rfc/rfc3986.txt) that identifies the problem type.
+          type: string
+          format: uri
+        title:
+          description: >
+            A short, human-readable summary of the problem type.
+          type: string
+        status:
+          description: >
+            The HTTP status code [([RFC7231], Section 6)](https://tools.ietf.org/rfc/rfc7231.txt#section-6)
+            generated by the origin server for this occurrence of the problem.
+          type: number
+        instance:
+          description: >
+            A URI reference that identifies the specific occurrence of the problem.
+          type: string
+        detail:
+          description: >
+            A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        debugging:
+          description: >
+            Debugging information for DEV and QA environments.
+          type: string
+        invalid-params:
+          description: >
+            An array of validation errors.
+          type: array
+          items:
+            description: >
+              The validation error descriptor.
+            type: object
+            required:
+              - path
+              - name
+              - reason
+            properties:
+              path:
+                type: string
+              name:
+                type: string
+              reason:
+                type: string
+            additionalProperties: false
+          uniqueItems: true
+      additionalProperties: false
+
+  securitySchemes:
+    application:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: 'http://example.com/oauth/token'
+          scopes:
+            write: allows modifying resources
+            read: allows reading resources

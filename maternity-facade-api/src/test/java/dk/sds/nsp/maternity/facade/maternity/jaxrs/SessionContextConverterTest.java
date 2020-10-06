@@ -1,7 +1,7 @@
-package dk.sds.nsp.maternity.facade.common.convert;
+package dk.sds.nsp.maternity.facade.maternity.jaxrs;
 
 import dk.sds.nsp.maternity.facade.SpringTestConfiguration;
-import dk.sds.nsp.maternity.facade.common.security.SessionContext;
+import dk.sds.nsp.maternity.facade.maternity.security.SessionContext;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,9 +14,9 @@ import java.util.stream.Stream;
 
 import static dk.sds.nsp.maternity.facade.common.model.ApplicationMode.EMBEDDED;
 import static dk.sds.nsp.maternity.facade.common.model.ApplicationMode.STANDALONE;
-import static dk.sds.nsp.maternity.facade.test.RandomService.choose;
-import static dk.sds.nsp.maternity.facade.test.RandomService.localDateTime;
-import static dk.sds.nsp.maternity.facade.test.RandomService.numerify;
+import static dk.sds.nsp.maternity.facade.maternity.test.RandomService.choose;
+import static dk.sds.nsp.maternity.facade.maternity.test.RandomService.localDateTime;
+import static dk.sds.nsp.maternity.facade.maternity.test.RandomService.numerify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)

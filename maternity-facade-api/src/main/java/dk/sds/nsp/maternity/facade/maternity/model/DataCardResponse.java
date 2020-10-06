@@ -2,7 +2,6 @@ package dk.sds.nsp.maternity.facade.maternity.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 

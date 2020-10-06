@@ -1,6 +1,7 @@
 package dk.sds.nsp.maternity.facade.maternity.api;
 
-import dk.sds.nsp.maternity.facade.common.security.SessionContext;
+import dk.sds.nsp.maternity.facade.maternity.security.SecurityHandler;
+import dk.sds.nsp.maternity.facade.maternity.security.SessionContext;
 import dk.sds.nsp.maternity.facade.maternity.model.CprIdentifiedPerson;
 import dk.sds.nsp.maternity.facade.maternity.model.DataCard;
 import dk.sds.nsp.maternity.facade.maternity.model.HealthCareOrganization;
@@ -16,8 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import static dk.sds.nsp.maternity.facade.maternity.security.SecurityHandler.updateContextCookie;
 
 @Path("data-card")
 @Produces(MediaType.APPLICATION_JSON)
@@ -52,7 +51,7 @@ public class DataCardService {
         return Response
                 .ok()
                 .entity(new DataCard[] { dataCard })
-                .cookie(updateContextCookie(context))
+                .cookie(SecurityHandler.updateContextCookie(context))
                 .build();
     }
 
@@ -64,7 +63,7 @@ public class DataCardService {
         return Response
                 .ok()
                 .entity("identifier = " + id)
-                .cookie(updateContextCookie(context))
+                .cookie(SecurityHandler.updateContextCookie(context))
                 .build();
     }
 }
