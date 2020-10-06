@@ -9,11 +9,9 @@ import java.util.Objects;
 /**
  * HealthCareOrganization
  */
-public class HealthCareOrganization implements OneOfHealthCareActor {
+public class HealthCareOrganization implements HealthCareActor {
     @JsonProperty("name")
     private String name = null;
-    @JsonProperty("objectType")
-    private ObjectTypeEnum objectType = null;
 
     public HealthCareOrganization name(String name) {
         this.name = name;
@@ -34,22 +32,9 @@ public class HealthCareOrganization implements OneOfHealthCareActor {
     }
 
     public HealthCareOrganization objectType(ObjectTypeEnum objectType) {
-        this.objectType = objectType;
         return this;
     }
 
-    /**
-     * Get objectType
-     *
-     * @return objectType
-     **/
-    public ObjectTypeEnum getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(ObjectTypeEnum objectType) {
-        this.objectType = objectType;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -60,25 +45,14 @@ public class HealthCareOrganization implements OneOfHealthCareActor {
             return false;
         }
         HealthCareOrganization healthCareOrganization = (HealthCareOrganization) o;
-        return Objects.equals(this.name, healthCareOrganization.name) &&
-                Objects.equals(this.objectType, healthCareOrganization.objectType);
+        return Objects.equals(this.name, healthCareOrganization.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, objectType);
+        return Objects.hash(name);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class HealthCareOrganization {\n");
-
-        sb.append("    name: ").append(toIndentedString(name)).append("\n");
-        sb.append("    objectType: ").append(toIndentedString(objectType)).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
 
     /**
      * Convert the given object to string with each line indented by 4 spaces
@@ -95,7 +69,7 @@ public class HealthCareOrganization implements OneOfHealthCareActor {
      * Gets or Sets objectType
      */
     public enum ObjectTypeEnum {
-        HEALTHCAREORGANIZATION("healthCareOrganization");
+        HEALTHCAREORGANIZATION("HealthCareOrganization");
 
         private String value;
 

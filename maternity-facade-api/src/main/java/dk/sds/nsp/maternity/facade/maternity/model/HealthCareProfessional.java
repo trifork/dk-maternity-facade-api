@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * HealthCareProfessional
  */
-public class HealthCareProfessional extends Person implements OneOfHealthCareActor {
+public class HealthCareProfessional extends Person implements HealthCareActor {
     @JsonProperty("objectType")
     private ObjectTypeEnum objectType = null;
 
