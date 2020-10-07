@@ -1,5 +1,6 @@
-package dk.sds.nsp.maternity.facade.common.exception;
+package dk.sds.nsp.maternity.facade.common.jaxrs;
 
+import dk.sds.nsp.maternity.facade.common.exception.ProblemDetailsException;
 import org.jboss.resteasy.spi.BadRequestException;
 
 import javax.ws.rs.core.Response;
@@ -18,9 +19,9 @@ public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestExce
     @Override
     public Response toResponse(BadRequestException exception) {
         final Throwable cause = exception.getCause();
-        if (cause instanceof ProblemDetailsException) {
+        if (cause instanceof ProblemDetailsException)
             return problemDetailsExceptionMapper.toResponse((ProblemDetailsException) cause);
-        }
+
         return Response.status(500).build();
     }
 }

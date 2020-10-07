@@ -1,11 +1,14 @@
 package dk.sds.nsp.maternity.facade.common.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.annotation.Generated;
 import java.util.Objects;
 
 /**
  * The validation error descriptor.
  */
+@Generated("openapi")
 public class ProblemDetailsInvalidparams {
     @JsonProperty("path")
     private String path = null;

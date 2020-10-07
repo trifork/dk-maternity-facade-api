@@ -2,6 +2,7 @@ package dk.sds.nsp.maternity.facade.common.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,6 +10,7 @@ import java.util.Objects;
 /**
  * A way to carry machine-readable details of errors in a HTTP response to avoid the need to define new error response formats for HTTP APIs. See [RFC7807](https://tools.ietf.org/rfc/rfc7807.txt)
  */
+@Generated("openapi")
 public class ProblemDetails {
     @JsonProperty("type")
     private String type = null;

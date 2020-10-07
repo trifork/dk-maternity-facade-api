@@ -1,5 +1,6 @@
-package dk.sds.nsp.maternity.facade.common.exception;
+package dk.sds.nsp.maternity.facade.common.jaxrs;
 
+import dk.sds.nsp.maternity.facade.common.exception.ProblemDetailsException;
 import dk.sds.nsp.maternity.facade.common.model.ProblemDetails;
 
 import javax.ws.rs.core.MediaType;

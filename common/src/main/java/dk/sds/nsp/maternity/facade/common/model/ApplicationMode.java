@@ -3,9 +3,12 @@ package dk.sds.nsp.maternity.facade.common.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import javax.annotation.Generated;
+
 /**
  * Gets or Sets ApplicationMode
  */
+@Generated("openapi")
 public enum ApplicationMode {
     STANDALONE("standalone"),
     EMBEDDED("embedded");
