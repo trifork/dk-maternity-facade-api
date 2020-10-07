@@ -28,6 +28,7 @@ public class ProblemDetailsMessageBodyWriter implements MessageBodyWriter<Proble
     }
 
     @Override
+    @Deprecated
     public long getSize(ProblemDetails problemDetails, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         // As of JAX-RS 2.0, the method has been deprecated and the value returned by the method is ignored
         // by a JAX-RS runtime. All MessageBodyWriter implementations are advised to return -1 from the
