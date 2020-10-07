@@ -3,6 +3,7 @@ package dk.sds.nsp.maternity.facade.common.security;
 import javax.ws.rs.core.NewCookie;
 import java.util.Date;
 
+@SuppressWarnings("unused")
 public final class Cookies {
 
     private Cookies() {}

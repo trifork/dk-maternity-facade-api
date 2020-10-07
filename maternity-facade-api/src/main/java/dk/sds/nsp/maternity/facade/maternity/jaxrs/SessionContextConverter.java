@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static dk.sds.nsp.maternity.facade.common.convert.LocalDateTimeConverter.convert;
+import static dk.sds.nsp.maternity.facade.common.jaxrs.LocalDateTimeConverter.convert;
 
 @Component
 public class SessionContextConverter implements ParamConverter<SessionContext> {

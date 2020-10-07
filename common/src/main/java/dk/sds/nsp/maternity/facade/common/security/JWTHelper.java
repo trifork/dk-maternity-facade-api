@@ -9,6 +9,8 @@ import dk.sds.nsp.maternity.facade.common.exception.ProblemDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.BadRequestException;
+
 @Component
 public class JWTHelper {
 
@@ -22,7 +24,7 @@ public class JWTHelper {
     public DecodedJWT verify(final String token) {
         try {
             return JWT.require(algorithm).build().verify(token);
-        } catch (JWTVerificationException e) {
+        } catch (JWTVerificationException | IllegalArgumentException e) {
             throw ProblemDetails.unauthorized();
         }
     }

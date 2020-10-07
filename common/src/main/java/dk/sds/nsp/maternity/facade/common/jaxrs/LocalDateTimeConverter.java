@@ -1,4 +1,4 @@
-package dk.sds.nsp.maternity.facade.common.convert;
+package dk.sds.nsp.maternity.facade.common.jaxrs;
 
 import javax.ws.rs.ext.ParamConverter;
 import java.time.LocalDateTime;
