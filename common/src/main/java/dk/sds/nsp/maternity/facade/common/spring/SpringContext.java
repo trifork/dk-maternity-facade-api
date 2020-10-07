@@ -1,6 +1,7 @@
 package dk.sds.nsp.maternity.facade.common.spring;
 
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.sds.nsp.maternity.facade.common.security.JWTHelper;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -26,6 +27,7 @@ public class SpringContext implements ServletContextListener {
 
         final Algorithm algorithm = springContext.getBean(Algorithm.class);
         jwtHelper = new JWTHelper(algorithm);
+        objectMapper = springContext.getBean(ObjectMapper.class);
     }
 
     @Override
@@ -38,5 +40,8 @@ public class SpringContext implements ServletContextListener {
 
     private static JWTHelper jwtHelper;
     public static JWTHelper jwtHelper() { return jwtHelper; }
+
+    private static ObjectMapper objectMapper;
+    public static ObjectMapper objectMapper() { return objectMapper; }
 
 }

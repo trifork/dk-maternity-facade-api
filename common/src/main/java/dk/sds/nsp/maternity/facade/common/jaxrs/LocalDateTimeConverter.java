@@ -1,6 +1,14 @@
 package dk.sds.nsp.maternity.facade.common.jaxrs;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
 import javax.ws.rs.ext.ParamConverter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,12 +24,26 @@ public class LocalDateTimeConverter implements ParamConverter<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime fromString(String value) {
+    public LocalDateTime fromString(final String value) {
         return convert(value);
     }
 
     @Override
-    public String toString(LocalDateTime value) {
+    public String toString(final LocalDateTime value) {
         return convert(value);
+    }
+
+    public static final class Serializer extends JsonSerializer<LocalDateTime> {
+        @Override
+        public void serialize(final LocalDateTime value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
+            jgen.writeString(convert(value));
+        }
+    }
+
+    public static final class Deserializer extends JsonDeserializer<LocalDateTime> {
+        @Override
+        public LocalDateTime deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
+            return convert(jp.getValueAsString());
+        }
     }
 }

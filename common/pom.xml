@@ -10,7 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>common</artifactId>
     <version>dev</version>
-
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson.version}</version>
+<!--            <scope>provided</scope>-->
+        </dependency>
     </dependencies>
 </project>
