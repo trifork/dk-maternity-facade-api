@@ -1,6 +1,5 @@
 package dk.sds.nsp.maternity.facade.common.jaxrs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.sds.nsp.maternity.facade.common.model.ProblemDetails;
 
 import javax.ws.rs.Produces;
@@ -14,9 +13,15 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import static dk.sds.nsp.maternity.facade.common.spring.SpringContext.objectMapper;
+
+/**
+ * A {@link MessageBodyWriter} capable of writing {@link ProblemDetails} for MediaType {@link MediaTypes#APPLICATION_JSON}.
+ */
 @Provider
 @Produces(MediaTypes.APPLICATION_JSON_PROBLEM)
 public class ProblemDetailsMessageBodyWriter implements MessageBodyWriter<ProblemDetails> {
+
     @Override
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return type == ProblemDetails.class;
@@ -24,11 +29,15 @@ public class ProblemDetailsMessageBodyWriter implements MessageBodyWriter<Proble
 
     @Override
     public long getSize(ProblemDetails problemDetails, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return 0;
+        // As of JAX-RS 2.0, the method has been deprecated and the value returned by the method is ignored
+        // by a JAX-RS runtime. All MessageBodyWriter implementations are advised to return -1 from the
+        // method. Responsibility to compute the actual Content-Length header value has been delegated to
+        // JAX-RS runtime.
+        return -1;
     }
 
     @Override
     public void writeTo(ProblemDetails problemDetails, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
-        new ObjectMapper().writeValue(entityStream, problemDetails);
+       objectMapper().writeValue(entityStream, problemDetails);
     }
 }
