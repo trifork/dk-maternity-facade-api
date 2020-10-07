@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class LocalDateTimeConverter implements ParamConverter<LocalDateTime> {
 
     public static LocalDateTime convert(final String value) {
