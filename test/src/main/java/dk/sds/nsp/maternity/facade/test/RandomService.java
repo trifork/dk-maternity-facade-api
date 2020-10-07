@@ -1,9 +1,10 @@
-package dk.sds.nsp.maternity.facade.maternity.test;
+package dk.sds.nsp.maternity.facade.test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Random;
 
+@SuppressWarnings("unused")
 public final class RandomService {
 
     private static final Random RANDOM = new Random("NSP ...".hashCode());
@@ -30,7 +31,7 @@ public final class RandomService {
     }
 
     public static LocalDateTime localDateTime() {
-        return LocalDateTime.ofEpochSecond(RANDOM.nextInt(), RANDOM.nextInt(1000000000), ZoneOffset.UTC);
+        return LocalDateTime.ofEpochSecond(((long)RANDOM.nextInt()) << 4 | RANDOM.nextInt(), RANDOM.nextInt(1000000000), ZoneOffset.UTC);
     }
 
     public static String randomString(int length) {

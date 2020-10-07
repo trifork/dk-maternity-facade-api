@@ -16,11 +16,13 @@
         <java-jwt.version>3.0.1</java-jwt.version>
         <jackson.version>2.8.4</jackson.version>
         <resteasy.version>3.0.10.Final</resteasy.version>
+        <mockito.version>3.5.13</mockito.version>
     </properties>
 
     <modules>
         <module>maternity-facade-api</module>
         <module>common</module>
+        <module>test</module>
     </modules>
 
     <build>
@@ -45,7 +47,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
-<!--            <scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -85,6 +86,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

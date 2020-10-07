@@ -14,7 +14,12 @@
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>common</artifactId>
             <version>dev</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>test</artifactId>
+            <version>dev</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <artifactId>maternity-facade-api</artifactId>

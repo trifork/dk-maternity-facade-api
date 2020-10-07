@@ -14,9 +14,9 @@ import java.util.stream.Stream;
 
 import static dk.sds.nsp.maternity.facade.common.model.ApplicationMode.EMBEDDED;
 import static dk.sds.nsp.maternity.facade.common.model.ApplicationMode.STANDALONE;
-import static dk.sds.nsp.maternity.facade.maternity.test.RandomService.choose;
-import static dk.sds.nsp.maternity.facade.maternity.test.RandomService.localDateTime;
-import static dk.sds.nsp.maternity.facade.maternity.test.RandomService.numerify;
+import static dk.sds.nsp.maternity.facade.test.RandomService.choose;
+import static dk.sds.nsp.maternity.facade.test.RandomService.localDateTime;
+import static dk.sds.nsp.maternity.facade.test.RandomService.numerify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
