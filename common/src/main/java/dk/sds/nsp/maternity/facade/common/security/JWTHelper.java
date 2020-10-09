@@ -5,11 +5,9 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import dk.sds.nsp.maternity.facade.common.exception.ProblemDetails;
+import dk.sds.nsp.maternity.facade.common.exception.ProblemDetailsExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.ws.rs.BadRequestException;
 
 @Component
 public class JWTHelper {
@@ -25,7 +23,7 @@ public class JWTHelper {
         try {
             return JWT.require(algorithm).build().verify(token);
         } catch (JWTVerificationException | IllegalArgumentException e) {
-            throw ProblemDetails.unauthorized();
+            throw ProblemDetailsExceptions.forbidden(e);
         }
     }
 

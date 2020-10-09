@@ -217,4 +217,65 @@ public List<ProblemDetailsInvalidparams> getInvalidParams() {
         }
         return o.toString().replace("\n", "\n    ");
     }
+
+    public ProblemDetails badRequest() {
+        return status(400);
+    }
+
+    public ProblemDetails unauthorized() {
+        return status(401);
+    }
+
+    public ProblemDetails forbidden() {
+        return status(403);
+    }
+
+    public ProblemDetails notFound() {
+        return status(404);
+    }
+
+    public ProblemDetails methodNotAllowed() {
+        return status(405);
+    }
+
+    public ProblemDetails notAcceptable() {
+        return status(406);
+    }
+
+    public ProblemDetails requestTimeout() {
+        return status(408);
+    }
+
+    public ProblemDetails conflict() {
+        return status(409);
+    }
+
+    public ProblemDetails unsupportedMediaType() {
+        return status(415);
+    }
+
+    public ProblemDetails tooEarly() {
+        return status(425);
+    }
+
+    public ProblemDetails internalServerError() {
+        return status(500);
+    }
+
+    public ProblemDetails notImplemented() {
+        return status(501);
+    }
+
+    public ProblemDetails badGateway() {
+        return status(502);
+    }
+
+    public ProblemDetails serviceUnavailable() {
+        return status(503);
+    }
+
+    public ProblemDetails gatewayTimeout() {
+        return status(504);
+    }
+
 }

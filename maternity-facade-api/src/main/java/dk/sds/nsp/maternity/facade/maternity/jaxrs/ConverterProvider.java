@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import static dk.sds.nsp.maternity.facade.common.spring.SpringContext.jwtHelper;
+import static dk.sds.nsp.maternity.facade.maternity.spring.SpringContext.jwtHelper;
 
 @Provider
 public class ConverterProvider implements ParamConverterProvider {
