@@ -3,10 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <name>Maternity Facade API</name>
+    <name>Maternity Data Facade API</name>
     <parent>
         <groupId>dk.sds.nsp.maternity</groupId>
-        <artifactId>facade-api</artifactId>
+        <artifactId>facade-apis</artifactId>
         <version>dev</version>
     </parent>
     <dependencies>
@@ -22,5 +22,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <artifactId>maternity-facade-api</artifactId>
+    <artifactId>maternity-data-facade-api</artifactId>
 </project>

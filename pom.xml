@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.sds.nsp.maternity</groupId>
-    <artifactId>facade-api</artifactId>
+    <artifactId>facade-apis</artifactId>
     <version>dev</version>
     <packaging>pom</packaging>
     <name>DK Maternity Facade APIs</name>
@@ -14,13 +14,13 @@
         <junit.version>5.7.0</junit.version>
         <spring.version>5.2.9.RELEASE</spring.version>
         <java-jwt.version>3.0.1</java-jwt.version>
-        <jackson.version>2.8.4</jackson.version>
+        <jackson.version>2.4.1</jackson.version>
         <resteasy.version>3.0.10.Final</resteasy.version>
         <mockito.version>3.5.13</mockito.version>
     </properties>
 
     <modules>
-        <module>maternity-facade-api</module>
+        <module>maternity-data-facade-api</module>
         <module>common</module>
         <module>test</module>
     </modules>
