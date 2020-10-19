@@ -24,6 +24,9 @@
         <module>maternity-feedback-api</module>
         <module>common</module>
         <module>test</module>
+        <module>maternity-feedback-service</module>
+        <module>maternity-feedback-service-impl</module>
+        <module>maternity-feedback-service-stub</module>
     </modules>
 
     <build>
