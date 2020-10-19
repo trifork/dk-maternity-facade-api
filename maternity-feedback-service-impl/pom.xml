@@ -7,12 +7,15 @@
         <groupId>dk.sds.nsp.maternity</groupId>
         <version>dev</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-    <name>Maternity Feedback API</name>
-    <artifactId>maternity-feedback-api</artifactId>
 
+    <artifactId>maternity-feedback-service-impl</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>maternity-feedback-service</artifactId>
+            <version>dev</version>
+        </dependency>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>common</artifactId>
@@ -20,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
-            <artifactId>maternity-feedback-service</artifactId>
+            <artifactId>maternity-feedback-api</artifactId>
             <version>dev</version>
         </dependency>
     </dependencies>
