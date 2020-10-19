@@ -3,102 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.sds.nsp.maternity</groupId>
-    <artifactId>facade-apis</artifactId>
+    <artifactId>facade</artifactId>
     <version>dev</version>
-    <packaging>pom</packaging>
-    <name>DK Maternity Facade APIs</name>
-
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <junit.version>5.7.0</junit.version>
-        <spring.version>5.2.9.RELEASE</spring.version>
-        <java-jwt.version>3.0.1</java-jwt.version>
-        <jackson.version>2.4.1</jackson.version>
-        <resteasy.version>3.0.10.Final</resteasy.version>
-        <mockito.version>3.5.13</mockito.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
-
-    <modules>
-        <module>maternity-data-facade-api</module>
-        <module>maternity-feedback-api</module>
-        <module>common</module>
-        <module>test</module>
-        <module>maternity-feedback-service</module>
-        <module>maternity-feedback-service-impl</module>
-        <module>maternity-feedback-service-stub</module>
-    </modules>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>${java-jwt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.14</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <version>${resteasy.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <packaging>pom</packaging>
+    <name>DK Maternity Facade</name>
 
     <repositories>
         <repository>
@@ -112,5 +23,24 @@
             <url>https://nexus.nspop.dk/nexus/content/repositories/releases/</url>
         </repository>
     </repositories>
+
+    <modules>
+        <module>apis</module>
+        <module>cfg</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>
