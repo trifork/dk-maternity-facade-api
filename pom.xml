@@ -21,6 +21,7 @@
 
     <modules>
         <module>maternity-data-facade-api</module>
+        <module>maternity-feedback-api</module>
         <module>common</module>
         <module>test</module>
     </modules>

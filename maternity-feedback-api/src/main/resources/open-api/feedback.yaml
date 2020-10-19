@@ -1,0 +1,64 @@
+openapi: 3.0.0
+
+info:
+  title: DK Maternity Feedback Api
+  description: >
+   This is the specification of the DK Maternity feedback API.
+  version: 1.0.0
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
+
+security:
+  - application:
+      - read
+      - write
+
+paths:
+  /feedback:
+    post:
+      summary: Create feedback
+      description: >
+        Post feedback from current user identified in the **context** cookie
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+
+components:
+    schemas:
+      Feedback:
+        type: object
+        properties:
+          rating:
+            type: integer
+            minimum: 1
+            maximum: 5
+          comment:
+            type: string
+        required: [ rating ]
+      FeedbackResponse:
+        allOf:
+          - $ref: '#/components/schemas/Feedback'
+          type: object
+          properties:
+            rating:
+              type: integer
+              minimum: 1
+              maximum: 5
+            comment:
+              type: string
+          required: [ rating ]
+
+
+
+
+
