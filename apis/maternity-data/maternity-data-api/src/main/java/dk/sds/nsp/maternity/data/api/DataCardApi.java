@@ -1,13 +1,12 @@
 package dk.sds.nsp.maternity.data.api;
 
-import dk.sds.nsp.maternity.data.model.CprIdentifiedPerson;
 import dk.sds.nsp.maternity.data.model.CreateDataCardRequest;
-import dk.sds.nsp.maternity.data.model.DataCard;
 import dk.sds.nsp.maternity.data.model.DataCardResponse;
-import dk.sds.nsp.maternity.data.model.HealthCareOrganization;
-import dk.sds.nsp.maternity.data.model.PersonName;
+import dk.sds.nsp.maternity.data.model.UpdateDataCardRequest;
 import dk.sds.nsp.maternity.data.security.SessionContext;
 import dk.sds.nsp.maternity.data.service.DataCardService;
+import dk.sds.nsp.maternity.data.service.DataCardService.ServiceResponse;
+import dk.sds.nsp.maternity.data.spring.DependencyResolver;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import org.apache.log4j.Logger;
 
@@ -24,63 +23,47 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
 
 @Path("data-card")
 @Produces(MediaType.APPLICATION_JSON)
 public class DataCardApi {
 
     private static final Logger LOGGER = Logger.getLogger(DataCardApi.class);
-    private final DataCardResponse dataCardResponse;
-    private DataCardService service;
-
-    public DataCardApi() {
-        final PersonName name = new PersonName();
-        name.addFirstNamesItem("Ronnie");
-        name.addMiddleNamesItem("Birkelund");
-        name.setLastName("Trøjborg");
-
-        final CprIdentifiedPerson recordTarget = new CprIdentifiedPerson();
-        recordTarget.setIdentifier("6509810001");
-        recordTarget.setName(name);
-
-        dataCardResponse = new DataCardResponse()
-                .modifiedTime(LocalDateTime.now())
-                .author(new HealthCareOrganization()
-                        .name("Jeppe Man"))
-                .episodeOfCareIdentifier(UUID.fromString("a312e032-8007-59cd-ba66-022cb8146b04"))
-                .recordTarget(new CprIdentifiedPerson()
-                        .name(new PersonName()
-                            .addFirstNamesItem("Ronnie")
-                            .addMiddleNamesItem("Johnny")
-                            .lastName("Lonnie")));
-    }
+    private final DataCardService service = DependencyResolver.dataCardService();
 
     @GET
     public Response getDataCards(
             @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String patientIdentifier,
-            @HeaderParam("X-Break-The-Glass-Reason") final String breakTheGlassReason) {
-        return Response
-                .ok()
-                .entity(new DataCard[] {dataCardResponse})
-                .build();
+            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
+            @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason) {
+
+        final String patientIdentifier = null;
+        final boolean breakTheGlass = false;
+
+        final ServiceResponse<List<DataCardResponse>> response = service.get(patientIdentifier, breakTheGlass);
+        final List<DataCardResponse> entity = response.getEntity();
+
+        if (response.isPartial()) return Response.status(PARTIAL_CONTENT).entity(entity).build();
+        if (response.isOk()) return Response.ok().entity(entity).build();
+
+        return null;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDataCard(
             @CookieParam("context") final SessionContext context,
-            final CreateDataCardRequest dataCard) {
-        final DataCardResponse created = dataCardResponse;
-        LOGGER.info("gedebuk");
-        return Response
-                .created(getLocation(created))
-                .entity(created)
-                .build();
+            final CreateDataCardRequest request) {
+        final ServiceResponse<DataCardResponse> response = service.create(request);
+        final DataCardResponse entity = response.getEntity();
+
+        if(response.isOk()) return Response.created(getLocation(entity)).entity(entity).build();
+
+        return null;
     }
 
     @GET
@@ -88,25 +71,26 @@ public class DataCardApi {
     public Response getDataCard(
             @CookieParam("context") final SessionContext context,
             @PathParam("identifier") final UUID id) {
-        return id.equals(dataCardResponse.getEpisodeOfCareIdentifier()) ?
-                Response
-                        .ok()
-                        .entity(dataCardResponse)
-                        .build() :
-                Response.noContent().build();
+        final ServiceResponse<DataCardResponse> response = service.get(id);
+        final DataCardResponse entity = response.getEntity();
+
+        if(response.isOk()) return Response.ok().entity(entity).build();
+
+        return null;
     }
 
     @PUT
     @Path("{identifier}")
     public Response updateDataCard(
             @CookieParam("context") final SessionContext context,
-            @PathParam("identifier") final UUID id) {
-        return id.equals(dataCardResponse.getEpisodeOfCareIdentifier()) ?
-                Response
-                        .ok()
-                        .entity(dataCardResponse)
-                        .build() :
-                Response.status(NOT_FOUND).build();
+            @PathParam("identifier") final UUID id,
+            final UpdateDataCardRequest request) {
+        final ServiceResponse<DataCardResponse> response = service.update(id, request);
+        final DataCardResponse entity = response.getEntity();
+
+        if(response.isOk()) return Response.ok().entity(entity).build();
+
+        return null;
     }
 
     @DELETE
@@ -114,11 +98,11 @@ public class DataCardApi {
     public Response deleteDataCard(
             @CookieParam("context") final SessionContext context,
             @PathParam("identifier") final UUID id) {
-        return id.equals(dataCardResponse.getEpisodeOfCareIdentifier()) ?
-                Response
-                        .ok()
-                        .build() :
-                Response.status(NOT_FOUND).build();
+        final ServiceResponse<Void> response = service.delete(id);
+
+        if(response.isOk()) return Response.ok().build();
+
+        return null;
     }
 
     private static URI getLocation(final DataCardResponse created) {

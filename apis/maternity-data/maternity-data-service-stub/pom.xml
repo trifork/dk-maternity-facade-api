@@ -9,4 +9,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>maternity-data-service-stub</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>common</artifactId>
+            <version>dev</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>maternity-data-service</artifactId>
+            <version>dev</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>maternity-data-api</artifactId>
+            <version>dev</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

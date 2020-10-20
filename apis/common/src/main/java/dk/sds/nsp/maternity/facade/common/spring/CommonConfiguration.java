@@ -22,7 +22,7 @@ public class CommonConfiguration {
     @Bean
     public AppConfiguration configuration(){
         final AppConfiguration appConfiguration = new AppConfiguration();
-        //appConfiguration.init(); TODO @jgg this break the unit tests
+        appConfiguration.init();
         return appConfiguration;
     }
 
