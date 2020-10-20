@@ -1,6 +1,6 @@
 package dk.sds.nsp.maternity.data.jaxrs;
 
-import dk.sds.nsp.maternity.facade.SpringTestConfiguration;
+import dk.sds.nsp.maternity.data.SpringTestConfiguration;
 import dk.sds.nsp.maternity.data.security.SessionContext;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
