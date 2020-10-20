@@ -15,7 +15,7 @@
     <dependency>
         <groupId>dk.digst</groupId>
         <artifactId>oiosaml2.java</artifactId>
-        <version>${oiosaml.verison}</version>
+        <version>${oiosaml.version}</version>
         <exclusions>
             <exclusion>
                 <groupId>org.slf4j</groupId>
