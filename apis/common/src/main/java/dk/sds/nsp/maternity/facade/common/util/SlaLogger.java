@@ -26,7 +26,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dk.sds.nsp.maternity.cfg;
+package dk.sds.nsp.maternity.facade.common.util;
 
 import dk.sdsd.nsp.slalog.api.SLALogConfig;
 import dk.sdsd.nsp.slalog.api.SLALogItem;
@@ -46,7 +46,7 @@ public class SlaLogger {
     public static final String SHORT_APP_NAME = "maternity-web-facade";
     private static SLALogConfig slaLogInstance;
 
-    private String name;
+    private final String name;
 
     public SlaLogger(String name) {
         this.name = name;
@@ -58,20 +58,21 @@ public class SlaLogger {
     }
 
     /**
-     * creates a SLAlog Item
+     * Creates a SLAlog Item
      * @param httpServletRequest The servlet request context
      * @param startTimeNano Start time in nano seconds
      * @param startTimeMillis Start time in milliseconds seconds
-     * @param errorMessage optional error message
+     * @param e optional exception
      * @return SlaLogItem
      */
-    protected SLALogItem createSlaLogItem(HttpServletRequest httpServletRequest, Long startTimeNano, Long startTimeMillis, String errorMessage){
+    private SLALogItem createSlaLogItem(HttpServletRequest httpServletRequest, Long startTimeNano, Long startTimeMillis, Exception e){
+        final String errorMessage = e == null ? null : e.getMessage();
         SLALogItem logItem = slaLogInstance.getSLALogger().createLogItem(SHORT_APP_NAME + "." + name, SHORT_APP_NAME + "." + name);
 
         // SLA headers that is trackable in REST interfaces
         logItem.setStartTime(startTimeNano, startTimeMillis);
         logItem.setClientIP(httpServletRequest);
-        logItem.setSourceEndpoint(httpServletRequest.getServletPath());
+        logItem.setSourceEndpoint(httpServletRequest.getRequestURI());
         logItem.setSourceOperation(httpServletRequest.getMethod());
         logItem.setEndTime(System.nanoTime(), System.currentTimeMillis());
 
@@ -87,13 +88,23 @@ public class SlaLogger {
      * @param httpServletRequest The servlet request context
      * @param startTimeNano Start time in nano seconds
      * @param startTimeMillis Start time in milliseconds seconds
-     * @param errorMessage optional error message
+     * @param cause optional exception
      */
-    public void addSlaLog(HttpServletRequest httpServletRequest, Long startTimeNano, Long startTimeMillis,String errorMessage) {
+    public void addSlaLog(HttpServletRequest httpServletRequest, Long startTimeNano, Long startTimeMillis, Exception cause) {
         try {
-            createSlaLogItem(httpServletRequest, startTimeNano, startTimeMillis, errorMessage).store();
+            createSlaLogItem(httpServletRequest, startTimeNano, startTimeMillis, cause).store();
         } catch (Exception e) {
             logger.error("Could not create SLA LogItem", e);
         }
+    }
+
+    /**
+     * create and stores a SLA log
+     * @param request The servlet request context
+     * @param startTimeNano Start time in nano seconds
+     * @param startTimeMillis Start time in milliseconds seconds
+     */
+    public void addSlaLog(HttpServletRequest request, long startTimeNano, long startTimeMillis) {
+        addSlaLog(request, startTimeNano, startTimeMillis, null);
     }
 }

@@ -2,9 +2,11 @@ package dk.sds.nsp.maternity.facade.common.spring;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.sds.nsp.maternity.facade.common.jaxrs.SlaLoggingFilter;
 import dk.sds.nsp.maternity.facade.common.security.JWTHelper;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -24,7 +26,8 @@ public class SpringContext implements ServletContextListener {
         springContext.refresh();
         final ServletContext servletContext = servletContextEvent.getServletContext();
         servletContext.setAttribute(ANNOTATION_CONFIG_CONTEXT, springContext);
-
+        Dynamic filterRegistration = servletContext.addFilter("SlaLogFilter", SlaLoggingFilter.class);
+        filterRegistration.addMappingForUrlPatterns(null, false, "/*");
         final Algorithm algorithm = springContext.getBean(Algorithm.class);
         jwtHelper = new JWTHelper(algorithm);
         objectMapper = springContext.getBean(ObjectMapper.class);
