@@ -2,13 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <name>Maternity Data Facade API</name>
     <parent>
+        <artifactId>maternity-feedback</artifactId>
         <groupId>dk.sds.nsp.maternity</groupId>
-        <artifactId>facade-apis</artifactId>
         <version>dev</version>
     </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <name>Maternity Feedback API</name>
+    <artifactId>maternity-feedback-api</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
@@ -17,10 +20,9 @@
         </dependency>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
-            <artifactId>test</artifactId>
+            <artifactId>maternity-feedback-service</artifactId>
             <version>dev</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
-    <artifactId>maternity-data-facade-api</artifactId>
+
 </project>
