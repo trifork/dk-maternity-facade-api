@@ -15,7 +15,6 @@
     <modules>
         <module>saml-auth</module>
         <module>auth-model</module>
-        <module>auth-model</module>
     </modules>
 
 
