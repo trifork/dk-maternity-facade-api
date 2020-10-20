@@ -1,6 +1,6 @@
-package dk.sds.nsp.maternity.facade.common.jaxrs;
+package dk.sds.nsp.maternity.facade.common.servlet;
 
-import dk.sds.nsp.maternity.facade.common.util.SlaLogger;
+import dk.sds.nsp.maternity.cfg.SlaLogger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

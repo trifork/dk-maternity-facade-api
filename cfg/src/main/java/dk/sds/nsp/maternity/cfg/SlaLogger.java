@@ -26,7 +26,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dk.sds.nsp.maternity.facade.common.util;
+package dk.sds.nsp.maternity.cfg;
 
 import dk.sdsd.nsp.slalog.api.SLALogConfig;
 import dk.sdsd.nsp.slalog.api.SLALogItem;

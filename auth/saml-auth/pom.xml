@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>auth</artifactId>
+        <groupId>dk.sds.nsp.maternity</groupId>
+        <version>dev</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>saml-auth</artifactId>
+    <dependencies>
+
+    <dependency>
+        <groupId>dk.digst</groupId>
+        <artifactId>oiosaml2.java</artifactId>
+        <version>${oiosaml.verison}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    </dependencies>
+
+</project>

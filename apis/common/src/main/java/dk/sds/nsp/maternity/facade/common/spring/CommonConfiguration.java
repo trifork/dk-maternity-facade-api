@@ -3,6 +3,7 @@ package dk.sds.nsp.maternity.facade.common.spring;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import dk.sds.nsp.maternity.cfg.AppConfiguration;
 import dk.sds.nsp.maternity.facade.common.jaxrs.LocalDateTimeConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,13 @@ public class CommonConfiguration {
     @Bean
     public Algorithm algorithm() throws UnsupportedEncodingException {
         return Algorithm.HMAC256("asdf");
+    }
+
+    @Bean
+    public AppConfiguration configuration(){
+        final AppConfiguration appConfiguration = new AppConfiguration();
+        appConfiguration.init();
+        return appConfiguration;
     }
 
     @Bean

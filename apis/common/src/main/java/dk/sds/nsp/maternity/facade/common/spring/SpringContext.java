@@ -2,7 +2,7 @@ package dk.sds.nsp.maternity.facade.common.spring;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.sds.nsp.maternity.facade.common.jaxrs.SlaLoggingFilter;
+import dk.sds.nsp.maternity.facade.common.servlet.SlaLoggingFilter;
 import dk.sds.nsp.maternity.facade.common.security.JWTHelper;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
