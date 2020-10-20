@@ -9,7 +9,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 @WebListener
-public class SpringContext implements ServletContextListener {
+public class StubSpringContext implements ServletContextListener {
     protected static final String ANNOTATION_CONFIG_CONTEXT = "ANNOTATION_CONFIG_APPLICATION_CONTEXT";
 
     /**
@@ -18,7 +18,7 @@ public class SpringContext implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         AnnotationConfigApplicationContext springContext = new AnnotationConfigApplicationContext();
-        springContext.register(DataConfiguration.class);
+        springContext.register(StubDataConfiguration.class);
         springContext.refresh();
         final ServletContext servletContext = servletContextEvent.getServletContext();
         servletContext.setAttribute(ANNOTATION_CONFIG_CONTEXT, springContext);

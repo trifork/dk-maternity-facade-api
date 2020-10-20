@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(CommonConfiguration.class)
-public class DataConfiguration {
+public class StubDataConfiguration {
 
     @Bean
     public DataCardService dataCardService(){
