@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>dk.sds.nsp.maternity</groupId>
+        <artifactId>maternity-data</artifactId>
+        <version>dev</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <name>Maternity Data Facade API</name>
+    <artifactId>maternity-data-api</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>common</artifactId>
+            <version>dev</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>maternity-data-service</artifactId>
+            <version>dev</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sds.nsp.maternity</groupId>
+            <artifactId>test</artifactId>
+            <version>dev</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
