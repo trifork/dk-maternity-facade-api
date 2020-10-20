@@ -3,20 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>facade</artifactId>
+        <artifactId>auth</artifactId>
         <groupId>dk.sds.nsp.maternity</groupId>
         <version>dev</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <artifactId>auth</artifactId>
-    <name>Facade auth</name>
 
-    <modules>
-        <module>saml-auth</module>
-        <module>auth-model</module>
-        <module>auth-model</module>
-    </modules>
+    <artifactId>auth-model</artifactId>
 
 
 </project>
