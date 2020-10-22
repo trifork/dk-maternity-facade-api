@@ -26,7 +26,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feedback'
+                $ref: '#/components/schemas/FeedbackResponse'
       requestBody:
         content:
           application/json:
@@ -50,13 +50,8 @@ components:
           - $ref: '#/components/schemas/Feedback'
           type: object
           properties:
-            rating:
-              type: integer
-              minimum: 1
-              maximum: 5
-            comment:
-              type: string
-          required: [ rating ]
+            id:
+              type: uuid
 
 
 
