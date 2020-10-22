@@ -28,6 +28,10 @@
         <module>test</module>
         <module>maternity-data</module>
         <module>maternity-feedback</module>
+        <module>maternity-configuration-api</module>
+        <module>maternity-configuration-service</module>
+        <module>maternity-configuration-service-impl</module>
+        <module>maternity-configuration-service-stub</module>
     </modules>
 
     <dependencies>
