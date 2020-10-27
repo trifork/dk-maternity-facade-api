@@ -20,7 +20,6 @@ public class StubSpringContext implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         AnnotationConfigApplicationContext springContext = new AnnotationConfigApplicationContext();
         springContext.register(StubDataConfiguration.class);
-        springContext.register(StubDataConfiguration.class);
         springContext.refresh();
         final ServletContext servletContext = servletContextEvent.getServletContext();
         servletContext.setAttribute(ANNOTATION_CONFIG_CONTEXT, springContext);
