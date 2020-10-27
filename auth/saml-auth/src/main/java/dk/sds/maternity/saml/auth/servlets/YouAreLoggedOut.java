@@ -27,7 +27,7 @@
  * SOFTWARE.
  */
 
-package dk.sds.maternity.saml.auth;
+package dk.sds.maternity.saml.auth.servlets;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,7 +40,7 @@ import java.io.PrintWriter;
  * Simple servlet used as SingleLogoutService on Sikker Browser Opstart
  */
 @WebServlet("/youAreLoggedOut")
-public class YouAreLoggedOutServlet extends HttpServlet {
+public class YouAreLoggedOut extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
