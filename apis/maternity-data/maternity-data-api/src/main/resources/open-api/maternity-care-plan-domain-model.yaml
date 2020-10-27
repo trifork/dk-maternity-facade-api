@@ -1,0 +1,153 @@
+openapi: 3.0.0
+
+info:
+  title: Care Plan Domain Model
+  description: Care Plan Domain Model for Maternity Facade API
+  version: 1.0.0
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
+
+paths: {}
+
+components:
+  schemas:
+    EditableActivity:
+      title: Activity in care plan
+      type: object
+      properties:
+        practitioner:
+          type: object
+          properties:
+            healthCareActorsIdentification:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            organizationName:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+            fax:
+              type: string
+          required: [firstName, lastName, organizationName]
+        location:
+          type: object
+          properties:
+            healthCareActorsIdentification:
+              type: string
+            organizationName:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+            fax:
+              type: string
+        gestationWeek:
+          type: string
+          pattern: '^[1-9]?[0-9]\+[0-6]$'
+        plannedTime:
+          type: object
+          properties:
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+        status:
+          type: string
+          enum: [expected, planned, finished]
+        title:
+          type: string
+        description:
+          type: string
+        reference:
+          description: A pointer to whatever object this activity is related to
+          type: string
+        goal:
+          type: object
+          properties:
+            code:
+              $ref:  '#/components/schemas/Code'
+            text:
+              type: string
+        code:
+          $ref:  '#/components/schemas/Code'
+        kind:
+          type: string
+      required: [ title, practitioner, gestationWeek, status]
+    EditableCarePlan:
+      title: The care plan for the entire pregnency
+      properties:
+        patient:
+          type: string
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EditableActivity'
+        processId:
+          description: A reference to any external clinical pathway that this care plan is a part of
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        goal:
+          type: object
+          properties:
+            code:
+              $ref: '#/components/schemas/Code'
+            text:
+              type: string
+        responsibleOrganization:
+          type: object
+          properties:
+            id:
+              type: string
+            source:
+              type: string
+          required: [id, source]
+      required: [patient, title, responsibleOrganization]
+    Code:
+      title: Represents a (code, codesystem, display value) tuple
+      properties:
+        code:
+          type: string
+        codeSystem:
+          type: string
+        display:
+          type: string
+      required: [code, codeSystem, display]
+    Activity:
+      title: Activity in care plan
+      allOf:
+        - $ref: '#/components/schemas/EditableActivity'
+        - type: object
+          properties:
+            id:
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv5'
+
+      required: [id]
+    CarePlan:
+      title: The care plan for the entire pregnency
+      allOf:
+        - $ref: '#/components/schemas/EditableCarePlan'
+        - type: object
+          properties:
+            id:
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv5'
+            version:
+              type: number
+            activities:
+              type: array
+              items:
+                $ref: '#/components/schemas/Activity'
+
+
+      required: [id, version]
+

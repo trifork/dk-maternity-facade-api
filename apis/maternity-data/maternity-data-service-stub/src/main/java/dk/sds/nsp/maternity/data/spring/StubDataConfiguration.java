@@ -1,7 +1,9 @@
 package dk.sds.nsp.maternity.data.spring;
 
-import dk.sds.nsp.maternity.data.service.DataCardService;
-import dk.sds.nsp.maternity.data.service.DataCardServiceStub;
+import dk.sds.nsp.maternity.data.care_plan.service.CarePlanService;
+import dk.sds.nsp.maternity.data.care_plan.service.CarePlanServiceStub;
+import dk.sds.nsp.maternity.data.data_card.service.DataCardService;
+import dk.sds.nsp.maternity.data.data_card.service.DataCardServiceStub;
 import dk.sds.nsp.maternity.facade.common.spring.CommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,5 +16,10 @@ public class StubDataConfiguration {
     @Bean
     public DataCardService dataCardService(){
         return new DataCardServiceStub();
+    }
+
+    @Bean
+    public CarePlanService carePlanService(){
+        return new CarePlanServiceStub();
     }
 }
