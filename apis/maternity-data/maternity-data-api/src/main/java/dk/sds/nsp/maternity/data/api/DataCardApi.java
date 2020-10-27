@@ -1,11 +1,11 @@
 package dk.sds.nsp.maternity.data.api;
 
-import dk.sds.nsp.maternity.data.model.CreateDataCardRequest;
-import dk.sds.nsp.maternity.data.model.DataCardResponse;
-import dk.sds.nsp.maternity.data.model.UpdateDataCardRequest;
+import dk.sds.nsp.maternity.data.data_card.model.CreateDataCardRequest;
+import dk.sds.nsp.maternity.data.data_card.model.DataCardResponse;
+import dk.sds.nsp.maternity.data.data_card.model.UpdateDataCardRequest;
 import dk.sds.nsp.maternity.data.security.SessionContext;
-import dk.sds.nsp.maternity.data.service.DataCardService;
-import dk.sds.nsp.maternity.data.service.DataCardService.ServiceResponse;
+import dk.sds.nsp.maternity.data.data_card.service.DataCardService;
+import dk.sds.nsp.maternity.data.data_card.service.DataCardService.ServiceResponse;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import org.apache.log4j.Logger;
@@ -28,7 +28,7 @@ import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
 
-@Path("data-card")
+@Path("/data-card")
 @Produces(MediaType.APPLICATION_JSON)
 public class DataCardApi {
 

@@ -1,6 +1,7 @@
 package dk.sds.nsp.maternity.data.spring;
 
-import dk.sds.nsp.maternity.data.service.DataCardService;
+import dk.sds.nsp.maternity.data.care_plan.service.CarePlanService;
+import dk.sds.nsp.maternity.data.data_card.service.DataCardService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletContext;
@@ -23,6 +24,7 @@ public class StubSpringContext implements ServletContextListener {
         final ServletContext servletContext = servletContextEvent.getServletContext();
         servletContext.setAttribute(ANNOTATION_CONFIG_CONTEXT, springContext);
         DependencyResolver.dataCardService = springContext.getBean(DataCardService.class);
+        DependencyResolver.carePlanService = springContext.getBean(CarePlanService.class);
     }
 
     @Override
