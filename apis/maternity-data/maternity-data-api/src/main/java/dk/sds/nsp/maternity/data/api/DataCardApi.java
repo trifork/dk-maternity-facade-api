@@ -28,7 +28,7 @@ import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
 
-@Path("data-card")
+@Path("/data-card")
 @Produces(MediaType.APPLICATION_JSON)
 public class DataCardApi {
 

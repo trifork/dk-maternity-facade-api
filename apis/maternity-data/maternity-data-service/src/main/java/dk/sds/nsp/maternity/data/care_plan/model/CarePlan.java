@@ -33,7 +33,7 @@ public class CarePlan extends EditableCarePlan {
   private BigDecimal version = null;
 
   @JsonProperty("activities")
-  private ArrayList<Activity> activities = null;
+  private List<Activity> activities = null;
 
   public CarePlan id(String id) {
     this.id = id;
@@ -79,13 +79,15 @@ public class CarePlan extends EditableCarePlan {
    * @return activities
    **/
   public CarePlan withActivities(List<Activity> activities) {
-   // this.activities = activities;
+    this.activities = activities;
     return this;
   }
+  @JsonProperty("activities")
   public List<Activity> getAllActivities() {
     return activities;
   }
-  public void setActivities(ArrayList<Activity> activities) {
+  @JsonProperty("activities")
+  public void setAllActivities(List<Activity> activities) {
     this.activities = activities;
   }
 

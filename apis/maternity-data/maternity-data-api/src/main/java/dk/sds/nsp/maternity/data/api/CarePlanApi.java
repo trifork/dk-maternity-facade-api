@@ -29,7 +29,7 @@ import java.util.UUID;
 import static dk.sds.nsp.maternity.facade.common.util.Problems.typeFor;
 import static javax.ws.rs.core.Response.Status.*;
 
-@Path("care-plan")
+@Path("/care-plan")
 @Produces(MediaType.APPLICATION_JSON)
 public class CarePlanApi {
 
@@ -42,11 +42,11 @@ public class CarePlanApi {
             @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
             @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason
     ) {
-        final String patientIdentifier = null;
+        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
         final boolean breakTheGlass = false;
 
         try {
-            final List<CarePlan> response = service.list(xPatientIdentifier, breakTheGlass);
+            final List<CarePlan> response = service.list(patientIdentifier, breakTheGlass);
             return Response.ok(response)
                     .build();
         } catch (ResourceNotFoundException e) {
@@ -204,7 +204,7 @@ public class CarePlanApi {
         return Response.status(FORBIDDEN)
                 .entity(
                         new ProblemDetails()
-                                .notFound()
+                                .forbidden()
                                 .title("Patienten har spærret adgang til data")
                                 .detail(String.format("Patienten har spærret for adgang til alt eller dele af forløbets data. Fejl-id'et er '%s'", errorId))
                                 .type(typeFor("some-data-was-blocked.html"))
@@ -218,7 +218,7 @@ public class CarePlanApi {
         return Response.status(CONFLICT)
                 .entity(
                         new ProblemDetails()
-                                .notFound()
+                                .conflict()
                                 .title("Andre har ændret data")
                                 .detail(String.format("En anden har ændret data i forløbet samtidig med dig. Fejl-id'et er '%s'", errorId))
                                 .type(typeFor("conflict-error.html"))

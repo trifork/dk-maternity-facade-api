@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 public class CarePlanServiceStub implements CarePlanService {
     List<CarePlan> database = new ArrayList();
 
+    public CarePlanServiceStub() {
+        create(getTemplate("9949653695"));// Put some test-data in db to get us started :-)
+    }
 
     @Override
     public List<CarePlan> list(String patientIdentifier, boolean breakTheGlass) throws ResourceNotFoundException, DataBlockedException {
