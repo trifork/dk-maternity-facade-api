@@ -2,19 +2,18 @@ package dk.sds.nsp.maternity.feedback.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class FeedbackResponse extends Feedback{
-  @JsonProperty("id")
-  private UUID id;
+  @JsonProperty("identifier")
+  private UUID identifier;
 
   public UUID getId() {
-    return id;
+    return identifier;
   }
 
   public void setId(UUID id) {
-    this.id = id;
+    this.identifier = id;
   }
 
   public FeedbackResponse rating(final Integer rating) {
@@ -27,7 +26,7 @@ public class FeedbackResponse extends Feedback{
     return this;
   }
   public FeedbackResponse id(final UUID id) {
-    this.id = id;
+    this.identifier = id;
     return this;
   }
 
