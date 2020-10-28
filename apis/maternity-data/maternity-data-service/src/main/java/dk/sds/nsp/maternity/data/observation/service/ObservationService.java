@@ -15,5 +15,5 @@ public interface ObservationService {
     Observation get(final String id) throws ResourceNotFoundException, DataBlockedException;
     Observation create(String patientIdentifier, final CreateObservation request);
     Observation update(final String id, final EditableObservation request) throws ResourceNotFoundException, DataBlockedException, MergeConflictException;
-    List<ObservationType> getTypes();
+    List<CreateObservation> getTypes();
 }

@@ -21,13 +21,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum ObservationType {
   WEIGHT("weight"),
-  BLOOD_PREASURE("blood_preasure"),
+  BLOOD_PREASSURE("blood_preassure"),
   URINE("urine"),
   EDEMA("edema"),
   PUBIS_MEASURUEMENTS("pubis_measuruements"),
   FETUS_ACTIVITY("fetus_activity"),
   FETUS_GENDER("fetus_gender"),
-  FETUS_PRESENTATION("fetus_presentation");
+  FETUS_PRESENTATION("fetus_presentation"),
+  GA_U_D("ga_u_d"),
+  UL_WEIGHT("ul_weight"),
+  WEIGHT_DEVIATION("weight_deviation"),
+  AMNIOTIC_FLUID("amniotic_fluid"),
+  FLOW("flow");
 
   private String value;
 

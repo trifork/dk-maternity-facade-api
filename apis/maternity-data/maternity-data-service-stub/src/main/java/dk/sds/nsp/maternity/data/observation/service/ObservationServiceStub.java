@@ -3,10 +3,7 @@ package dk.sds.nsp.maternity.data.observation.service;
 import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
 import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
 import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
-import dk.sds.nsp.maternity.data.observation.model.CreateObservation;
-import dk.sds.nsp.maternity.data.observation.model.EditableObservation;
-import dk.sds.nsp.maternity.data.observation.model.Observation;
-import dk.sds.nsp.maternity.data.observation.model.ObservationType;
+import dk.sds.nsp.maternity.data.observation.model.*;
 
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
@@ -14,6 +11,21 @@ import java.util.*;
 
 public class ObservationServiceStub implements ObservationService {
     MultivaluedMap<String, Observation> database = new MultivaluedHashMap<>();
+
+    public ObservationServiceStub() {
+        database.put("9949653695", Arrays.asList(
+            randomObservation(ObservationType.WEIGHT, Collections.singletonList(new EditableObservationValues().unit("kg").value("65"))),
+            randomObservation(ObservationType.BLOOD_PREASSURE, Arrays.asList(
+                    new EditableObservationValues().name("Systolisk")
+                            .value("120")
+                            .unit("mm Hg"),
+                    new EditableObservationValues().name("Diastolisk")
+                            .value("75")
+                            .unit("mm Hg")
+            )),
+            randomObservation(ObservationType.URINE, Collections.singletonList(new EditableObservationValues().unit("A+")))
+        ));
+    }
 
     @Override
     public List<Observation> list(String patientIdentifier, boolean breakTheGlass) throws ResourceNotFoundException, DataBlockedException {
@@ -59,7 +71,31 @@ public class ObservationServiceStub implements ObservationService {
     }
 
     @Override
-    public List<ObservationType> getTypes() {
-        return Arrays.asList(ObservationType.values());
+    public List<CreateObservation> getTypes() {
+        return Arrays.asList(
+                ObservationTemplates.EDEMA,
+                ObservationTemplates.AMNIOTIC_FLUID,
+                ObservationTemplates.BLOOD_PREASSURE,
+                ObservationTemplates.FETUS_ACTIVITY,
+                ObservationTemplates.FETUS_GENDER,
+                ObservationTemplates.FETUS_PRESENTATION,
+                ObservationTemplates.FLOW,
+                ObservationTemplates.GA_U_D,
+                ObservationTemplates.PUBIS_MEASURUEMENTS,
+                ObservationTemplates.URINE,
+                ObservationTemplates.WEIGHT,
+                ObservationTemplates.WEIGHT_DEVIATION
+        );
+    }
+
+    private static Observation randomObservation(ObservationType type, List<EditableObservationValues> values) {
+        Observation result = new Observation().id(UUID.randomUUID().toString());
+        result.type(type)
+                .values(values)
+                .measuredBy("Borger selv")
+                .enteredBy("Gutte U. Danielsen")
+                .completed(true)
+                .dateOfMeasurement(new Date());
+        return result;
     }
 }
