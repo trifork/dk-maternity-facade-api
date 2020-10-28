@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static dk.sds.maternity.saml.auth.Constants.SESSION_CPR;
+
 /**
  * 
  * @author jso
@@ -31,15 +33,14 @@ public class SBOV2Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
         req.getRequestDispatcher("saml/SAMLAssertionConsumer").forward(req, resp);
 
         HttpSession session = req.getSession();
 
         if (session != null) {
-            final String cpr = req.getParameter("cpr");
+            final String cpr = req.getParameter(SESSION_CPR);
             if (cpr != null) {
-                session.setAttribute("cpr", cpr);
+                session.setAttribute(SESSION_CPR, cpr);
             }
         }
     }

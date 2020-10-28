@@ -14,16 +14,14 @@ import java.util.List;
 public class CustomSPFilter extends SPFilter {
     private final List<String> skipSPFilterPaths = Arrays.asList(
             "/youAreLoggedOut",
-            "/isAlive",
-            "/session"
+            "/isAlive"
     );
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
         HttpServletRequest httpServletRequest = ((HttpServletRequest) request);
-//        final String header = httpServletRequest.getHeader("X-Requested-With");
-//        if("javascript".equals(header) && UserAssertionHolder.get() != null){
-//        }
+
         // bypass the SPFilter
         if(skipSPFilterPaths.stream().anyMatch(path -> httpServletRequest.getRequestURI().startsWith(path))){
             chain.doFilter(request, response);
