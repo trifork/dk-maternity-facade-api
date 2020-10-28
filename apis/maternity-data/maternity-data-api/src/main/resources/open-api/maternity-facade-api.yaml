@@ -326,7 +326,7 @@ paths:
         schema:
           $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
         required: true
-        description: The identifier of the data card
+        description: The identifier of the care plan
     get:
       tags: [care-plan]
       summary: Get the care plan with the specified **identifier**
@@ -426,7 +426,7 @@ paths:
         schema:
           $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
         required: true
-        description: The identifier of the data card
+        description: The identifier of the care plan to extend
     patch:
       tags: [care-plan]
       summary: Extend the care plan
@@ -499,6 +499,186 @@ paths:
             application/json:
               schema:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/EditableCarePlan'
+  /maternity/observation:
+    get:
+      tags: [observation, measurement]
+      summary: Get observations
+      description: >
+        Gets all observations for the current patient identified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is use), related to the currently active pregnancy.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/Observation'
+        '403':
+          description: >
+            Forbidden -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+    post:
+        tags: [observation, measurement]
+        summary: Create an observation
+        description: >
+          Creates a new observation for the current patient identified in the **context** cookie as part of the currently active pregnency.
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/CreateObservation'
+        responses:
+          '201':
+            description: Created
+            content:
+              application/json:
+                schema:
+                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/Observation'
+          '401':
+            description: >
+              Unauthorized -
+            content:
+              application/problem+json:
+                schema:
+                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+          '500':
+            description: >
+              Internal Server Error -
+            content:
+              application/problem+json:
+                schema:
+                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+  /maternity/observation/{identifier}:
+    get:
+      tags: [observation, measurement]
+      summary: Get the observation with the specified **identifier**
+      description: >
+        Gets the observation with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/Observation'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '403':
+          description: >
+            Forbidden -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '404':
+          description: >
+            Not Found -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+    put:
+      tags: [observation, measurement]
+      summary: Update the observation with the specified **identifier**
+      description: >
+        Updates the observation with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/EditableObservation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/Observation'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '403':
+          description: >
+            Forbidden -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '404':
+          description: >
+            Not Found -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '409':
+          description: >
+            Conflict -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+  /maternity/observation/type:
+    get:
+      tags: [observation, measurement]
+      summary: Get the list of allowed observation types
+      description: >
+        Get the list of allowed observation types which can be used when creating observations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/ObservationType'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/demographics
 
 components:

@@ -1,8 +1,8 @@
 package dk.sds.nsp.maternity.data.care_plan.service;
 
-import dk.sds.nsp.maternity.data.care_plan.exceptions.DataBlockedException;
-import dk.sds.nsp.maternity.data.care_plan.exceptions.MergeConflictException;
-import dk.sds.nsp.maternity.data.care_plan.exceptions.ResourceNotFoundException;
+import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
+import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
+import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
 import dk.sds.nsp.maternity.data.care_plan.model.*;
 
 import java.math.BigDecimal;

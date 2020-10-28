@@ -3,9 +3,10 @@ package dk.sds.nsp.maternity.data.api;
 import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
 import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
 import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
-import dk.sds.nsp.maternity.data.care_plan.model.CarePlan;
-import dk.sds.nsp.maternity.data.care_plan.model.EditableCarePlan;
-import dk.sds.nsp.maternity.data.care_plan.service.CarePlanService;
+import dk.sds.nsp.maternity.data.observation.model.CreateObservation;
+import dk.sds.nsp.maternity.data.observation.model.Observation;
+import dk.sds.nsp.maternity.data.observation.model.EditableObservation;
+import dk.sds.nsp.maternity.data.observation.service.ObservationService;
 import dk.sds.nsp.maternity.data.security.SessionContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
 import dk.sds.nsp.maternity.facade.common.jaxrs.PATCH;
@@ -23,15 +24,15 @@ import java.util.UUID;
 import static dk.sds.nsp.maternity.facade.common.util.Problems.typeFor;
 import static javax.ws.rs.core.Response.Status.*;
 
-@Path("/care-plan")
+@Path("/observation")
 @Produces(MediaType.APPLICATION_JSON)
-public class CarePlanApi {
+public class ObservationApi {
 
-    private static final Logger LOGGER = Logger.getLogger(CarePlanApi.class);
-    private final CarePlanService service = DependencyResolver.carePlanService();
+    private static final Logger LOGGER = Logger.getLogger(ObservationApi.class);
+    private final ObservationService service = DependencyResolver.observationService();
 
     @GET
-    public Response listCarePlansForPatient(
+    public Response listObservationsForPatient(
             @CookieParam("context") final SessionContext context,
             @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
             @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason
@@ -40,63 +41,65 @@ public class CarePlanApi {
         final boolean breakTheGlass = false;
 
         try {
-            final List<CarePlan> response = service.list(patientIdentifier, breakTheGlass);
+            final List<Observation> response = service.list(patientIdentifier, breakTheGlass);
             return Response.ok(response)
                     .build();
         } catch (ResourceNotFoundException e) {
             String errorId = UUID.randomUUID().toString();
-            LOGGER.warn(String.format("ERROR_ID=%s Failed to find the care-plan for the patient", errorId), e);
+            LOGGER.warn(String.format("ERROR_ID=%s Failed to find observations for the patient", errorId), e);
             return Response.status(NOT_FOUND)
                     .entity(
                             new ProblemDetails()
                                     .notFound()
-                                    .title("Forløbet kunne ikke findes")
-                                    .detail(String.format("Vi kunne ikke finde et forløb for den valgte patient. Fejl-id'et er '%s'", errorId))
+                                    .title("Den valgte patient findes ikke")
+                                    .detail(String.format("Vi kunne ikke finde den valgte patient. Fejl-id'et er '%s'", errorId))
                                     .type(typeFor("not-found.html"))
                     )
                     .build();
         } catch (DataBlockedException e) {
             String errorId = UUID.randomUUID().toString();
-            LOGGER.info(String.format("ERROR_ID=%s Could not fetch care-plan because patient has blocked data", errorId), e);
+            LOGGER.info(String.format("ERROR_ID=%s Could not fetch observations because patient has blocked data", errorId), e);
             return Response.status(FORBIDDEN)
                     .entity(
                             new ProblemDetails()
                                     .notFound()
                                     .title("Patienten har spærret adgang til data")
-                                    .detail(String.format("Patienten har spærret for adgang til alt eller dele af forløbets data. Fejl-id'et er '%s'", errorId))
+                                    .detail(String.format("Patienten har spærret for adgang til alle eller dele af målingerne. Fejl-id'et er '%s'", errorId))
                                     .type(typeFor("some-data-was-blocked.html"))
                     )
                     .build();
         } catch (Exception e) {
-            return internalError("unexpected error when reading care plans for patient", e);
+            return internalError("unexpected error when reading observations for patient", e);
         }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCarePlan(
+    public Response createObservation(
             @CookieParam("context") final SessionContext context,
-            final EditableCarePlan request
+            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
+            final CreateObservation request
     ) {
+        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
         try {
-            final CarePlan response = service.create(request);
+            final Observation response = service.create(patientIdentifier, request);
             return Response.created(getLocation(response))
                     .entity(response)
                     .build();
 
         } catch (Exception e) {
-            return internalError("Failed to create a care plan", e);
+            return internalError("Failed to create a observation", e);
         }
     }
 
     @GET
     @Path("/{identifier}")
-    public Response getCarePlan(
+    public Response getObservation(
             @CookieParam("context") final SessionContext context,
             @PathParam("identifier") final String id
     ) {
         try {
-            final CarePlan result = service.get(id);
+            final Observation result = service.get(id);
             return Response.ok(result)
                     .build();
         } catch (ResourceNotFoundException e) {
@@ -104,7 +107,7 @@ public class CarePlanApi {
         } catch (DataBlockedException e) {
             return blocked(id, e);
         } catch (Exception e) {
-            return internalError("Failed to read care plan by id " + id, e);
+            return internalError("Failed to read observation by id " + id, e);
         }
     }
 
@@ -113,10 +116,10 @@ public class CarePlanApi {
     public Response update(
             @CookieParam("context") final SessionContext context,
             @PathParam("identifier") final String id,
-            final EditableCarePlan request
+            final EditableObservation request
     ) {
         try {
-            CarePlan result = service.update(id, request);
+            Observation result = service.update(id, request);
             return Response.ok(result)
                     .build();
         } catch (ResourceNotFoundException e) {
@@ -126,41 +129,18 @@ public class CarePlanApi {
         } catch (DataBlockedException e) {
             return blocked(id, e);
         } catch (Exception e) {
-            return internalError("Could not update care plan with id " + id, e);
-        }
-    }
-    @PATCH
-    @Path("/{identifier}/extend")
-    public Response extend(
-            @CookieParam("context") final SessionContext context,
-            @PathParam("identifier") final String id,
-            final EditableCarePlan request
-    ) {
-        try {
-            CarePlan result = service.extend(id, request);
-            return Response.ok(result)
-                    .build();
-        } catch (ResourceNotFoundException e) {
-            return notFound(id, e);
-        } catch (MergeConflictException e) {
-            return conflict(id, e);
-        } catch (DataBlockedException e) {
-            return blocked(id, e);
-        } catch (Exception e) {
-            return internalError("Could not update care plan with id " + id, e);
+            return internalError("Could not update observation with id " + id, e);
         }
     }
 
     @GET
-    @Path("/template")
+    @Path("/types")
     public Response getTemplate(@CookieParam("context") final SessionContext context) {
-        return Response.ok(service.getTemplate(context.getPatientIdentifier()))
+        return Response.ok(service.getTypes())
                 .build();
     }
 
-
-
-    private static URI getLocation(final CarePlan created) {
+    private static URI getLocation(final Observation created) {
         return URI.create(RequestContext.get().getUriInfo().getAbsolutePath() + "/" + created.getId());
     }
 
@@ -185,8 +165,8 @@ public class CarePlanApi {
                 .entity(
                         new ProblemDetails()
                                 .notFound()
-                                .title("Forløbet kunne ikke findes")
-                                .detail(String.format("Vi kunne ikke finde et forløb for den valgte patient. Fejl-id'et er '%s'", errorId))
+                                .title("Målingen kunne ikke findes")
+                                .detail(String.format("Vi kunne ikke finde en måling for den valgte patient. Fejl-id'et er '%s'", errorId))
                                 .type(typeFor("not-found.html"))
                 )
                 .build();
@@ -194,13 +174,13 @@ public class CarePlanApi {
 
     private static Response blocked(String id, Throwable e) {
         String errorId = UUID.randomUUID().toString();
-        LOGGER.info(String.format("ERROR_ID=%s Could not fetch care-plan with id '%s' because patient has blocked data", errorId, id), e);
+        LOGGER.info(String.format("ERROR_ID=%s Could not fetch observation with id '%s' because patient has blocked data", errorId, id), e);
         return Response.status(FORBIDDEN)
                 .entity(
                         new ProblemDetails()
                                 .forbidden()
                                 .title("Patienten har spærret adgang til data")
-                                .detail(String.format("Patienten har spærret for adgang til alt eller dele af forløbets data. Fejl-id'et er '%s'", errorId))
+                                .detail(String.format("Patienten har spærret for adgang til målingen. Fejl-id'et er '%s'", errorId))
                                 .type(typeFor("some-data-was-blocked.html"))
                 )
                 .build();
@@ -208,13 +188,13 @@ public class CarePlanApi {
 
     private static Response conflict(String id, Throwable e) {
         String errorId = UUID.randomUUID().toString();
-        LOGGER.info(String.format("ERROR_ID=%s Could not modify care-plan with id '%s' because of a merge conflict", errorId, id), e);
+        LOGGER.info(String.format("ERROR_ID=%s Could not modify observation with id '%s' because of a merge conflict", errorId, id), e);
         return Response.status(CONFLICT)
                 .entity(
                         new ProblemDetails()
                                 .conflict()
                                 .title("Andre har ændret data")
-                                .detail(String.format("En anden har ændret data i forløbet samtidig med dig. Fejl-id'et er '%s'", errorId))
+                                .detail(String.format("En anden har ændret målingen samtidig med dig. Fejl-id'et er '%s'", errorId))
                                 .type(typeFor("conflict-error.html"))
                 )
                 .build();

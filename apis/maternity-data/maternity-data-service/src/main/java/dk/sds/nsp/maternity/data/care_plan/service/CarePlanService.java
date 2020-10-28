@@ -1,17 +1,12 @@
 package dk.sds.nsp.maternity.data.care_plan.service;
 
-import dk.sds.nsp.maternity.data.care_plan.exceptions.DataBlockedException;
-import dk.sds.nsp.maternity.data.care_plan.exceptions.MergeConflictException;
-import dk.sds.nsp.maternity.data.care_plan.exceptions.ResourceNotFoundException;
+import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
+import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
+import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
 import dk.sds.nsp.maternity.data.care_plan.model.CarePlan;
-import dk.sds.nsp.maternity.data.care_plan.model.EditableActivity;
 import dk.sds.nsp.maternity.data.care_plan.model.EditableCarePlan;
-import dk.sds.nsp.maternity.data.data_card.model.CreateDataCardRequest;
-import dk.sds.nsp.maternity.data.data_card.model.DataCardResponse;
-import dk.sds.nsp.maternity.data.data_card.model.UpdateDataCardRequest;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface CarePlanService {
     List<CarePlan> list(final String patientIdentifier, final boolean breakTheGlass) throws ResourceNotFoundException, DataBlockedException;

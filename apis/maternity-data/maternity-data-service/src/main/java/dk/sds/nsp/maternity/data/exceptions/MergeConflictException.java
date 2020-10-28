@@ -1,4 +1,4 @@
-package dk.sds.nsp.maternity.data.care_plan.exceptions;
+package dk.sds.nsp.maternity.data.exceptions;
 
 public class MergeConflictException extends Exception {
     public MergeConflictException(String message) {

@@ -1,0 +1,53 @@
+openapi: 3.0.0
+
+info:
+  title: Observation Domain Model
+  description: Observation (measurement) Domain Model for Maternity Facade API
+  version: 1.0.0
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
+
+paths: {}
+
+components:
+  schemas:
+    EditableObservation:
+      type: object
+      properties:
+        dateOfMeasurement:
+          type: string
+          format: date-time
+        values:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              unit:
+                type: string
+        measuredBy:
+          type: string
+        enteredBy:
+          type: string
+        completed:
+          type: boolean
+    CreateObservation:
+      allOf:
+        - $ref: '#/components/schemas/EditableObservation'
+        - type: object
+          properties:
+            type:
+              $ref: '#/components/schemas/ObservationType'
+    Observation:
+      allOf:
+        - $ref: '#/components/schemas/CreateObservation'
+        - type: object
+          properties:
+            id:
+              type: string
+    ObservationType:
+      type: string
+      enum: [weight, blood_preasure, urine, edema, pubis_measuruements, fetus_activity, fetus_gender, fetus_presentation]
+
