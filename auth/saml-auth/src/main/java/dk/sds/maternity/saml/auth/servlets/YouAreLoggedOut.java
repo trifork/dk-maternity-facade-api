@@ -58,7 +58,6 @@ public class YouAreLoggedOut extends HttpServlet {
                 "Du er logget ud.\n" +
                 "</body>");
         writer.append("</html>");
-
         resp.setStatus(HttpServletResponse.SC_OK);
     }
 }
