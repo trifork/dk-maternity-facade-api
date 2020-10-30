@@ -1,11 +1,11 @@
 package dk.sds.nsp.maternity.data.api;
 
+import dk.sds.nsp.maternity.data.appointment.service.AppointmentService;
+import dk.sds.nsp.maternity.data.care_plan.model.Activity;
+import dk.sds.nsp.maternity.data.care_plan.model.EditableActivity;
 import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
 import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
 import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
-import dk.sds.nsp.maternity.data.appointment.model.EditableAppointment;
-import dk.sds.nsp.maternity.data.appointment.model.Appointment;
-import dk.sds.nsp.maternity.data.appointment.service.AppointmentService;
 import dk.sds.nsp.maternity.data.security.SessionContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
@@ -39,7 +39,7 @@ public class AppointmentApi {
         final boolean breakTheGlass = false;
 
         try {
-            final List<Appointment> response = service.list(patientIdentifier, breakTheGlass);
+            final List<Activity> response = service.list(patientIdentifier, breakTheGlass);
             return Response.ok(response)
                     .build();
         } catch (ResourceNotFoundException e) {
@@ -76,11 +76,11 @@ public class AppointmentApi {
     public Response createAppointment(
             @CookieParam("context") final SessionContext context,
             @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
-            final EditableAppointment request
+            final EditableActivity request
     ) {
         final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
         try {
-            final Appointment response = service.create(patientIdentifier, request);
+            final Activity response = service.create(patientIdentifier, request);
             return Response.created(getLocation(response))
                     .entity(response)
                     .build();
@@ -97,7 +97,7 @@ public class AppointmentApi {
             @PathParam("identifier") final String id
     ) {
         try {
-            final Appointment result = service.get(id);
+            final Activity result = service.get(id);
             return Response.ok(result)
                     .build();
         } catch (ResourceNotFoundException e) {
@@ -114,10 +114,10 @@ public class AppointmentApi {
     public Response update(
             @CookieParam("context") final SessionContext context,
             @PathParam("identifier") final String id,
-            final EditableAppointment request
+            final EditableActivity request
     ) {
         try {
-            Appointment result = service.update(id, request);
+            Activity result = service.update(id, request);
             return Response.ok(result)
                     .build();
         } catch (ResourceNotFoundException e) {
@@ -131,7 +131,7 @@ public class AppointmentApi {
         }
     }
 
-    private static URI getLocation(final Appointment created) {
+    private static URI getLocation(final Activity created) {
         return URI.create(RequestContext.get().getUriInfo().getAbsolutePath() + "/" + created.getId());
     }
 

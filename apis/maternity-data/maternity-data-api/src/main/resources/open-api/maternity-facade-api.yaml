@@ -681,10 +681,10 @@ paths:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/appointment:
     get:
-      tags: [appointment]
+      tags: [appointment, activity]
       summary: Get appointments
       description: >
-        Gets all appointments for the current patient identified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is use), related to the currently active pregnancy.
+        Gets all activities for the current patient identified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is use), related to the currently active pregnancy.
       responses:
         '200':
           description: OK
@@ -693,7 +693,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-appointment-domain-model.yaml#/components/schemas/Appointment'
+                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/Activity'
         '403':
           description: >
             Forbidden -
@@ -724,14 +724,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-appointment-domain-model.yaml#/components/schemas/EditableAppointment'
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/EditableActivity'
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-appointment-domain-model.yaml#/components/schemas/Appointment'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/Activity'
         '401':
           description: >
             Unauthorized -
@@ -765,7 +765,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-appointment-domain-model.yaml#/components/schemas/Appointment'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/Activity'
         '401':
           description: >
             Unauthorized -
@@ -810,7 +810,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-appointment-domain-model.yaml#/components/schemas/Appointment'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/Activity'
         '401':
           description: >
             Unauthorized -

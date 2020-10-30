@@ -30,8 +30,8 @@ public class StubDataConfiguration {
     }
 
     @Bean
-    public CarePlanService carePlanService(){
-        return new CarePlanServiceStub();
+    public CarePlanService carePlanService(AppointmentService appointmentService){
+        return new CarePlanServiceStub(appointmentService);
     }
 
     @Bean

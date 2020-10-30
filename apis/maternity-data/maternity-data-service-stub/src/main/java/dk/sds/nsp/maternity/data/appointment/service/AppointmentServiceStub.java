@@ -1,9 +1,9 @@
 package dk.sds.nsp.maternity.data.appointment.service;
 
+import dk.sds.nsp.maternity.data.care_plan.model.*;
 import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
 import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
 import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
-import dk.sds.nsp.maternity.data.appointment.model.*;
 import dk.sds.nsp.maternity.data.appointment.service.AppointmentService;
 
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -11,30 +11,69 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.util.*;
 
 public class AppointmentServiceStub implements AppointmentService {
-    MultivaluedMap<String, Appointment> database = new MultivaluedHashMap<>();
+    MultivaluedMap<String, Activity> database = new MultivaluedHashMap<>();
 
     public AppointmentServiceStub() {
-        EditableAppointment nonExactMeeting = baseAppointment(120, 8, "Andet møde");
-        nonExactMeeting.getPeriod().setType(AppointmentPeriod.TypeEnum.GUIDE);
-
-        EditableAppointment openEndedMeeting = baseAppointment(120, 35, "Fællesspisning");
-        openEndedMeeting.getPeriod().setEnd(null);
-
-        EditableAppointment interval = baseAppointment(440, 60, "Måske noget med ultralyd?");
-        interval.getPeriod().setType(AppointmentPeriod.TypeEnum.INTERVAL);
-
-        EditableAppointment repeated = baseAppointment(120, 100, "Checkup hver 2. måned")
-                .repeated(true);
-
-        create("9949653695", baseAppointment(30, 0, "Første Møde"));
-        create("9949653695", nonExactMeeting);
-        create("9949653695", openEndedMeeting);
-        create("9949653695", interval);
-        create("9949653695", repeated);
+        Arrays.asList(
+                new EditableActivity()
+                        .code(
+                                new Code()
+                                        .code("screening")
+                                        .codeSystem("http://whatever.fhir.com")
+                                        .display("First Screening")
+                        )
+                        .title("Some screening or whatever")
+                        .description("We'll just look around and stuff. Listen I'm not qualified for this")
+                        .gestationWeek("11+1")
+                        .kind("Some kind")
+                        .practitioner(
+                                new Practitioner()
+                                        .email("practitioner@totally-a-legit-hospital.com")
+                                        .firstName("Hank the")
+                                        .lastName("Tank")
+                                        .healthCareActorsIdentification("547296382")
+                                        .organizationName("Some Awesome Organization")
+                                        .phone("+4588888888")
+                        )
+                        .location(
+                                new Location()
+                                        .organizationName("Some Awesome Organization")
+                                        .email("whatever@none-of-your-business.com")
+                                        .healthCareActorsIdentification("1234567890")
+                        )
+                        .status(EditableActivity.StatusEnum.EXPECTED),
+                new EditableActivity()
+                        .code(
+                                new Code()
+                                        .code("birth")
+                                        .codeSystem("http://whatever.fhir.com")
+                                        .display("Literally give birth")
+                        )
+                        .title("Birth")
+                        .description("That baby-thingy needs to get out now - we'll take care of it")
+                        .gestationWeek("42+6")
+                        .kind("Some other kind")
+                        .practitioner(
+                                new Practitioner()
+                                        .email("practitioner@totally-a-legit-hospital.com")
+                                        .firstName("Kurt the")
+                                        .lastName("Bird")
+                                        .healthCareActorsIdentification("547296382")
+                                        .organizationName("Some Awesome Organization")
+                                        .phone("+4588888888")
+                        )
+                        .location(
+                                new Location()
+                                        .organizationName("Some Awesome Organization")
+                                        .email("whatever@none-of-your-business.com")
+                                        .healthCareActorsIdentification("1234567890")
+                        )
+                        .status(EditableActivity.StatusEnum.EXPECTED)
+        ).forEach( x-> create("9949653695", x));
     }
 
     @Override
-    public List<Appointment> list(String patientIdentifier, boolean breakTheGlass) throws ResourceNotFoundException, DataBlockedException {
+    public List<Activity> list(String patientIdentifier, boolean breakTheGlass) throws ResourceNotFoundException, DataBlockedException {
         if (!database.containsKey(patientIdentifier)) {
             return Collections.emptyList();
         }
@@ -42,84 +81,48 @@ public class AppointmentServiceStub implements AppointmentService {
     }
 
     @Override
-    public Appointment get(String id) throws ResourceNotFoundException, DataBlockedException {
+    public Activity get(String id) throws ResourceNotFoundException, DataBlockedException {
         return database.values().stream()
                 .flatMap(List::stream)
                 .filter(x -> x.getId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("No such appointment exists"));
+                .orElseThrow(() -> new ResourceNotFoundException("No such activity exists"));
     }
 
     @Override
-    public Appointment create(String patientIdentifier, EditableAppointment request) {
-        Appointment appointment = new Appointment()
+    public Activity create(String patientIdentifier, EditableActivity request) {
+        Activity activity = new Activity()
                 .id(UUID.randomUUID().toString());
-       appointment.location(request.getLocation())
-               .performer(request.getPerformer())
-               .reason(request.getReason())
-               .title(request.getTitle())
-               .period(request.getPeriod())
-               .repeated(request.isRepeated())
-               .responsible(request.getResponsible());
-        database.add(patientIdentifier, appointment);
+       activity.code(request.getCode())
+               .description(request.getDescription())
+               .gestationWeek(request.getGestationWeek())
+               .kind(request.getKind())
+               .reference(request.getReference())
+               .goal(request.getGoal())
+               .status(request.getStatus())
+               .location(request.getLocation())
+               .plannedTime(request.getPlannedTime())
+               .practitioner(request.getPractitioner())
+               .title(request.getTitle());
+        database.add(patientIdentifier, activity);
 
-        return appointment;
+        return activity;
     }
 
     @Override
-    public Appointment update(String id, EditableAppointment request) throws ResourceNotFoundException, DataBlockedException, MergeConflictException {
-        Appointment toUpdate = get(id);
-        toUpdate.location(request.getLocation())
-                .performer(request.getPerformer())
-                .reason(request.getReason())
-                .title(request.getTitle())
-                .period(request.getPeriod())
-                .responsible(request.getResponsible());
+    public Activity update(String id, EditableActivity request) throws ResourceNotFoundException, DataBlockedException, MergeConflictException {
+        Activity toUpdate = get(id);
+        toUpdate.code(request.getCode())
+                .description(request.getDescription())
+                .gestationWeek(request.getGestationWeek())
+                .kind(request.getKind())
+                .reference(request.getReference())
+                .goal(request.getGoal())
+                .status(request.getStatus())
+                .location(request.getLocation())
+                .plannedTime(request.getPlannedTime())
+                .practitioner(request.getPractitioner())
+                .title(request.getTitle());
         return toUpdate;
-    }
-
-
-    private static EditableAppointment baseAppointment(int lengthInMinutes, int daysFromNow, String title) {
-        AppointmentLocation theOffice = new AppointmentLocation()
-                .address(
-                        new AppointmentLocationAddress()
-                                .city("Aarhus C")
-                                .postalCode("8000")
-                                .street("Europaplads 2")
-                )
-                .description("Praktiserende læges kontor")
-                .name("Kontoret")
-                .phone("+4574537295");
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, daysFromNow);
-        Date startDate = calendar.getTime();
-        calendar.add(Calendar.MINUTE, lengthInMinutes);
-        Date endDate = calendar.getTime();
-
-        EditableAppointment result = new EditableAppointment()
-                .title(title)
-                .reason("Vi skal lige snakke om noget")
-                .period(
-                        new AppointmentPeriod()
-                                .start(startDate)
-                                .end(endDate)
-                                .type(AppointmentPeriod.TypeEnum.FIXED)
-                )
-                .repeated(false)
-                .location(theOffice)
-                .responsible(
-                        new AppointmentResponsible()
-                            .id("some-id")
-                            .name("Hank the Tank")
-                            .type(AppointmentResponsible.TypeEnum.PRACTITIONER)
-                )
-                .performer(
-                        new AppointmentPerformer()
-                                .id("some-id")
-                                .name("Hank the Tank")
-                                .type(AppointmentPerformer.TypeEnum.PRACTITIONER)
-                );
-        return result;
     }
 }

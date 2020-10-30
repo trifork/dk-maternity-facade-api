@@ -1,5 +1,6 @@
 package dk.sds.nsp.maternity.data.care_plan.service;
 
+import dk.sds.nsp.maternity.data.appointment.service.AppointmentService;
 import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
 import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
 import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
@@ -13,9 +14,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CarePlanServiceStub implements CarePlanService {
+    private AppointmentService appointmentService;
     List<CarePlan> database = new ArrayList();
 
-    public CarePlanServiceStub() {
+    public CarePlanServiceStub(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
         create(getTemplate("9949653695"));// Put some test-data in db to get us started :-)
     }
 
@@ -23,6 +26,13 @@ public class CarePlanServiceStub implements CarePlanService {
     public List<CarePlan> list(String patientIdentifier, boolean breakTheGlass) throws ResourceNotFoundException, DataBlockedException {
         return database.stream()
                 .filter(x -> x.getPatient().equals(patientIdentifier))
+                .map(x -> {
+                    try {
+                        List<Activity> activities = appointmentService.list(x.getPatient(), breakTheGlass);
+                        return x.withActivities(activities);
+                    } catch (Exception ignored) { }
+                    return x;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -31,10 +41,12 @@ public class CarePlanServiceStub implements CarePlanService {
         if ("blocked".equals(id)) {
             throw new DataBlockedException("Patient has blocked data");
         }
-        return database.stream()
+        CarePlan carePlan = database.stream()
                 .filter( x -> x.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Care plan with id " + id + " does not exist"));
+        carePlan.withActivities(appointmentService.list(carePlan.getPatient(), false));
+        return carePlan;
     }
 
     @Override
@@ -45,22 +57,23 @@ public class CarePlanServiceStub implements CarePlanService {
                 .description(request.getDescription())
                 .patient(request.getPatient())
                 .title(request.getTitle())
-                .responsibleOrganization(request.getResponsibleOrganization())
-                .withActivities(
-                        request.getActivities().stream()
-                            .map(x -> new Activity()
-                                    .id(UUID.randomUUID().toString())
-                                    .code(x.getCode())
-                                    .title(x.getTitle())
-                                    .description(x.getDescription())
-                                    .gestationWeek(x.getGestationWeek())
-                                    .kind(x.getKind())
-                                    .plannedTime(x.getPlannedTime())
-                                    .practitioner(x.getPractitioner())
-                                    .location(x.getLocation())
-                                    .status(x.getStatus())
-                        ).collect(Collectors.toList())
-                );
+                .responsibleOrganization(request.getResponsibleOrganization());
+
+        request.getActivities().stream()
+                .map(x -> new Activity()
+                        .id(UUID.randomUUID().toString())
+                        .code(x.getCode())
+                        .title(x.getTitle())
+                        .description(x.getDescription())
+                        .gestationWeek(x.getGestationWeek())
+                        .kind(x.getKind())
+                        .plannedTime(x.getPlannedTime())
+                        .practitioner(x.getPractitioner())
+                        .location(x.getLocation())
+                        .status(x.getStatus())
+                ).forEach( x -> appointmentService.create(request.getPatient(), x)
+        );
+
 
         database.add(result);
 
@@ -75,22 +88,7 @@ public class CarePlanServiceStub implements CarePlanService {
                 .description(request.getDescription())
                 .patient(request.getPatient())
                 .title(request.getTitle())
-                .responsibleOrganization(request.getResponsibleOrganization())
-                .withActivities(
-                        request.getActivities().stream()
-                                .map(x -> new Activity()
-                                        .id(UUID.randomUUID().toString())
-                                        .code(x.getCode())
-                                        .title(x.getTitle())
-                                        .description(x.getDescription())
-                                        .gestationWeek(x.getGestationWeek())
-                                        .kind(x.getKind())
-                                        .plannedTime(x.getPlannedTime())
-                                        .practitioner(x.getPractitioner())
-                                        .location(x.getLocation())
-                                        .status(x.getStatus())
-                                ).collect(Collectors.toList())
-                );
+                .responsibleOrganization(request.getResponsibleOrganization());
 
         return toUpdate;
     }
@@ -98,23 +96,8 @@ public class CarePlanServiceStub implements CarePlanService {
     @Override
     public CarePlan extend(String id, EditableCarePlan request) throws ResourceNotFoundException, DataBlockedException, MergeConflictException {
         CarePlan toUpdate = get(id);
-
-        toUpdate.getAllActivities().addAll(
-                request.getActivities().stream()
-                        .map(x -> new Activity()
-                                .id(UUID.randomUUID().toString())
-                                .code(x.getCode())
-                                .title(x.getTitle())
-                                .description(x.getDescription())
-                                .gestationWeek(x.getGestationWeek())
-                                .kind(x.getKind())
-                                .plannedTime(x.getPlannedTime())
-                                .practitioner(x.getPractitioner())
-                                .location(x.getLocation())
-                                .status(x.getStatus())
-                        ).collect(Collectors.toList())
-        );
-
+        request.getActivities()
+                .forEach(x -> appointmentService.create(toUpdate.getPatient(), x));
         return toUpdate;
     }
 
