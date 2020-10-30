@@ -1,0 +1,37 @@
+openapi: 3.0.0
+
+info:
+  title: Note Domain Model
+  description: Note Domain Model for Maternity Facade API
+  version: 1.0.0
+  license:
+    name: MIT License
+    url: https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/LICENSE
+
+paths: {}
+
+components:
+  schemas:
+    EditableNote:
+      description: represents the fields users/the frontend can edit.
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        date:
+          type: string
+          format: date-time
+      required: [title, content, date]
+    Note:
+      allOf:
+        - $ref: '#/components/schemas/EditableNote'
+        - type: object
+          properties:
+            id:
+              type: string
+            author:
+              type: string
+          required: [id, author]
+

@@ -54,7 +54,7 @@ public class ObservationServiceStub implements ObservationService {
                 .measuredBy(request.getMeasuredBy())
                 .values(request.getValues());
         observation.type(request.getType());
-        database.putSingle(patientIdentifier, observation);
+        database.add(patientIdentifier, observation);
 
         return observation;
     }
@@ -77,7 +77,7 @@ public class ObservationServiceStub implements ObservationService {
                 ObservationTemplates.AMNIOTIC_FLUID,
                 ObservationTemplates.BLOOD_PREASSURE,
                 ObservationTemplates.FETUS_ACTIVITY,
-                ObservationTemplates.FETUS_GENDER,
+                ObservationTemplates.FETUS_WEIGHT_ESTIMATE,
                 ObservationTemplates.FETUS_PRESENTATION,
                 ObservationTemplates.FLOW,
                 ObservationTemplates.GA_U_D,

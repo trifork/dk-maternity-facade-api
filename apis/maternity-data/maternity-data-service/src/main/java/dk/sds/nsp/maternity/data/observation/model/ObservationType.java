@@ -26,7 +26,7 @@ public enum ObservationType {
   EDEMA("edema"),
   PUBIS_MEASURUEMENTS("pubis_measuruements"),
   FETUS_ACTIVITY("fetus_activity"),
-  FETUS_GENDER("fetus_gender"),
+  FETUS_WEIGHT_ESTIMATE("fetus_weight_estimate"),
   FETUS_PRESENTATION("fetus_presentation"),
   GA_U_D("ga_u_d"),
   UL_WEIGHT("ul_weight"),

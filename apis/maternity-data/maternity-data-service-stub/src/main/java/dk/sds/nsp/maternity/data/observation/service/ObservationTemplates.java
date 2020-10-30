@@ -53,11 +53,11 @@ public class ObservationTemplates {
                 new EditableObservationValues()
         )).dateOfMeasurement(new Date());
     }
-    public final static CreateObservation FETUS_GENDER;
+    public final static CreateObservation FETUS_WEIGHT_ESTIMATE;
     static {
-        FETUS_GENDER = new CreateObservation().type(ObservationType.FETUS_GENDER);
-        FETUS_GENDER.values(Collections.singletonList(
-                new EditableObservationValues()
+        FETUS_WEIGHT_ESTIMATE = new CreateObservation().type(ObservationType.FETUS_WEIGHT_ESTIMATE);
+        FETUS_WEIGHT_ESTIMATE.values(Collections.singletonList(
+                new EditableObservationValues().unit("g")
         )).dateOfMeasurement(new Date());
     }
     public final static CreateObservation FETUS_PRESENTATION;
