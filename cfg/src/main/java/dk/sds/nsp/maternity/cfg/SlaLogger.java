@@ -43,7 +43,7 @@ public class SlaLogger {
     private static final Logger logger = LogManager.getLogger(SlaLogger.class);
 
     private static final Integer lock = 1;
-    public static final String SHORT_APP_NAME = "maternity-web-facade";
+    public static final String SHORT_APP_NAME = "maternity-facade";
     private static SLALogConfig slaLogInstance;
 
     private final String name;
