@@ -21,21 +21,21 @@ paths:
       - in: cookie
         name: context
         description: >
-          The context encoded as a JWT token, see [SessionContext](#/components/schemas/SessionContext)
+          The context encoded as a JWT token, see [](#/components/schemas/ApplicationContext)
         required: true
         schema:
-          $ref: '#/components/schemas/SessionContext'
+          $ref: '#/components/schemas/ApplicationContext'
     get:
       tags: [data-card]
       summary: Get data cards
       parameters:
         - in: header
-          name: X-Patient-Identifier
+          name: X-Chosen-Role
           description: >
-            When set and the **context** cookie has applicationMode = standalone changes the patient.
+          The chosen user STS or SEB
           required: false
           schema:
-            $ref: '#/components/schemas/CprNumber'
+            $ref: '#/components/schemas/UserRole'
         - in: header
           name: X-Break-The-Glass-Reason
           description: >
@@ -44,7 +44,7 @@ paths:
           schema:
             $ref: '#/components/schemas/BreakTheGlassReason'
       description: >
-        Gets all data cards for the current patient identified in the **context** cookie unless the header X-Patient-Identifier is set, in which case that patient is used.
+        Gets all data cards for the current patient identified
       responses:
         '200':
           description: OK
@@ -52,7 +52,6 @@ paths:
             Set-Cookie:
               description: >
                 The **context** cookie.
-                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
                 If the **X-Break-The-Glass-Reason** header was set the **context** is updated to contain a breakTheGlass with an expiration time.
               schema:
                 type: string
@@ -71,7 +70,6 @@ paths:
             Set-Cookie:
               description: >
                 The updated **context** cookie.
-                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
               schema:
                 type: string
               example: >
@@ -98,7 +96,7 @@ paths:
       tags: [data-card]
       summary: Create a data card
       description: >
-        Creates a new data card for the current patient identified in the **context** cookie.
+        Creates a new data card for the current patient
       requestBody:
         content:
           application/json:
@@ -246,10 +244,10 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
 components:
   schemas:
-    SessionContext:
-      title: Session context
+    ApplicationContext:
+      title: Application context
       description: >
-        The patient, application mode and break the glass expiration encoded as a JWT
+      Application mode and break the glass expiration encoded as a JWT
       type: object
       properties:
         header:
@@ -267,8 +265,6 @@ components:
         payload:
           type: object
           properties:
-            patientIdentifier:
-              $ref: '#/components/schemas/CprNumber'
             applicationMode:
               $ref: '#/components/schemas/ApplicationMode'
             breakTheGlass:
@@ -283,7 +279,6 @@ components:
               required:
                 - expires
           required:
-            - patient-identifier
             - application-mode
         signature:
           description: The signature of the JWT
@@ -298,7 +293,7 @@ components:
 
     ApplicationMode:
       type: string
-      enum: [ standalone, embedded ]
+      enum: [ standalone, embedded, citizen ]
 
     BreakTheGlassReason:
       type: string
@@ -1319,6 +1314,11 @@ components:
       type: string
       pattern: '([06][1-9]|[1-25-8][0-9]|[39][0-1])(0[1-9]|1[0-2])[0-9]{6}'
       example: '9103672134'
+
+    UserRole:
+      title: USER sts or SEB role
+      type: string
+      example: 'jordemoder'
 
     PartialDetails:
       allOf:

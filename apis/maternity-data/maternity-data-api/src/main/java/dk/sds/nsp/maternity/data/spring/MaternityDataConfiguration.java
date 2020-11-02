@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
 public class MaternityDataConfiguration {
 
     @Bean
-    @SessionContextQualifier
+    @ApplicationContextQualifier
     public Algorithm algorithm(AppConfiguration configuration) throws UnsupportedEncodingException {
         return Algorithm.HMAC256(configuration.getContextJwtSecret());
     }

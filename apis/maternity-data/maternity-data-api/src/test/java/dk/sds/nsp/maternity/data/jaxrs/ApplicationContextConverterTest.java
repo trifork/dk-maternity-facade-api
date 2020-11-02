@@ -1,7 +1,7 @@
 package dk.sds.nsp.maternity.data.jaxrs;
 
 import dk.sds.nsp.maternity.data.SpringTestConfiguration;
-import dk.sds.nsp.maternity.data.security.SessionContext;
+import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,23 +21,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringTestConfiguration.class)
-class SessionContextConverterTest {
+class ApplicationContextConverterTest {
 
-    private final SessionContextConverter converter;
+    private final ApplicationContextConverter converter;
 
     @Autowired
-    SessionContextConverterTest(final SessionContextConverter converter) {
+    ApplicationContextConverterTest(final ApplicationContextConverter converter) {
         this.converter = converter;
     }
 
     @ParameterizedTest
     @MethodSource("arguments")
-    void encodeDecode(final SessionContext context) {
+    void encodeDecode(final ApplicationContext context) {
         final String serialized = converter.toString(context);
-        final SessionContext deserialized = converter.fromString(serialized);
+        final ApplicationContext deserialized = converter.fromString(serialized);
 
         assertEquals(context.getApplicationMode(), deserialized.getApplicationMode());
-        assertEquals(context.getPatientIdentifier(), deserialized.getPatientIdentifier());
         assertEquals(context.getBreakTheGlassExpiration(), deserialized.getBreakTheGlassExpiration());
     }
 
@@ -45,8 +44,8 @@ class SessionContextConverterTest {
         return Stream.generate(() -> Arguments.of(randomContext())).limit(100);
     }
 
-    private static SessionContext randomContext() {
-        return SessionContext
+    private static ApplicationContext randomContext() {
+        return ApplicationContext
                 .withApplicationMode(choose(EMBEDDED, STANDALONE))
                 .withPatientIdentifier(numerify("##########"))
                 .withBreakTheGlassExpiration(localDateTime())

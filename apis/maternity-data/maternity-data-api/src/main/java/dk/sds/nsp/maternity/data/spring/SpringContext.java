@@ -2,7 +2,7 @@ package dk.sds.nsp.maternity.data.spring;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import dk.sds.nsp.maternity.facade.common.security.JWTHelper;
-import dk.sds.nsp.maternity.data.security.SessionContextJWTHelper;
+import dk.sds.nsp.maternity.data.security.ApplicationContextJWTHelper;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletContext;
@@ -25,8 +25,8 @@ public class SpringContext implements ServletContextListener {
         final ServletContext servletContext = servletContextEvent.getServletContext();
         servletContext.setAttribute(ANNOTATION_CONFIG_CONTEXT, springContext);
 
-        final Algorithm algorithm = springContext.getBean(Algorithm.class, SessionContextQualifier.class);
-        jwtHelper = new SessionContextJWTHelper(algorithm);
+        final Algorithm algorithm = springContext.getBean(Algorithm.class, ApplicationContextQualifier.class);
+        jwtHelper = new ApplicationContextJWTHelper(algorithm);
     }
 
     @Override
