@@ -1,7 +1,7 @@
 package dk.sds.nsp.maternity.data.jaxrs;
 
 
-import dk.sds.nsp.maternity.data.security.SessionContext;
+import dk.sds.nsp.maternity.data.security.ApplicationContext;
 
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
@@ -17,7 +17,7 @@ public class ConverterProvider implements ParamConverterProvider {
     @SuppressWarnings("unchecked")
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
-        if(rawType.equals(SessionContext.class)) return (ParamConverter<T>) new SessionContextConverter(contextJwtHelper());
+        if(rawType.equals(ApplicationContext.class)) return (ParamConverter<T>) new ApplicationContextConverter(contextJwtHelper());
 
         return null;
     }

@@ -5,16 +5,16 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dk.sds.nsp.maternity.facade.common.exception.ProblemDetailsException;
 import dk.sds.nsp.maternity.facade.common.security.JWTHelper;
 import dk.sds.nsp.maternity.data.exception.ProblemDetailsExceptions;
-import dk.sds.nsp.maternity.data.spring.SessionContextQualifier;
+import dk.sds.nsp.maternity.data.spring.ApplicationContextQualifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@SessionContextQualifier
-public class SessionContextJWTHelper extends JWTHelper {
+@ApplicationContextQualifier
+public class ApplicationContextJWTHelper extends JWTHelper {
 
     @Autowired
-    public SessionContextJWTHelper(@SessionContextQualifier Algorithm algorithm) {
+    public ApplicationContextJWTHelper(@ApplicationContextQualifier Algorithm algorithm) {
         super(algorithm);
     }
 

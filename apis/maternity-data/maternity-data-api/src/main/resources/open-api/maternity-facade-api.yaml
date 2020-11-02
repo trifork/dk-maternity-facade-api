@@ -21,21 +21,21 @@ paths:
       - in: cookie
         name: context
         description: >
-          The context encoded as a JWT token, see [SessionContext](#/components/schemas/SessionContext)
+          The context encoded as a JWT token, see [ApplicationContext](#/components/schemas/ApplicationContext)
         required: true
         schema:
-          $ref: '#/components/schemas/SessionContext'
+          $ref: '#/components/schemas/ApplicationContext'
     get:
       tags: [data-card]
       summary: Get data cards
       parameters:
         - in: header
-          name: X-Patient-Identifier
+          name: X-Chosen-Role
           description: >
-            When set and the **context** cookie has applicationMode = standalone changes the patient.
+          The chosen user STS or SEB
           required: false
           schema:
-            $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
+            $ref: '#/components/schemas/UserRole'
         - in: header
           name: X-Break-The-Glass-Reason
           description: >
@@ -252,7 +252,7 @@ paths:
           The context encoded as a JWT token, see [SessionContext](#/components/schemas/SessionContext)
         required: true
         schema:
-          $ref: '#/components/schemas/SessionContext'
+          $ref: '#/components/schemas/ApplicationContext'
     get:
       tags: [care-plan]
       summary: Get data cards
@@ -371,7 +371,7 @@ paths:
       tags: [care-plan]
       summary: Update the care plan with the specified **identifier**
       description: >
-       Updates the care plan with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+        Updates the care plan with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
       requestBody:
         content:
           application/json:
@@ -536,36 +536,36 @@ paths:
               schema:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     post:
-        tags: [observation, measurement]
-        summary: Create an observation
-        description: >
-          Creates a new observation for the current patient identified in the **context** cookie as part of the currently active pregnency.
-        requestBody:
+      tags: [observation, measurement]
+      summary: Create an observation
+      description: >
+        Creates a new observation for the current patient identified in the **context** cookie as part of the currently active pregnency.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/CreateObservation'
+      responses:
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/CreateObservation'
-        responses:
-          '201':
-            description: Created
-            content:
-              application/json:
-                schema:
-                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/Observation'
-          '401':
-            description: >
-              Unauthorized -
-            content:
-              application/problem+json:
-                schema:
-                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
-          '500':
-            description: >
-              Internal Server Error -
-            content:
-              application/problem+json:
-                schema:
-                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/Observation'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/observation/{identifier}:
     get:
       tags: [observation, measurement]
@@ -683,7 +683,11 @@ paths:
 
 components:
   schemas:
-    SessionContext:
+    UserRole:
+      title: USER sts or SEB role
+      type: string
+      example: 'jordemoder'
+    ApplicationContext:
       title: Session context
       description: >
         The patient, application mode and break the glass expiration encoded as a JWT
@@ -704,8 +708,6 @@ components:
         payload:
           type: object
           properties:
-            patientIdentifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
             applicationMode:
               $ref: '#/components/schemas/ApplicationMode'
             breakTheGlass:
@@ -720,7 +722,6 @@ components:
               required:
                 - expires
           required:
-            - patient-identifier
             - application-mode
         signature:
           description: The signature of the JWT

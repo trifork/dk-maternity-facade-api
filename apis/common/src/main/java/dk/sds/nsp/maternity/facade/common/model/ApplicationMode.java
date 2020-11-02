@@ -11,7 +11,8 @@ import javax.annotation.Generated;
 @Generated("openapi")
 public enum ApplicationMode {
     STANDALONE("standalone"),
-    EMBEDDED("embedded");
+    EMBEDDED("embedded"),
+    CITIZEN("citizen");
 
     private final String value;
 
