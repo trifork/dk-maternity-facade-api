@@ -7,6 +7,7 @@ import dk.sds.nsp.maternity.data.data_card.service.DataCardService;
 import dk.sds.nsp.maternity.data.data_card.service.DataCardService.ServiceResponse;
 import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
+import dk.sds.nsp.maternity.data.utils.PatientContext;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import org.apache.log4j.Logger;
 
@@ -19,7 +20,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import static dk.sds.nsp.maternity.data.utils.PatientContext.extractPatientIdentifierFromSession;
 import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
 
 @Path("/data-card")
@@ -37,7 +37,7 @@ public class DataCardApi {
             @HeaderParam("X-Chosen-Role") final String xChosenRole) {
 
         final boolean breakTheGlass = false;
-        final String patientIdentifier = extractPatientIdentifierFromSession(httpServletRequest);
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
 
         final ServiceResponse<List<DataCardResponse>> response = service.get(patientIdentifier, breakTheGlass);
         final List<DataCardResponse> entity = response.getEntity();

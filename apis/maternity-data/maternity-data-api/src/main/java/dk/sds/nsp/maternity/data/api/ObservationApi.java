@@ -9,6 +9,7 @@ import dk.sds.nsp.maternity.data.observation.model.Observation;
 import dk.sds.nsp.maternity.data.observation.service.ObservationService;
 import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
+import dk.sds.nsp.maternity.data.utils.PatientContext;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import dk.sds.nsp.maternity.facade.common.model.ProblemDetails;
 import org.apache.log4j.Logger;
@@ -23,7 +24,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import static dk.sds.nsp.maternity.data.utils.PatientContext.extractPatientIdentifierFromSession;
 import static dk.sds.nsp.maternity.facade.common.util.Problems.typeFor;
 import static javax.ws.rs.core.Response.Status.*;
 
@@ -44,7 +44,7 @@ public class ObservationApi {
         final boolean breakTheGlass = false;
 
         try {
-            final String patientIdentifier = extractPatientIdentifierFromSession(httpServletRequest);
+            final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
             final List<Observation> response = service.list(patientIdentifier, breakTheGlass);
             return Response.ok(response)
                     .build();
@@ -86,8 +86,7 @@ public class ObservationApi {
             final CreateObservation request
     ) {
         try {
-            final HttpSession session = httpServletRequest.getSession();
-            final String patientIdentifier = session != null ? (String) session.getAttribute("cpr") : "1234567890";
+            final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
             final Observation response = service.create(patientIdentifier, request);
             return Response.created(getLocation(response))
                     .entity(response)

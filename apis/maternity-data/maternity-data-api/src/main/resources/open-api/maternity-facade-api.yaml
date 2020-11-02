@@ -44,20 +44,10 @@ paths:
           schema:
             $ref: '#/components/schemas/BreakTheGlassReason'
       description: >
-        Gets all data cards for the current patient identified in the **context** cookie unless the header X-Patient-Identifier is set, in which case that patient is used.
+        Gets all data cards for the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint)
       responses:
         '200':
           description: OK
-          headers:
-            Set-Cookie:
-              description: >
-                The **context** cookie.
-                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
-                If the **X-Break-The-Glass-Reason** header was set the **context** is updated to contain a breakTheGlass with an expiration time.
-              schema:
-                type: string
-              example: >
-                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
           content:
             application/json:
               schema:
@@ -67,15 +57,6 @@ paths:
         '206':
           description: >
             Partial Content -
-          headers:
-            Set-Cookie:
-              description: >
-                The updated **context** cookie.
-                If the **X-Patient-Identifier** header was set the **context** and the **context** had applicationMode = standalone the **context** is updated with that patient.
-              schema:
-                type: string
-              example: >
-                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
           content:
             application/json:
               schema:
@@ -98,7 +79,7 @@ paths:
       tags: [data-card]
       summary: Create a data card
       description: >
-        Creates a new data card for the current patient identified in the **context** cookie.
+        Creates a new data card for the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint)
       requestBody:
         content:
           application/json:
@@ -154,15 +135,6 @@ paths:
       responses:
         '200':
           description: OK
-          headers:
-            Set-Cookie:
-              description: >
-                The updated **context** cookie.
-                If the **X-Break-The-Glass-Reason** header was set the **context** is updated to contain a breakTheGlass with an expiration time.
-              schema:
-                type: string
-              example: >
-                Set-Cookie: context=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50LWlkZW50aWZpZXIiOiI5MTAzNjcyMTM0IiwiYXBwbGljYXRpb24tbW9kZSI6InN0YW5kYWxvbmUifQ.mu7vIUndSNn83ziXypl6zBaeI51ogCRetjS8ChOYDpc"; secure; HttpOnly
           content:
             application/json:
               schema:
@@ -257,7 +229,7 @@ paths:
       tags: [care-plan]
       summary: Get data cards
       description: >
-        Gets all care plans for the current patient identified in the **context** cookie unless the header X-Patient-Identifier is set, in which case that patient is used.
+        Gets all care plans for the current patient ((which is stored in the session and can be updated using PUT on the /patientcontext endpoint)
       responses:
         '200':
           description: OK
@@ -292,7 +264,7 @@ paths:
       tags: [care-plan]
       summary: Create a care plan
       description: >
-        Creates a new care plan for the current patient identified in the **context** cookie.
+        Creates a new care plan for the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint).
       requestBody:
         content:
           application/json:
@@ -331,7 +303,7 @@ paths:
       tags: [care-plan]
       summary: Get the care plan with the specified **identifier**
       description: >
-        Gets the care plan with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+        Gets the care plan with the **identifier** specified in the URI, provided it belongs to the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint)
       responses:
         '200':
           description: OK
@@ -371,7 +343,7 @@ paths:
       tags: [care-plan]
       summary: Update the care plan with the specified **identifier**
       description: >
-        Updates the care plan with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+        Updates the care plan with the **identifier** specified in the URI provided it belongs to the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint).
       requestBody:
         content:
           application/json:
@@ -431,7 +403,7 @@ paths:
       tags: [care-plan]
       summary: Extend the care plan
       description: >
-        Extend the care plan with the **identifier** specified in the URI with all activities specified in the template provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+        Extend the care plan with the **identifier** specified in the URI with all activities specified in the template provided it belongs to the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint).
       requestBody:
         content:
           application/json:
@@ -504,7 +476,7 @@ paths:
       tags: [observation, measurement]
       summary: Get observations
       description: >
-        Gets all observations for the current patient identified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is use), related to the currently active pregnancy.
+        Gets all observations for the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint), related to the currently active pregnancy.
       responses:
         '200':
           description: OK
@@ -539,7 +511,7 @@ paths:
       tags: [observation, measurement]
       summary: Create an observation
       description: >
-        Creates a new observation for the current patient identified in the **context** cookie as part of the currently active pregnency.
+        Creates a new observation for the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint) as part of the currently active pregnency.
       requestBody:
         content:
           application/json:
@@ -571,7 +543,7 @@ paths:
       tags: [observation, measurement]
       summary: Get the observation with the specified **identifier**
       description: >
-        Gets the observation with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+        Gets the observation with the **identifier** specified in the URI provided it belongs to the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint).
       responses:
         '200':
           description: OK
@@ -611,7 +583,7 @@ paths:
       tags: [observation, measurement]
       summary: Update the observation with the specified **identifier**
       description: >
-        Updates the observation with the **identifier** specified in the URI provided it belongs to the patient specified in the **context** cookie (unless the header X-Patient-Identifier is set, in which case that patient is used for comparison).
+        Updates the observation with the **identifier** specified in the URI provided it belongs to the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint).
       requestBody:
         content:
           application/json:

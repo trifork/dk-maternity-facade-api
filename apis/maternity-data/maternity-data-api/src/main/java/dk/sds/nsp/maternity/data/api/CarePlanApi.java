@@ -8,6 +8,7 @@ import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
 import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
 import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
+import dk.sds.nsp.maternity.data.utils.PatientContext;
 import dk.sds.nsp.maternity.facade.common.jaxrs.PATCH;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import dk.sds.nsp.maternity.facade.common.model.ProblemDetails;
@@ -40,9 +41,8 @@ public class CarePlanApi {
             @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason,
             @HeaderParam("X-Chosen-Role") final String xChosenRole
     ) {
-        final boolean breakTheGlass = false;
-        final HttpSession session = httpServletRequest.getSession();
-        final String patientIdentifier = session != null ? (String) session.getAttribute("cpr") : "1234567890";
+        final boolean breakTheGlass = xBreakTheGlassReason != null;
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
         try {
             final List<CarePlan> response = service.list(patientIdentifier, breakTheGlass);
             return Response.ok(response)
@@ -165,8 +165,7 @@ public class CarePlanApi {
     @Context HttpServletRequest httpServletRequest,
     @CookieParam("context") final ApplicationContext context
     ) {
-        final HttpSession session = httpServletRequest.getSession();
-        final String patientIdentifier = session != null ? (String) session.getAttribute("cpr") : "1234567890";
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
         return Response.ok(service.getTemplate(patientIdentifier))
                 .build();
     }
