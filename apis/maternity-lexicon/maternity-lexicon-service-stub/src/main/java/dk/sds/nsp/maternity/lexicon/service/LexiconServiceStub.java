@@ -5,6 +5,7 @@ import dk.sds.nsp.maternity.lexicon.exceptions.NoConnectionToServiceException;
 import dk.sds.nsp.maternity.lexicon.model.Catalogue;
 import dk.sds.nsp.maternity.lexicon.model.Category;
 import dk.sds.nsp.maternity.lexicon.model.Post;
+import dk.sds.nsp.maternity.lexicon.model.PostContent;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
@@ -75,11 +76,20 @@ public class LexiconServiceStub implements LexiconService {
     }
 
     private static Post randomPost(List<String> tags, List<Category> categories) {
+        List<PostContent> paragraphs = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            paragraphs.add(
+                    new PostContent()
+                        .title(randomString(10))
+                        .content(randomString(50))
+            );
+        }
+
         return new Post()
                 .tags(tags)
                 .categories(categories.stream().map(Category::getId).collect(Collectors.toList()))
                 .title(randomString(10))
-                .content(randomString(100))
+                .content(paragraphs)
                 .excerpt(randomString(15))
                 .id(UUID.randomUUID().toString())
                 .lastUpdateDate(new Date())
