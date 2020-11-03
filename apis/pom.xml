@@ -37,7 +37,7 @@
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>cfg</artifactId>
-            <version>dev</version>
+            <version>${facade.version}</version>
         </dependency>
 
         <dependency>
