@@ -1,0 +1,146 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: DK Maternity Lexicon Api
+  description: This is the specification of the DK Maternity Lexicon API.
+
+paths:
+  /lexicon/list:
+    get:
+      summary: Get list of lexicon entries based on some query
+      parameters:
+        - in: query
+          name: page
+          required: false
+          description: The page number - queries without this property will get the first page, which will contain information about how many pages are available
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - in: query
+          name: order-by
+          required: false
+          description: Defines the ordering of the posts - defaults to ordering by title alphabetically
+          schema:
+            type: string
+            enum: [date, id, modified, relevance, title]
+            default: title
+        - in: query
+          name: tags
+          required: false
+          description: Search for posts only matching these tags
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: categories
+          required: false
+          description: Search for posts in these categories
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: query
+          required: false
+          description: A query string that posts must match to be included in result
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalogue'
+        '400':
+          description: >
+            Bad Request -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+  /lexicon/category:
+    get:
+      summary: Get the list of available categories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+
+components:
+  schemas:
+    Category:
+      description: Closely mirrors a wordpress category, enritched with an image to be displayed as a nice card :)
+      type: object
+      properties:
+        id:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+        name:
+          type: string
+        count:
+          type: number
+          format: int32
+    Catalogue:
+      description: Represents a list of posts along with some meta-information about paging
+      type: object
+      properties:
+        curretPage:
+          type: integer
+          minimum: 0
+        numberOfPages:
+          type: integer
+          minimum: 1
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+    Post:
+      description: Represents a guide for the patient - analogous to a wordpress [post](https://developer.wordpress.org/rest-api/reference/posts/#schema)
+      type: object
+      properties:
+        publicationDate:
+          type: string
+          format: date-time
+        lastUpdateDate:
+          type: string
+          format: date-time
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        excerpt:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
