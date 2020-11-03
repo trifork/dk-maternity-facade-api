@@ -8,8 +8,14 @@
 
     <properties>
         <log4j.version>1.2.17</log4j.version>
-        <oiosaml.version>2.2.1</oiosaml.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <resteasy.version>3.13.2.Final</resteasy.version>
+        <jackson.version>2.10.5</jackson.version>
+        <project.version>dev</project.version>
+        <flatten-maven-plugin.version>1.2.5</flatten-maven-plugin.version>
+
+        <!-- GLOBAL PROJECT VERSION -->
+        <facade.version>dev</facade.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -40,10 +46,25 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>${resteasy.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -59,10 +80,34 @@
             </exclusions>
             <version>1.0.11</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>flatten-maven-plugin</artifactId>
+            <version>${flatten-maven-plugin.version}</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten-maven-plugin.version}</version>
+                <configuration>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

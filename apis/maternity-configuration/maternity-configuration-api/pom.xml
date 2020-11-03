@@ -11,17 +11,18 @@
     <modelVersion>4.0.0</modelVersion>
     <name>Maternity Configuration API</name>
     <artifactId>maternity-configuration-api</artifactId>
+    <version>${facade.version}</version>
 
     <dependencies>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>common</artifactId>
-            <version>dev</version>
+            <version>${facade.version}</version>
         </dependency>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>maternity-configuration-service</artifactId>
-            <version>dev</version>
+            <version>${facade.version}</version>
         </dependency>
     </dependencies>
 
