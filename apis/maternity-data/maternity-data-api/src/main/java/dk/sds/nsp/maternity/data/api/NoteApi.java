@@ -6,13 +6,16 @@ import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
 import dk.sds.nsp.maternity.data.note.model.EditableNote;
 import dk.sds.nsp.maternity.data.note.model.Note;
 import dk.sds.nsp.maternity.data.note.service.NoteService;
-import dk.sds.nsp.maternity.data.security.SessionContext;
+import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
+import dk.sds.nsp.maternity.data.utils.PatientContext;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import dk.sds.nsp.maternity.facade.common.model.ProblemDetails;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -31,12 +34,12 @@ public class NoteApi {
 
     @GET
     public Response listNotesForPatient(
-            @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
+            @CookieParam("context") final ApplicationContext context,
+            @Context HttpServletRequest httpServletRequest,
             @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason
     ) {
-        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
-        final boolean breakTheGlass = false;
+        final boolean breakTheGlass = xBreakTheGlassReason != null;
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
 
         try {
             final List<Note> response = service.list(patientIdentifier, breakTheGlass);
@@ -74,11 +77,11 @@ public class NoteApi {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createNote(
-            @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
+            @CookieParam("context") final ApplicationContext context,
+            @Context HttpServletRequest httpServletRequest,
             final EditableNote request
     ) {
-        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
         try {
             final Note response = service.create(patientIdentifier, "SomeName", request);
             return Response.created(getLocation(response))
@@ -93,7 +96,7 @@ public class NoteApi {
     @GET
     @Path("/{identifier}")
     public Response getNote(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
             @PathParam("identifier") final String id
     ) {
         try {
@@ -112,7 +115,7 @@ public class NoteApi {
     @PUT
     @Path("/{identifier}")
     public Response update(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
             @PathParam("identifier") final String id,
             final EditableNote request
     ) {

@@ -162,15 +162,13 @@ public class CarePlanApi {
     @GET
     @Path("/template")
     public Response getTemplate(
-    @Context HttpServletRequest httpServletRequest,
-    @CookieParam("context") final ApplicationContext context
+        @Context HttpServletRequest httpServletRequest,
+        @CookieParam("context") final ApplicationContext context
     ) {
         final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
         return Response.ok(service.getTemplate(patientIdentifier))
                 .build();
     }
-
-
 
     private static URI getLocation(final CarePlan created) {
         return URI.create(RequestContext.get().getUriInfo().getAbsolutePath() + "/" + created.getId());
