@@ -13,7 +13,7 @@ security:
         - write
 
 paths:
-  /session:
+  /usercontext:
     get:
       summary: Get Userinformation
       description: >
@@ -34,5 +34,7 @@ components:
           type: string
         organizationName:
           type: string
-        role:
-          type: string
+        eligibleRoles:
+          type: array
+          items:
+            type: string
