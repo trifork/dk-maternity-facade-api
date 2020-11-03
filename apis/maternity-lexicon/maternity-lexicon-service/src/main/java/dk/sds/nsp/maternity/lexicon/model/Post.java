@@ -12,17 +12,18 @@
 
 package dk.sds.nsp.maternity.lexicon.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a guide for the patient - analogous to a wordpress [post](https://developer.wordpress.org/rest-api/reference/posts/#schema)
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-11-03T11:09:06.852462+01:00[Europe/Copenhagen]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-11-03T16:15:42.700046+01:00[Europe/Copenhagen]")
 public class Post {
 
   @JsonProperty("publicationDate")
@@ -38,7 +39,7 @@ public class Post {
   private String title = null;
 
   @JsonProperty("content")
-  private String content = null;
+  private List<PostContent> content = null;
 
   @JsonProperty("excerpt")
   private String excerpt = null;
@@ -116,21 +117,27 @@ public class Post {
   public void setTitle(String title) {
     this.title = title;
   }
-  public Post content(String content) {
+  public Post content(List<PostContent> content) {
     this.content = content;
     return this;
   }
 
-  
+  public Post addContentItem(PostContent contentItem) {
+    if (this.content == null) {
+      this.content = new ArrayList<PostContent>();
+    }
+    this.content.add(contentItem);
+    return this;
+  }
 
   /**
-  * Get content
+  * A list of sections, each with a title and some content
   * @return content
   **/
-  public String getContent() {
+  public List<PostContent> getContent() {
     return content;
   }
-  public void setContent(String content) {
+  public void setContent(List<PostContent> content) {
     this.content = content;
   }
   public Post excerpt(String excerpt) {
@@ -197,7 +204,7 @@ public class Post {
     this.tags = tags;
   }
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -217,7 +224,7 @@ public class Post {
 
   @Override
   public int hashCode() {
-    return java.util.Objects.hash(publicationDate, lastUpdateDate, id, title, content, excerpt, categories, tags);
+    return Objects.hash(publicationDate, lastUpdateDate, id, title, content, excerpt, categories, tags);
   }
 
   @Override
@@ -241,7 +248,7 @@ public class Post {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }
