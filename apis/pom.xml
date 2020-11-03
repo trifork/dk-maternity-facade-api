@@ -28,6 +28,7 @@
         <module>maternity-data</module>
         <module>maternity-feedback</module>
         <module>maternity-configuration</module>
+        <module>maternity-lexicon</module>
     </modules>
 
 
