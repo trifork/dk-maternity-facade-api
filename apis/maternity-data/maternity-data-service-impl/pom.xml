@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>maternity-data-service-impl</artifactId>
-
+    <version>${facade.version}</version>
     <dependencies>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>maternity-data-service</artifactId>
-            <version>dev</version>
+            <version>${facade.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -7,13 +7,17 @@ import dk.sds.nsp.maternity.data.observation.model.CreateObservation;
 import dk.sds.nsp.maternity.data.observation.model.EditableObservation;
 import dk.sds.nsp.maternity.data.observation.model.Observation;
 import dk.sds.nsp.maternity.data.observation.service.ObservationService;
-import dk.sds.nsp.maternity.data.security.SessionContext;
+import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
+import dk.sds.nsp.maternity.data.utils.PatientContext;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import dk.sds.nsp.maternity.facade.common.model.ProblemDetails;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -32,14 +36,15 @@ public class ObservationApi {
 
     @GET
     public Response listObservationsForPatient(
-            @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
-            @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason
+            @Context HttpServletRequest httpServletRequest,
+            @CookieParam("context") final ApplicationContext context,
+            @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason,
+            @HeaderParam("X-Chosen-Role") final String xChosenRole
     ) {
-        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
         final boolean breakTheGlass = false;
 
         try {
+            final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
             final List<Observation> response = service.list(patientIdentifier, breakTheGlass);
             return Response.ok(response)
                     .build();
@@ -75,12 +80,13 @@ public class ObservationApi {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createObservation(
-            @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
+            @Context HttpServletRequest httpServletRequest,
+            @CookieParam("context") final ApplicationContext context,
+            @HeaderParam("X-Chosen-Role") final String xChosenRole,
             final CreateObservation request
     ) {
-        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
         try {
+            final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
             final Observation response = service.create(patientIdentifier, request);
             return Response.created(getLocation(response))
                     .entity(response)
@@ -94,8 +100,9 @@ public class ObservationApi {
     @GET
     @Path("/{identifier}")
     public Response getObservation(
-            @CookieParam("context") final SessionContext context,
-            @PathParam("identifier") final String id
+            @CookieParam("context") final ApplicationContext context,
+            @PathParam("identifier") final String id,
+            @HeaderParam("X-Chosen-Role") final String xChosenRole
     ) {
         try {
             final Observation result = service.get(id);
@@ -113,8 +120,9 @@ public class ObservationApi {
     @PUT
     @Path("/{identifier}")
     public Response update(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
             @PathParam("identifier") final String id,
+            @HeaderParam("X-Chosen-Role") final String xChosenRole,
             final EditableObservation request
     ) {
         try {
@@ -134,7 +142,7 @@ public class ObservationApi {
 
     @GET
     @Path("/types")
-    public Response getTemplate(@CookieParam("context") final SessionContext context) {
+    public Response getTemplate(@CookieParam("context") final ApplicationContext context) {
         return Response.ok(service.getTypes())
                 .build();
     }

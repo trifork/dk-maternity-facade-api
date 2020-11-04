@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>facade-apis</artifactId>
+        <artifactId>maternity-configuration</artifactId>
         <groupId>dk.sds.nsp.maternity</groupId>
         <version>dev</version>
     </parent>
@@ -11,17 +11,18 @@
     <modelVersion>4.0.0</modelVersion>
     <name>Maternity Configuration API</name>
     <artifactId>maternity-configuration-api</artifactId>
+    <version>${facade.version}</version>
 
     <dependencies>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>common</artifactId>
-            <version>dev</version>
+            <version>${facade.version}</version>
         </dependency>
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>maternity-configuration-service</artifactId>
-            <version>dev</version>
+            <version>${facade.version}</version>
         </dependency>
     </dependencies>
 

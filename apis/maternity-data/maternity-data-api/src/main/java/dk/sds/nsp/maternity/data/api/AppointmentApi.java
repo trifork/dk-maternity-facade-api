@@ -6,13 +6,16 @@ import dk.sds.nsp.maternity.data.care_plan.model.EditableActivity;
 import dk.sds.nsp.maternity.data.exceptions.DataBlockedException;
 import dk.sds.nsp.maternity.data.exceptions.MergeConflictException;
 import dk.sds.nsp.maternity.data.exceptions.ResourceNotFoundException;
-import dk.sds.nsp.maternity.data.security.SessionContext;
+import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
+import dk.sds.nsp.maternity.data.utils.PatientContext;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import dk.sds.nsp.maternity.facade.common.model.ProblemDetails;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -31,12 +34,12 @@ public class AppointmentApi {
 
     @GET
     public Response listAppointmentsForPatient(
-            @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
+            @Context HttpServletRequest httpServletRequest,
+            @CookieParam("context") final ApplicationContext context,
             @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason
     ) {
-        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
-        final boolean breakTheGlass = false;
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
+        final boolean breakTheGlass = xBreakTheGlassReason != null;
 
         try {
             final List<Activity> response = service.list(patientIdentifier, breakTheGlass);
@@ -74,11 +77,11 @@ public class AppointmentApi {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAppointment(
-            @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
+            @CookieParam("context") final ApplicationContext context,
+            @Context HttpServletRequest httpServletRequest,
             final EditableActivity request
     ) {
-        final String patientIdentifier = xPatientIdentifier != null ? xPatientIdentifier : context.getPatientIdentifier();
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
         try {
             final Activity response = service.create(patientIdentifier, request);
             return Response.created(getLocation(response))
@@ -93,7 +96,7 @@ public class AppointmentApi {
     @GET
     @Path("/{identifier}")
     public Response getAppointment(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
             @PathParam("identifier") final String id
     ) {
         try {
@@ -112,7 +115,7 @@ public class AppointmentApi {
     @PUT
     @Path("/{identifier}")
     public Response update(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
             @PathParam("identifier") final String id,
             final EditableActivity request
     ) {

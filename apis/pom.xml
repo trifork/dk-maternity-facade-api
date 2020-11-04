@@ -17,47 +17,42 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>5.7.0</junit.version>
         <spring.version>5.2.9.RELEASE</spring.version>
-        <java-jwt.version>3.0.1</java-jwt.version>
-        <jackson.version>2.4.1</jackson.version>
-        <resteasy.version>3.0.10.Final</resteasy.version>
+        <java-jwt.version>3.11.0</java-jwt.version>
         <mockito.version>3.5.13</mockito.version>
+        <commons-codec.version>1.14</commons-codec.version>
+
     </properties>
 
     <modules>
         <module>common</module>
-        <module>test</module>
         <module>maternity-data</module>
         <module>maternity-feedback</module>
         <module>maternity-configuration</module>
+        <module>maternity-lexicon</module>
     </modules>
 
+
     <dependencies>
+
         <dependency>
             <groupId>dk.sds.nsp.maternity</groupId>
             <artifactId>cfg</artifactId>
-            <version>dev</version>
+            <version>${facade.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>${java-jwt.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.14</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <version>${resteasy.version}</version>
+            <version>${commons-codec.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>

@@ -3,23 +3,17 @@ package dk.sds.nsp.maternity.data.api;
 import dk.sds.nsp.maternity.data.data_card.model.CreateDataCardRequest;
 import dk.sds.nsp.maternity.data.data_card.model.DataCardResponse;
 import dk.sds.nsp.maternity.data.data_card.model.UpdateDataCardRequest;
-import dk.sds.nsp.maternity.data.security.SessionContext;
 import dk.sds.nsp.maternity.data.data_card.service.DataCardService;
 import dk.sds.nsp.maternity.data.data_card.service.DataCardService.ServiceResponse;
+import dk.sds.nsp.maternity.data.security.ApplicationContext;
 import dk.sds.nsp.maternity.data.spring.DependencyResolver;
+import dk.sds.nsp.maternity.data.utils.PatientContext;
 import dk.sds.nsp.maternity.facade.common.jaxrs.RequestContext;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -37,12 +31,13 @@ public class DataCardApi {
 
     @GET
     public Response getDataCards(
-            @CookieParam("context") final SessionContext context,
-            @HeaderParam("X-Patient-Identifier") final String xPatientIdentifier,
-            @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason) {
+            @Context HttpServletRequest httpServletRequest,
+            @CookieParam("context") final ApplicationContext context,
+            @HeaderParam("X-Break-The-Glass-Reason") final String xBreakTheGlassReason,
+            @HeaderParam("X-Chosen-Role") final String xChosenRole) {
 
-        final String patientIdentifier = null;
         final boolean breakTheGlass = false;
+        final String patientIdentifier = PatientContext.extractPatientIdentifierFromSession(httpServletRequest);
 
         final ServiceResponse<List<DataCardResponse>> response = service.get(patientIdentifier, breakTheGlass);
         final List<DataCardResponse> entity = response.getEntity();
@@ -56,7 +51,8 @@ public class DataCardApi {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDataCard(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
+            @HeaderParam("X-Chosen-Role") final String xPatientIdentifier,
             final CreateDataCardRequest request) {
         final ServiceResponse<DataCardResponse> response = service.create(request);
         final DataCardResponse entity = response.getEntity();
@@ -69,7 +65,8 @@ public class DataCardApi {
     @GET
     @Path("{identifier}")
     public Response getDataCard(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
+            @HeaderParam("X-Chosen-Role") final String xPatientIdentifier,
             @PathParam("identifier") final UUID id) {
         final ServiceResponse<DataCardResponse> response = service.get(id);
         final DataCardResponse entity = response.getEntity();
@@ -82,8 +79,9 @@ public class DataCardApi {
     @PUT
     @Path("{identifier}")
     public Response updateDataCard(
-            @CookieParam("context") final SessionContext context,
+            @CookieParam("context") final ApplicationContext context,
             @PathParam("identifier") final UUID id,
+            @HeaderParam("X-Chosen-Role") final String xChosenRole,
             final UpdateDataCardRequest request) {
         final ServiceResponse<DataCardResponse> response = service.update(id, request);
         final DataCardResponse entity = response.getEntity();
@@ -96,8 +94,9 @@ public class DataCardApi {
     @DELETE
     @Path("{identifier}")
     public Response deleteDataCard(
-            @CookieParam("context") final SessionContext context,
-            @PathParam("identifier") final UUID id) {
+            @CookieParam("context") final ApplicationContext context,
+            @PathParam("identifier") final UUID id,
+            @HeaderParam("X-Chosen-Role") final String xChosenRole) {
         final ServiceResponse<Void> response = service.delete(id);
 
         if(response.isOk()) return Response.ok().build();
