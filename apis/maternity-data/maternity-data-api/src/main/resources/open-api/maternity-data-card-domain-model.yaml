@@ -20,7 +20,7 @@ components:
         - type: object
           properties:
             episodeOfCareIdentifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv5'
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv5'
           required:
             - episodeOfCareIdentifier
 
@@ -40,9 +40,9 @@ components:
         - type: object
           properties:
             episodeOfCareIdentifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv5'
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv5'
             identifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
           required:
             - episodeOfCareIdentifier
 
@@ -891,7 +891,7 @@ components:
         - type: object
           properties:
             identifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/CprNumber'
           required:
             - identifier
 
