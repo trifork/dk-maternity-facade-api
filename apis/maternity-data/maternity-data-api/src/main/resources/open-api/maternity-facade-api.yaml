@@ -32,7 +32,7 @@ paths:
         - in: header
           name: X-Chosen-Role
           description: >
-          The chosen user STS or SEB
+            The chosen user STS or SEB
           required: false
           schema:
             $ref: '#/components/schemas/UserRole'
@@ -53,28 +53,28 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     post:
       tags: [data-card]
       summary: Create a data card
@@ -84,41 +84,41 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/CreateDataCardRequest'
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/CreateDataCardRequest'
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/data-card/{identifier}:
     parameters:
       - in: path
         name: identifier
         schema:
-          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
+          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
         required: true
         description: The identifier of the data card
     get:
@@ -138,28 +138,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     put:
       tags: [data-card]
       summary: Update a specific data card
@@ -167,35 +167,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/UpdateDataCardRequest'
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/UpdateDataCardRequest'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '206':
           description: >
             Partial Content -
           content:
             application/json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/maternity-facade-api/src/main/resources/open-api/maternity-domain-model.yaml#/components/schemas/DataCardResponse'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-data-card-domain-model.yaml#/components/schemas/DataCardResponse'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
     delete:
       tags: [data-card]
       summary: Delete a specific data card
@@ -208,14 +208,14 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
           content:
             application/problem+json:
               schema:
-                $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/care-plan:
     parameters:
       - in: cookie
@@ -225,6 +225,20 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/ApplicationContext'
+      - in: header
+        name: X-Chosen-Role
+        description: >
+          The chosen user STS or SEB
+        required: false
+        schema:
+          $ref: '#/components/schemas/UserRole'
+      - in: header
+        name: X-Break-The-Glass-Reason
+        description: >
+          When set disables access controls for a well defined period of time or until the patient is changed
+        required: false
+        schema:
+          $ref: '#/components/schemas/BreakTheGlassReason'
     get:
       tags: [care-plan]
       summary: Get data cards
@@ -245,14 +259,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -283,7 +297,7 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -296,7 +310,7 @@ paths:
       - in: path
         name: identifier
         schema:
-          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
+          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
         required: true
         description: The identifier of the care plan
     get:
@@ -317,21 +331,21 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '403':
           description: >
             Forbidden -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '404':
           description: >
             Not Found -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -362,28 +376,28 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '403':
           description: >
             Forbidden -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '404':
           description: >
             Not Found -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '409':
           description: >
             Conflict -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -396,7 +410,7 @@ paths:
       - in: path
         name: identifier
         schema:
-          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
+          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
         required: true
         description: The identifier of the care plan to extend
     patch:
@@ -422,28 +436,28 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '403':
           description: >
             Forbidden -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '404':
           description: >
             Not Found -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '409':
           description: >
             Conflict -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -452,13 +466,6 @@ paths:
               schema:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/care-plan/template:
-    parameters:
-      - in: path
-        name: identifier
-        schema:
-          $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv4'
-        required: true
-        description: The identifier of the data card
     get:
       tags: [care-plan, template]
       summary: Get a template with a default care plan
@@ -472,6 +479,28 @@ paths:
               schema:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/EditableCarePlan'
   /maternity/observation:
+    parameters:
+      - in: cookie
+        name: context
+        description: >
+          The context encoded as a JWT token, see [SessionContext](#/components/schemas/SessionContext)
+        required: true
+        schema:
+          $ref: '#/components/schemas/ApplicationContext'
+      - in: header
+        name: X-Chosen-Role
+        description: >
+          The chosen user STS or SEB
+        required: false
+        schema:
+          $ref: '#/components/schemas/UserRole'
+      - in: header
+        name: X-Break-The-Glass-Reason
+        description: >
+          When set disables access controls for a well defined period of time or until the patient is changed
+        required: false
+        schema:
+          $ref: '#/components/schemas/BreakTheGlassReason'
     get:
       tags: [observation, measurement]
       summary: Get observations
@@ -492,14 +521,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '401':
           description: >
             Unauthorized -
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -530,7 +559,7 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -539,6 +568,13 @@ paths:
               schema:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
   /maternity/observation/{identifier}:
+    parameters:
+      - in: path
+        name: identifier
+        schema:
+          type: string
+        required: true
+        description: The identifier of the observation
     get:
       tags: [observation, measurement]
       summary: Get the observation with the specified **identifier**
@@ -557,21 +593,21 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '403':
           description: >
             Forbidden -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '404':
           description: >
             Not Found -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -602,28 +638,28 @@ paths:
           content:
             application/problem+json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '403':
           description: >
             Forbidden -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '404':
           description: >
             Not Found -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '409':
           description: >
             Conflict -
           content:
             application/json:
               schema:
-                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-care-plan-domain-model.yaml#/components/schemas/ProblemDetails'
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
         '500':
           description: >
             Internal Server Error -
@@ -651,7 +687,196 @@ paths:
             application/problem+json:
               schema:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
-  /maternity/demographics
+  /maternity/note:
+    parameters:
+      - in: cookie
+        name: context
+        description: >
+          The context encoded as a JWT token, see [SessionContext](#/components/schemas/SessionContext)
+        required: true
+        schema:
+          $ref: '#/components/schemas/ApplicationContext'
+      - in: header
+        name: X-Chosen-Role
+        description: >
+          The chosen user STS or SEB
+        required: false
+        schema:
+          $ref: '#/components/schemas/UserRole'
+      - in: header
+        name: X-Break-The-Glass-Reason
+        description: >
+          When set disables access controls for a well defined period of time or until the patient is changed
+        required: false
+        schema:
+          $ref: '#/components/schemas/BreakTheGlassReason'
+    get:
+      tags: [note, summary]
+      summary: Get notes
+      description: >
+        Gets all notes for the current patient ((which is stored in the session and can be updated using PUT on the /patientcontext endpoint)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-note-domain-model.yaml#/components/schemas/Note'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+    post:
+      tags: [note]
+      summary: Create a note
+      description: >
+        Creates a new note for the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint). Adds a reference to the activity referenced in the query param-
+      parameters:
+        - in: query
+          name: activity
+          description: >
+            The activity that this note is related to
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-note-domain-model.yaml#/components/schemas/EditableNote'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-note-domain-model.yaml#/components/schemas/Note'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+  /maternity/note/{identifier}:
+    parameters:
+      - in: path
+        name: identifier
+        schema:
+          type: string
+        required: true
+        description: The identifier of the note
+    get:
+      tags: [note]
+      summary: Get the note with the specified **identifier**
+      description: >
+        Gets the note with the **identifier** specified in the URI, provided it belongs to the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-note-domain-model.yaml#/components/schemas/Note'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '403':
+          description: >
+            Forbidden -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '404':
+          description: >
+            Not Found -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+    put:
+      tags: [note]
+      summary: Update the note with the specified **identifier**
+      description: >
+        Updates the note with the **identifier** specified in the URI provided it belongs to the current patient (which is stored in the session and can be updated using PUT on the /patientcontext endpoint).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-note-domain-model.yaml#/components/schemas/EditableNote'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-note-domain-model.yaml#/components/schemas/Note'
+        '401':
+          description: >
+            Unauthorized -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '403':
+          description: >
+            Forbidden -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '404':
+          description: >
+            Not Found -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '409':
+          description: >
+            Conflict -
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
+        '500':
+          description: >
+            Internal Server Error -
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/ProblemDetails'
 
 components:
   schemas:
