@@ -36,6 +36,8 @@ components:
           type: string
         completed:
           type: boolean
+        fetus:
+          type: string
       required: [enteredBy, measuredBy, dateOfMeasurement, values, completed]
     CreateObservation:
       allOf:
@@ -60,7 +62,7 @@ components:
         - blood_preassure
         - urine
         - edema
-        - pubis_measuruements
+        - pubis_measurements
         - fetus_activity
         - fetus_weight_estimate
         - fetus_presentation
@@ -69,4 +71,3 @@ components:
         - weight_deviation
         - amniotic_fluid
         - flow
-
