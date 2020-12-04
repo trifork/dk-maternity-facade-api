@@ -148,6 +148,10 @@ components:
               type: array
               items:
                 $ref: 'https://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/maternity-data/maternity-data-api/src/main/resources/open-api/maternity-observation-domain-model.yaml#/components/schemas/Observation'
+            sortDate:
+              description: Since activities may or may not have an actual plannedTime on them, this field is a computed date based on either plannedTime or (gestationAge + date of last period on the data-card if that exists (if it does not we just use today as the start point))
+              type: string
+              format: dateTime
       required: [id]
     CarePlan:
       title: The care plan for the entire pregnency
@@ -166,4 +170,3 @@ components:
 
 
       required: [id, version]
-
