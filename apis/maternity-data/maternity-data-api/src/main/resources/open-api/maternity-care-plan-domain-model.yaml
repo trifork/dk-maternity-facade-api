@@ -151,7 +151,7 @@ components:
             sortDate:
               description: Since activities may or may not have an actual plannedTime on them, this field is a computed date based on either plannedTime or (gestationAge + date of last period on the data-card if that exists (if it does not we just use today as the start point))
               type: string
-              format: dateTime
+              format: date-time
       required: [id]
     CarePlan:
       title: The care plan for the entire pregnency
@@ -170,3 +170,4 @@ components:
 
 
       required: [id, version]
+
