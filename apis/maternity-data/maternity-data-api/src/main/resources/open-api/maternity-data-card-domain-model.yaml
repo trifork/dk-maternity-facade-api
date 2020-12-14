@@ -763,7 +763,7 @@ components:
                 trimester:
                   description: Computed trimester (i.e. monthsIntoPregnancy/3). If last period is null, this is 0
                   type: number
-                  minimum: 1
+                  minimum: 0
                   maximum: 3
                 monthsIntoPregnancy:
                   description: Computed number of months since last period. If last period is null, this is 0
