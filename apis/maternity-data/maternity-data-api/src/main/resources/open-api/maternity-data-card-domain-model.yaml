@@ -105,6 +105,8 @@ components:
                   $ref: '#/components/schemas/DateValueUnitScreeningSection'
                 antiDImmunoglobulinGiven:
                   $ref: '#/components/schemas/YesNoDateScreeningSection'
+                mrsaSwap:
+                  $ref: '#/components/schemas/YesNoDateScreeningSection'
             chronicalDiseasesSection:
               $ref: '#/components/schemas/ChronicDiseasesSection'
             medicineSection:
@@ -112,14 +114,16 @@ components:
                 - $ref: '#/components/schemas/VersionedSection'
                 - type: object
                   properties:
-                    medicine:
+                    realMedicine:
+                      type: string
+                    natureMedicine:
                       type: string
             mmrVacinationSection:
               allOf:
                 - $ref: '#/components/schemas/VersionedSection'
                 - type: object
                   properties:
-                    value:
+                    status:
                       type: string
                       enum: [ vaccinated, notVacinnated, unknown ]
             historyOfPreviousTreatmentWithImpactOnPregnancySection:
@@ -133,6 +137,8 @@ components:
               $ref: '#/components/schemas/TobaccoUseAndExposureSection'
             alcoholDrinkingBehaviorSection:
               $ref: '#/components/schemas/AlcoholDrinkingBehaviorSection'
+            assistedFertilizationSection:
+              $ref: '#/components/schemas/AssistedFertilizationSection'
             substanceUseSection:
               $ref: '#/components/schemas/SubstanceUseSection'
             dietaryAndExerciseSection:
@@ -147,7 +153,10 @@ components:
               $ref: '#/components/schemas/PostpartumNursingSection'
             overallAssessmentSection:
               $ref: '#/components/schemas/OverallAssessmentSection'
-
+            personalDataSection:
+              $ref: '#/components/schemas/PersonalDataSection'
+            healthcareSection:
+              $ref: '#/components/schemas/HealthCareSection'
           required:
             - recordTarget
             - author
@@ -158,6 +167,7 @@ components:
         - type: object
           properties:
             prenatalCareAssessment:
+              type: object
               properties:
                 assessment:
                   type: string
@@ -244,6 +254,68 @@ components:
                     phoneNumber:
                       $ref: '#/components/schemas/PhoneNumber'
 
+    PersonalDataSection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedSection'
+        - type: object
+          properties:
+            name:
+              $ref: '#/components/schemas/PersonName'
+            cpr:
+              type: string
+            address:
+              $ref: '#/components/schemas/Address'
+            temporaryAddress:
+              type: object
+              properties:
+                name:
+                  type: string
+                streetAndNumber:
+                  type: string
+                city:
+                  type: string
+                zip:
+                  type: string
+                validFrom:
+                  type: string
+                  format: date
+                validTo:
+                  type: string
+                  format: date
+            telecoms:
+              $ref: '#/components/schemas/Telecoms'
+            generalPractitioner:
+              type: object
+              properties:
+                name:
+                  type: string
+                address:
+                  $ref: '#/components/schemas/Address'
+            nextOfKin:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  relation:
+                    type: string
+                    enum: ['uspec_paaroerende', 'ingen_relationer', 'barn', 'mor', 'far', 'forælder', 'søskende', 'aegtefaelle', 'barnebarn', 'svigerbarn', 'øvrig_familie', 'nabo', 'samboende', 'registreret_partner', 'anden', 'søn', 'datter']
+                  telecoms:
+                    $ref: '#/components/schemas/Telecoms'
+                  additionalInformation:
+                    type: string
+
+    HealthCareSection:
+      allOf:
+      - $ref: '#/components/schemas/VersionedSection'
+      - type: object
+        properties:
+          ward:
+            $ref: '#/components/schemas/HealthCareOrganization'
+          healthNurse:
+            $ref: '#/components/schemas/HealthCareNurse'
+
     MidwifeClinicSection:
       allOf:
         - $ref: '#/components/schemas/VersionedSection'
@@ -266,7 +338,6 @@ components:
                     - sunday
                 midwife:
                   $ref: '#/components/schemas/Person'
-
             assignedMidwifeClinic:
               $ref: '#/components/schemas/HealthCareOrganization'
       oneOf:
@@ -419,7 +490,21 @@ components:
             weeklyConsumptionBeforePregnancy:
               $ref: '#/components/schemas/WeeklyAlcoholUnitsConsumption'
             weeklyConsumptionDuringPregnancy:
-              $ref: '#/components/schemas/WeeklyAlcoholUnitsConsumption'
+              allOf:
+                - $ref: '#/components/schemas/WeeklyAlcoholUnitsConsumption'
+                - type: object
+                  properties:
+                    excessiveDrinkingCount:
+                      type: number
+                    excessiveDrinkingWeeks:
+                      type: array
+                      items:
+                        type: number
+                        minimum: 1
+                        maximum: 52
+                    tweakPoints:
+                      type: string
+                      enum: [0, 1, 2, 3, 4, 5, 6, 7]
 
     WeeklyAlcoholUnitsConsumption:
       type: object
@@ -427,17 +512,14 @@ components:
         value:
           type: integer
           minimum: 0
-        multiplier:
-          type: integer
-          minimum: 12
-          maximum: 12
-          default: 12
+        consumesAlcohol:
+          $ref: '#/components/schemas/YesNoEnum'
         unit:
           type: string
           enum: [ g/wk ]
       required:
         - value
-        - multiplier
+        - consumesAlcohol
         - unit
 
     TobaccoUseAndExposureSection:
@@ -447,62 +529,44 @@ components:
           properties:
             exposureToEnvironmentalTobaccoSmoke:
               $ref: '#/components/schemas/YesNoEnum'
-      oneOf:
-        - $ref: '#/components/schemas/ActiveTobaccoUser'
-        - $ref: '#/components/schemas/FormerTobaccoUser'
-        - $ref: '#/components/schemas/NeverUsedTobacco'
-      discriminator:
-        propertyName: tobaccoUser
-        mapping:
-          active: '#/components/schemas/activeTobaccoUser'
-          former: '#/components/schemas/formerTobaccoUser'
-          never: '#/components/schemas/neverUsedTobacco'
-
-    ActiveTobaccoUser:
-      type: object
-      properties:
-        tobaccoUser:
-          type: string
-          enum: [ active ]
-        referredToTobaccoCessationEducation:
-          $ref: '#/components/schemas/YesNoEnum'
-      required:
-        - tobaccoUser
-
-    FormerTobaccoUser:
-      type: object
-      properties:
-        tobaccoUser:
-          type: string
-          enum: [ former ]
-        stoppedUsingTobacco:
-          type: string
-          pattern: date
-      required:
-        - tobaccoUser
-
-    NeverUsedTobacco:
-      type: object
-      properties:
-        tobaccoUser:
-          type: string
-          enum: [ never ]
-      required:
-        - tobaccoUser
+            tobaccoUser:
+              type: string
+              enum:
+                - active
+                - never
+                - former_because_pregnancy
+                - former_long_ago
+            endDate:
+              type: string
+              format: date
+            smokeDuringPregnancy:
+              $ref: '#'#/components/schemas/YesNoEnum'
+            referredToTobaccoCessationEducation:
+              $ref: '#'#/components/schemas/YesNoEnum'
 
     ChronicDiseasesSection:
       allOf:
         - $ref: '#/components/schemas/VersionedSection'
         - type: object
           properties:
-            circulatorySystem:
-              $ref: '#/components/schemas/YesNoEnum'
-            respitorySystem:
-              $ref: '#/components/schemas/YesNoEnum'
-            thyroid:
-              $ref: '#/components/schemas/YesNoEnum'
-            diabetes:
-              $ref: '#/components/schemas/YesNoEnum'
+            conditions:
+              type: array
+              items:
+                type: string
+                enum:
+                  - circulatory_system
+                  - respiratory_system
+                  - thyroid
+                  - diabetes
+                  - epilepsy
+                  - mental_illness
+                  - herpes
+                  - uvi
+                  - cone_section
+                  - mrsa
+                  - gbs
+            comment:
+              type: string
 
     LanguageSection:
       allOf:
@@ -588,6 +652,19 @@ components:
             livingConditions:
               type: string
               enum: [ partnership, single ]
+            partner:
+              type: object
+              properties:
+                name:
+                  type: string
+                cpr:
+                  type: string
+                nationality:
+                  type: string
+                needsTranslation:
+                  $ref: '#/components/schemas/YesNoEnum'
+                translationLanguage:
+                  type: string
             additionalInformations:
               type: string
 
@@ -599,71 +676,76 @@ components:
     PreviousBirthsSection:
       allOf:
         - $ref: '#/components/schemas/VersionedSection'
-        - type: array
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                pattern: date
-              outcome:
-                type: string
-                enum: [ livebirth, stillbirth ]
-              sex:
-                type: string
-                enum: [ female, male ]
-              gestationLength:
-                $ref: '#/components/schemas/DurationInDays'
-              birthWeight:
+        - type: object
+          properties:
+            births:
+              type: array
+              items:
                 type: object
                 properties:
-                  value:
-                    type: integer
-                    minimum: 0
-                  unit:
+                  date:
                     type: string
-                    enum: [ g ]
-                required: [ value, unit ]
-              birthPlace:
-                type: string
-              pregnancySummary:
-                type: string
-              birthSummary:
-                type: string
-              subjectiveBirthExpirience:
-                type: string
-                enum: [ good, normal, bad ]
-              puerperalSepsis:
-                type: boolean
-              childsCurrentHealthStatus:
-                type: string
+                    pattern: date
+                  outcome:
+                    type: string
+                    enum: [ livebirth, stillbirth ]
+                  sex:
+                    type: string
+                    enum: [ female, male ]
+                  gestationLength:
+                    $ref: '#/components/schemas/DurationInDays'
+                  birthWeight:
+                    type: object
+                    properties:
+                      value:
+                        type: integer
+                        minimum: 0
+                      unit:
+                        type: string
+                        enum: [ g ]
+                    required: [ value, unit ]
+                  birthPlace:
+                    type: string
+                  pregnancySummary:
+                    type: string
+                  birthSummary:
+                    type: string
+                  subjectiveBirthExpirience:
+                    type: string
+                    enum: [ good, normal, bad ]
+                  puerperalSepsis:
+                    type: boolean
+                  childsCurrentHealthStatus:
+                    type: string
 
     PreviousAbortionsSection:
       allOf:
         - $ref: '#/components/schemas/VersionedSection'
-        - type: array
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                pattern: date
-              type:
-                type: string
-                enum: [ spontaneous, induced ]
-              gestationLength:
+        - type: object
+          properties:
+            abortions:
+              type: array
+              items:
                 type: object
                 properties:
-                  value:
-                    type: integer
-                    minimum: 0
-                  unit:
+                  date:
                     type: string
-                    enum: [ w ]
-                required: [ value, unit ]
-              indication:
-                type: string
-
+                    pattern: date
+                  type:
+                    type: string
+                    enum: [ spontaneous, induced ]
+                  gestationLength:
+                    type: object
+                    properties:
+                      value:
+                        type: integer
+                        minimum: 0
+                      unit:
+                        type: string
+                        enum: [ w ]
+                    required: [ value, unit ]
+                  indication:
+                    type: string
     ExpectedDateOfDeliverySection:
       allOf:
         - $ref: '#/components/schemas/VersionedSection'
@@ -675,6 +757,19 @@ components:
                 lastPeriod:
                   type: string
                   pattern: date
+                gestationAge:
+                  description: Computed gestation age formatted as 'Weeks+Days'. If last period is null, this is also null
+                  type: string
+                trimester:
+                  description: Computed trimester (i.e. monthsIntoPregnancy/3). If last period is null, this is 0
+                  type: number
+                  minimum: 1
+                  maximum: 3
+                monthsIntoPregnancy:
+                  description: Computed number of months since last period. If last period is null, this is 0
+                  type: number
+                  minimum: 0
+                  maximum: 9
                 menstrualCycle:
                   oneOf:
                     - $ref: '#/components/schemas/DurationInDays'
@@ -685,6 +780,7 @@ components:
                 certainty:
                   type: string
                   enum: [ certain, equivocal ]
+              required: [monthsIntoPregnancy, trimester]
             expectedDateOfDeliveryFromPrenatalUtrasoundScan:
               type: string
               pattern: date
@@ -700,6 +796,17 @@ components:
               type: boolean
             remarks:
               type: string
+            type:
+              type: string
+              enum:
+                - spontaneous
+                - ovulation_induction_ivf
+                - ivf
+                - icsi
+                - hormone_therapy
+                - insemination
+                - egg_donation
+                - unknown
 
     PrenatalRiskAssessmentSection:
       type: object
@@ -726,6 +833,9 @@ components:
               properties:
                 doubleTestCompleted:
                   type: boolean
+                doubleTestCompletedDate:
+                  type: string
+                  format: date
                 firstTrimesterUltrasoundScanOfFetusCompleted:
                   type: boolean
                 secondTrimesterUltrasoundScanOfFetusCompleted:
@@ -769,18 +879,18 @@ components:
                     unit:
                       type: string
                       enum: [ h/wk ]
-                ergonomicalWorkEnvironmentalImpact:
+                exposureToWorkEnvironmentRisk:
                   allOf:
-                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
-                chemicalWorkEnvironmentalImpact:
-                  allOf:
-                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
-                biologicalWorkEnvironmentalImpact:
-                  allOf:
-                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
-                otherWorkEnvironmentalImpact:
-                  allOf:
-                    - $ref: '#/components/schemas/ExposureToWorkEnvironmentRisk'
+                    - $ref: '#/components/schemas/DurationFromDates'
+                    - type: object
+                      properties:
+                        remarks:
+                          type: string
+                        types:
+                          type: array
+                          items:
+                            type: string
+                            enum: [biological, chemical, ergonomic, other]
                 referredToOccupationalHealthDepartmentForRiskAssessment:
                   type: boolean
                 prenatalSickLeave:
@@ -792,23 +902,13 @@ components:
                 jobType:
                   type: string
 
-    ExposureToWorkEnvironmentRisk:
-      allOf:
-        - $ref: '#/components/schemas/DurationFromDates'
-        - type: object
-          properties:
-            remarks:
-              type: string
-
     AllergiesSection:
       allOf:
         - $ref: '#/components/schemas/VersionedSection'
         - type: object
           properties:
             allergiesOfMother:
-              type: array
-              items:
-                type: string
+              type: string
             allergicPredispositionOfChild:
               type: string
               enum:
@@ -965,6 +1065,14 @@ components:
       discriminator:
         propertyName: objectType
 
+    HealthCareNurse:
+      type: object
+      properties:
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+        name:
+          type: string
+
     HealthCareProfessional:
       allOf:
         - $ref: '#/components/schemas/Person'
@@ -989,6 +1097,24 @@ components:
       required:
         - name
         - objectType
+
+    Address:
+      type: object
+      properties:
+        streetAndNumber:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+
+    Telecoms:
+      type: object
+      properties:
+        primaryPhone:
+          $ref: '#/components/schemas/PhoneNumber'
+        alternatePhone:
+          $ref: '#/components/schemas/PhoneNumber'
 
     PhoneNumber:
       type: string
