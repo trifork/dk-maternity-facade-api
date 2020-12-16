@@ -171,6 +171,8 @@ components:
               properties:
                 assessment:
                   type: string
+                comment:
+                  type: string
                 numberOfFetuses:
                   type: integer
                   minimum: 0
@@ -326,16 +328,8 @@ components:
               properties:
                 location:
                   type: string
-                weekday:
+                notes:
                   type: string
-                  enum:
-                    - monday
-                    - tuesday
-                    - wednesday
-                    - thursday
-                    - friday
-                    - saturday
-                    - sunday
                 midwife:
                   $ref: '#/components/schemas/Person'
             assignedMidwifeClinic:
@@ -683,27 +677,34 @@ components:
               items:
                 type: object
                 properties:
+                  children:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sex:
+                          type: string
+                          enum: [ female, male ]
+                        birthWeight:
+                          type: object
+                          properties:
+                            value:
+                              type: integer
+                              minimum: 0
+                            unit:
+                              type: string
+                              enum: [ g ]
+                          required: [ value, unit ]
+                        outcome:
+                          type: string
+                          enum: [ livebirth, stillbirth ]
+                        childsCurrentHealthStatus:
+                          type: string
                   date:
                     type: string
                     pattern: date
-                  outcome:
-                    type: string
-                    enum: [ livebirth, stillbirth ]
-                  sex:
-                    type: string
-                    enum: [ female, male ]
                   gestationLength:
                     $ref: '#/components/schemas/DurationInDays'
-                  birthWeight:
-                    type: object
-                    properties:
-                      value:
-                        type: integer
-                        minimum: 0
-                      unit:
-                        type: string
-                        enum: [ g ]
-                    required: [ value, unit ]
                   birthPlace:
                     type: string
                   pregnancySummary:
@@ -715,8 +716,6 @@ components:
                     enum: [ good, normal, bad ]
                   puerperalSepsis:
                     type: boolean
-                  childsCurrentHealthStatus:
-                    type: string
 
     PreviousAbortionsSection:
       allOf:
@@ -768,6 +767,7 @@ components:
                 monthsIntoPregnancy:
                   description: Computed number of months since last period. If last period is null, this is 0
                   type: number
+                  format: double
                   minimum: 0
                   maximum: 9
                 menstrualCycle:
@@ -1111,9 +1111,11 @@ components:
     Telecoms:
       type: object
       properties:
-        primaryPhone:
+        mobile:
           $ref: '#/components/schemas/PhoneNumber'
-        alternatePhone:
+        work:
+          $ref: '#/components/schemas/PhoneNumber'
+        home:
           $ref: '#/components/schemas/PhoneNumber'
 
     PhoneNumber:
