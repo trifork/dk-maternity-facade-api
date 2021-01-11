@@ -59,7 +59,7 @@ components:
       type: string
       enum:
         - weight
-        - blood_preassure
+        - blood_pressure
         - urine
         - edema
         - pubis_measurements
@@ -71,3 +71,145 @@ components:
         - weight_deviation
         - amniotic_fluid
         - flow
+    NumericValueWithUnit:
+      type: object
+      properties:
+        value:
+          type: number
+        unit:
+          type: string
+    ObservationTable:
+      description: defines a table of observations to be displayed nicely - we do not support editing on a table-basis. Instad use the EditableObservation for that
+      type: object
+      properties:
+        mother:
+          type: object
+          properties:
+            rows:
+              type: array
+              items:
+                type: object
+                description: A grouping of observation values picked from observations that relate to the mother (the one giving birth in case of two mothers)
+                properties:
+                  activityId:
+                    type: string
+                    description: the ID of the careplan activity that these observations are pointing to (using a cross reference)
+                  date:
+                    type: string
+                    format: date-time
+                  gestationAge:
+                    type: string
+                    description: Always following the week+day notation
+                  weight:
+                    $ref: '#/components/schemas/NumericValueWithUnit'
+                  bloodPressure:
+                    type: object
+                    properties:
+                      systolic:
+                        $ref: '#/components/schemas/NumericValueWithUnit'
+                      diastolic:
+                        $ref: '#/components/schemas/NumericValueWithUnit'
+                  urine:
+                    type: string
+                  edema:
+                    type: string
+                  pubismeasurement:
+                    $ref: '#/components/schemas/NumericValueWithUnit'
+        fetuses:
+          type: array
+          items:
+            description: represents a fetus - in case of twins this list contains more than one element
+            type: object
+            properties:
+              name:
+                type: string
+              id:
+                type: string
+              rows:
+                type: array
+                items:
+                  description: A grouping of observation values that relate to the fetus recorded in the same activity
+                  type: object
+                  properties:
+                    activityId:
+                      type: string
+                      description: the ID of the careplan activity that these observations are pointing to (using a cross reference)
+                    date:
+                      type: string
+                      format: date-time
+                    gestationAge:
+                      type: string
+                      description: Always following the week+day notation
+                    fetusPresentation:
+                      type: string
+                    fetusWeightEstimate:
+                      $ref: '#/components/schemas/NumericValueWithUnit'
+                    fetusActivity:
+                      type: array
+                      items:
+                        type: string
+    ScanningObservationTable:
+      description: defines a table of observations, obtained from ultrasound scan, to be displayed nicely - we do not support editing on a table-basis. Instad use the EditableObservation for that
+      type: object
+      properties:
+        mother:
+          type: object
+          properties:
+            rows:
+              type: array
+              items:
+                type: object
+                description: A grouping of observation values picked from observations that relate to the mother (or rather are common for all the fetuses)
+                properties:
+                  activityId:
+                    type: string
+                    description: the ID of the careplan activity that these observations are pointing to (using a cross reference)
+                  date:
+                    type: string
+                    format: date-time
+                  gestationAge:
+                    type: string
+                    description: Always following the week+day notation
+                  amnioticFluid:
+                    type: string
+                  flow:
+                    type: string
+                    description: The length of the uterus in cm
+                  cervix:
+                    $ref: '#/components/schemas/NumericValueWithUnit'
+                  dvp:
+                    $ref: '#/components/schemas/NumericValueWithUnit'
+                  conclusion:
+                    type: string
+                    description: may be removed later if underlying datamodel does not support - basically this is a note cleverly disguised as an observation
+        fetuses:
+          type: array
+          items:
+            description: represents a fetus - in case of twins this list contains more than one element
+            type: object
+            properties:
+              name:
+                type: string
+              id:
+                type: string
+              rows:
+                type: array
+                items:
+                  description: A grouping of observation values that relate to the fetus recorded in the same activity
+                  type: object
+                  properties:
+                    activityId:
+                      type: string
+                      description: the ID of the careplan activity that these observations are pointing to (using a cross reference)
+                    date:
+                      type: string
+                      format: date-time
+                    gestationAge:
+                      type: string
+                      description: Always following the week+day notation
+                    ulWeight:
+                      $ref: '#/components/schemas/NumericValueWithUnit'
+                    weightDeviation:
+                      $ref: '#/components/schemas/NumericValueWithUnit'
+                    fetusPresentation:
+                      type: string
