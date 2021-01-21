@@ -1119,7 +1119,7 @@ components:
         modifiedTime:
           type: string
           pattern: date-time
-        isDirty:
+        dirty:
           type: boolean
         author:
           $ref: '#/components/schemas/HealthCareActor'
