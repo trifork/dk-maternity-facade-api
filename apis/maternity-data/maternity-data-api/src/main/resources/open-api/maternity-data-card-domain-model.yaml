@@ -13,27 +13,6 @@ paths: {}
 components:
   schemas:
 
-    CreateDataCardRequest:
-      title: Maternity data card to create
-      allOf:
-        - $ref: '#/components/schemas/DataCardRequest'
-        - type: object
-          properties:
-            episodeOfCareIdentifier:
-              $ref: 'http://raw.githubusercontent.com/trifork/dk-maternity-facade-api/master/apis/common/src/main/resources/open-api/common-facade-api.yaml#/components/schemas/Uuidv5'
-          required:
-            - episodeOfCareIdentifier
-
-    UpdateDataCardRequest:
-      title: Maternity data card to update
-      allOf:
-        - $ref: '#/components/schemas/DataCardRequest'
-
-    DataCardRequest:
-      title: Maternity data card response
-      allOf:
-        - $ref: '#/components/schemas/DataCard'
-
     DataCardResponse:
       allOf:
         - $ref: '#/components/schemas/DataCard'
@@ -107,7 +86,7 @@ components:
                   $ref: '#/components/schemas/YesNoDateScreeningSection'
                 mrsaSwap:
                   $ref: '#/components/schemas/YesNoDateScreeningSection'
-            chronicalDiseasesSection:
+            chronicDiseasesSection:
               $ref: '#/components/schemas/ChronicDiseasesSection'
             medicineSection:
               allOf:
@@ -118,14 +97,14 @@ components:
                       type: string
                     natureMedicine:
                       type: string
-            mmrVacinationSection:
+            mmrVaccinationSection:
               allOf:
                 - $ref: '#/components/schemas/VersionedSection'
                 - type: object
                   properties:
                     status:
                       type: string
-                      enum: [ vaccinated, notVacinnated, unknown ]
+                      enum: [ vaccinated, notVaccinated, unknown ]
             historyOfPreviousTreatmentWithImpactOnPregnancySection:
               allOf:
                 - $ref: '#/components/schemas/VersionedSection'
@@ -629,7 +608,8 @@ components:
               type: object
               properties:
                 value:
-                  type: integer
+                  type: number
+                  format: double
                   minimum: 0
                 unit:
                   type: string
@@ -711,7 +691,7 @@ components:
                     type: string
                   birthSummary:
                     type: string
-                  subjectiveBirthExpirience:
+                  subjectiveBirthExperience:
                     type: string
                     enum: [ good, normal, bad ]
                   puerperalSepsis:
@@ -756,20 +736,6 @@ components:
                 lastPeriod:
                   type: string
                   pattern: date
-                gestationAge:
-                  description: Computed gestation age formatted as 'Weeks+Days'. If last period is null, this is also null
-                  type: string
-                trimester:
-                  description: Computed trimester (i.e. monthsIntoPregnancy/3). If last period is null, this is 0
-                  type: number
-                  minimum: 0
-                  maximum: 3
-                monthsIntoPregnancy:
-                  description: Computed number of months since last period. If last period is null, this is 0
-                  type: number
-                  format: double
-                  minimum: 0
-                  maximum: 9
                 menstrualCycle:
                   oneOf:
                     - $ref: '#/components/schemas/DurationInDays'
@@ -780,12 +746,26 @@ components:
                 certainty:
                   type: string
                   enum: [ certain, equivocal ]
-              required: [monthsIntoPregnancy, trimester]
-            expectedDateOfDeliveryFromPrenatalUtrasoundScan:
+            expectedDateOfDeliveryFromPrenatalUltrasoundScan:
               type: string
               pattern: date
+            gestationAge:
+              description: Computed gestation age formatted as 'Weeks+Days'. Computed from 273 days minus days to expectedDateOfDeliveryFromPrenatalUltrasoundScan if present. Other ways computed from DaysSinceLastPeriode
+              type: string
+            trimester:
+                description: Computed trimester (i.e. monthsIntoPregnancy/3).
+                type: number
+                minimum: 0
+                maximum: 3
+            monthsIntoPregnancy:
+              description: Computed number of months into pregnanancy. Computed from expectedDateOfDeliveryFromPrenatalUtrasoundScan if presenent and expectedDateOfDeliveryFromLastPeriod otherwise. If both are null this wil be 0
+              type: number
+              format: double
+              minimum: 0
+              maximum: 9
             remarks:
               type: string
+          required: [monthsIntoPregnancy, trimester]
 
     AssistedFertilizationSection:
       allOf:
@@ -821,9 +801,11 @@ components:
                 consanguinity:
                   type: boolean
                 firstTrimesterUltrasoundScanOfFetusRequested:
-                  type: boolean
+                  type: string
+                  format: date
                 secondTrimesterUltrasoundScanOfFetusRequested:
-                  type: boolean
+                  type: string
+                    format: date
                 prenatalRiskAssessmentRequested:
                   type: boolean
         finalRiskAssessment:
@@ -842,6 +824,14 @@ components:
                   type: boolean
                 downsScreeningProbabilityAssessment:
                   type: string
+                  enum: [high, low]
+                multiplicityRiskAssessment:
+                  type: object
+                  properties:
+                    risk:
+                      $ref: '#/components/schemas/YesNoEnum'
+                    comment:
+                      type: string
                 placentalBiopsiObservation:
                   type: object
                   properties:
@@ -1129,5 +1119,7 @@ components:
         modifiedTime:
           type: string
           pattern: date-time
+        isDirty:
+          type: boolean
         author:
           $ref: '#/components/schemas/HealthCareActor'
