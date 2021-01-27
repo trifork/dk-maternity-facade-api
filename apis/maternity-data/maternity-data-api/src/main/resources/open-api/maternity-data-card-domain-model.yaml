@@ -274,6 +274,8 @@ components:
                   type: string
                 address:
                   $ref: '#/components/schemas/Address'
+                telephoneNumber:
+                  type: string
             nextOfKin:
               type: array
               items:
